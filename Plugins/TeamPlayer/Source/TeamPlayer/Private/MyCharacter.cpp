@@ -7,9 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Math/UnrealMathUtility.h"
 #include "GameFramework/CharacterMovementComponent.h"
-//#include "MyCharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "MySkeletalMeshComponent.h"
 #include "Particles/ParticleSystem.h"
 
 #include "Kismet/GameplayStatics.h"
@@ -17,7 +15,7 @@
 // Sets default values
 AMyCharacter::AMyCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 }
@@ -36,7 +34,7 @@ AMyCharacter::AMyCharacter(const FObjectInitializer& obj)
 	m_TPSCameraBoomComponent->SetupAttachment(RootComponent);
 	m_TPSCamera->SetupAttachment(m_TPSCameraBoomComponent, USpringArmComponent::SocketName);
 	m_TPSCameraBoomComponent->bUsePawnControlRotation = true;
-	
+
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> skelMesh(TEXT("SkeletalMesh'/Game/LadyMarionCotillard/mesh/LadyMarion_RedEye.LadyMarion_RedEye'"));
 	if (skelMesh.Succeeded())
@@ -62,7 +60,7 @@ AMyCharacter::AMyCharacter(const FObjectInitializer& obj)
 	if (staticMesh.Succeeded())
 	{
 		m_SM_WeaponSocket->SetStaticMesh(staticMesh.Object);
-		
+
 		m_SM_WeaponSocket->AttachTo(GetMesh(), "WeaponSocket");
 	}
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> AttackParticle(TEXT("ParticleSystem'/Game/Effect/P_Hit.P_Hit'"));
@@ -92,7 +90,7 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
 	FRotator temp2 = UKismetMathLibrary::Conv_VectorToRotator(GetCharacterMovement()->GetCurrentAcceleration());
 	FRotator temp = FMath::RInterpTo(GetActorRotation(), temp2, DeltaTime, 10.0f);
 	float Yaw, Pitch, Roll;
@@ -102,16 +100,16 @@ void AMyCharacter::Tick(float DeltaTime)
 	if (GetInputAxisValue("MoveForward") != 0.0f || GetInputAxisValue("MoveRight") != 0.0f)
 	{
 		SetActorRotation(temp);
-	
+
 	}
 
-		AddMovementInput(FVec, GetInputAxisValue("MovemForward"));
+	AddMovementInput(FVec, GetInputAxisValue("MovemForward"));
 
 	//
 	//
 	//SetActorRotation()
 	//FMath::RInterpTo()
-	
+
 }
 
 // Called to bind functionality to input
@@ -125,7 +123,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &AMyCharacter::Attack);
 	PlayerInputComponent->BindAction("Interect", EInputEvent::IE_Pressed, this, &AMyCharacter::InterectOverlap);
 	//PlayerInputComponent->BindAction("Interect", EInputEvent::IE_Pressed, this, &AMyCharacter::InterectOverlap);
-	
+
 }
 
 void AMyCharacter::Attack()
@@ -176,27 +174,27 @@ void AMyCharacter::InterectOverlap()
 
 void AMyCharacter::MoveForward(float value)
 {
-	if(IsDead == false)
-	if (value != 0.0f && Controller != nullptr)
-	{
-		FRotator rot = this->Controller->GetControlRotation();
-		FRotator yaw = FRotator(0, rot.Yaw, 0);
-		FRotationMatrix mat = FRotationMatrix(yaw);
-		FVector dir = mat.GetUnitAxis(EAxis::X);
-		AddMovementInput(dir, value);
-	}
+	if (IsDead == false)
+		if (value != 0.0f && Controller != nullptr)
+		{
+			FRotator rot = this->Controller->GetControlRotation();
+			FRotator yaw = FRotator(0, rot.Yaw, 0);
+			FRotationMatrix mat = FRotationMatrix(yaw);
+			FVector dir = mat.GetUnitAxis(EAxis::X);
+			AddMovementInput(dir, value);
+		}
 }
 void AMyCharacter::MoveRight(float value)
 {
 	if (IsDead == false)
-	if (value != 0.0f && Controller != nullptr)
-	{
-		FRotator rot = this->Controller->GetControlRotation();
-		FRotator yaw = FRotator(0, rot.Yaw, 0);
-		FRotationMatrix mat = FRotationMatrix(yaw);
-		FVector dir = mat.GetUnitAxis(EAxis::Y);
-		AddMovementInput(dir, value);
-	}
+		if (value != 0.0f && Controller != nullptr)
+		{
+			FRotator rot = this->Controller->GetControlRotation();
+			FRotator yaw = FRotator(0, rot.Yaw, 0);
+			FRotationMatrix mat = FRotationMatrix(yaw);
+			FVector dir = mat.GetUnitAxis(EAxis::Y);
+			AddMovementInput(dir, value);
+		}
 }
 void AMyCharacter::TurnAtRate(float value)
 {
@@ -246,7 +244,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 
 	fHP -= damage;
 	IsHit = true;
-	
+
 	UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(fHP));
 	if (fHP <= 0.0f)
 	{

@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class TEAM_PROJ_API AMyPlayerController : public APlayerController
+class TEAMPLAYER_API AMyPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	

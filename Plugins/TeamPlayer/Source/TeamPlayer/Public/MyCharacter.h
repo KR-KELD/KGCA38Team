@@ -9,11 +9,11 @@
 #include "Components/CapsuleComponent.h"
 #include "MyCharacter.generated.h"
 
+
 UCLASS()
-class TEAM_PROJ_API AMyCharacter : public ACharacter
+class TEAMPLAYER_API AMyCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
 
 		//º¯¼ö
 public:
@@ -84,10 +84,5 @@ public:
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser);
 	UFUNCTION()
 		void OverlappedActor(FName TagName);
-};
 
-//UENUM(BlueprintType)
-//enum class EOverlapType : uint8
-//{
-//	OT_Item UMETA(DisplayName = "Item"),
-//};
+};
