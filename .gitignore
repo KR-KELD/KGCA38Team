@@ -3,3 +3,9 @@
 ################################################################################
 
 /.vs
+/Intermediate
+/Binaries/Win64
+/Saved
+/KGCA38.sln
+/Plugins/TeamAI/Binaries/Win64
+/Plugins/TeamAI/Intermediate/Build/Win64/UE4Editor
