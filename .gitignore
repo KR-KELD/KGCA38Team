@@ -11,3 +11,5 @@
 /Plugins/TeamAI/Intermediate/Build/Win64/UE4Editor
 /Plugins/TeamPlayer/Intermediate/Build/Win64/UE4Editor
 /Plugins/TeamPlayer/Binaries/Win64
+/Plugins/TeamEffect/Binaries/Win64
+/Plugins/TeamEffect/Intermediate/Build/Win64/UE4Editor/Development/TeamEffect

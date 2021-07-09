@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "TeamEffect",
+	"Description": "Effect",
+	"Category": "Other",
+	"CreatedBy": "SSM",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "TeamEffect",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
