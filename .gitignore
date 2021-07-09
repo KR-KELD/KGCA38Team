@@ -13,3 +13,5 @@
 /Plugins/TeamPlayer/Binaries/Win64
 /Plugins/TeamEffect/Binaries/Win64
 /Plugins/TeamEffect/Intermediate/Build/Win64/UE4Editor/Development/TeamEffect
+/Plugins/TeamMap/Binaries/Win64
+/Plugins/TeamMap/Intermediate/Build/Win64/UE4Editor/Development/TeamMap
