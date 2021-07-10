@@ -18,9 +18,9 @@ AMapToolGameModeBase::AMapToolGameModeBase()
 void AMapToolGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
-	CM(15, 15);
+	CM(20, 8);
 
-	CellStack.Add(MapActorsArray[UKismetMathLibrary::RandomInteger(15)][UKismetMathLibrary::RandomInteger(15)]);
+	CellStack.Add(MapActorsArray[UKismetMathLibrary::RandomInteger(20)][UKismetMathLibrary::RandomInteger(8)]);
 	GetNextCell(CellStack[0]);
 	OpenTheDoor();
 
@@ -43,7 +43,7 @@ void AMapToolGameModeBase::CM(int x, int y)
 				FActorSpawnParameters SpawnParams;
 				SpawnParams.Owner = this;
 				FRotator rotator(0.0f , 0.0f, 0.0f);
-				FVector  SpawnLocation(i * 700, j * 700, -410.0f);
+				FVector  SpawnLocation(i * 1480, j * 1480, -410.0f);
 				AWallActor* Actor = world->SpawnActor<AWallActor>(MapActors, SpawnLocation, rotator, SpawnParams);
 				Actor->x = i;
 				Actor->y = j;
@@ -166,5 +166,5 @@ void AMapToolGameModeBase::ReSet()
 
 void	AMapToolGameModeBase::OpenTheDoor()
 {
-	MapActorsArray[0][3]->DownVisibility(false);
+	MapActorsArray[0][1]->DownVisibility(false);
 }
