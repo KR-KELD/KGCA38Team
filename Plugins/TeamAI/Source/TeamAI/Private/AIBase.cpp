@@ -8,6 +8,7 @@
 // Sets default values
 AAIBase::AAIBase()
 {
+	//PatrolPoints = CreateDefaultSubobject<APatrolPoint>(TEXT("PatrolPoints"));
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	AIControllerClass = AMyAIController::StaticClass();
@@ -15,21 +16,24 @@ AAIBase::AAIBase()
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
-
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 250.0f, 0.0f);
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
-
+	GetCharacterMovement()->BrakingDecelerationWalking = 200.0f;
+	GetCharacterMovement()->GroundFriction = 2.0f;
 }
-
-
 
 
 // Called when the game starts or when spawned
 void AAIBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (PatrolPoints == nullptr)
+	{
+		//PatrolPoints = APatrolPoint::StaticClass();
+	}
+
 }
 
 void AAIBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -51,17 +55,12 @@ void AAIBase::Tick(float DeltaTime)
 void AAIBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
-void AAIBase::AttackPlayer()
+void AAIBase::SetAIMove(float Speed, bool DesiredRot)
 {
-
-}
-
-void AAIBase::SetSpeed(float speed)
-{
-	GetCharacterMovement()->MaxWalkSpeed = speed;
+	GetCharacterMovement()->MaxWalkSpeed = Speed;
+	GetCharacterMovement()->bUseControllerDesiredRotation = DesiredRot;
 }
 
 void AAIBase::Patrol()
@@ -79,4 +78,13 @@ void AAIBase::AIHit()
 void AAIBase::AIDead()
 {
 	if (DeadDelegate.IsBound() == true) DeadDelegate.Broadcast("Dead");
+}
+
+bool AAIBase::AIDeadCheck()
+{
+	if (HP < 0.0f)
+	{
+		return true;
+	}
+	return false;
 }

@@ -12,6 +12,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Math/UnrealMathUtility.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "AIDataStruct.h"
 
 #include "MyAIController.generated.h"
 /**
@@ -40,11 +41,17 @@ public:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
 		FName BBAIState = "AIState";
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
-		FName BBIsHit = "IsHit";
+		FName BattleState = "BattleState";
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
 		FName BBIsBBDead = "IsDead";
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
+		FName BBIsAttackReady = "IsAttackReady";
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
+		FName HasPatrolPoint = "HasPatrolPoint";
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
 		FString AIState = "State_Idle";
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
+		bool IsAttackReady = true;
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
 		bool IsHit = false;
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
@@ -55,31 +62,21 @@ private:
 		class UAISenseConfig_Sight* SightConfig;
 	UPROPERTY()
 		class UAISenseConfig_Hearing* HearingConfig;
-private:
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float SightRadius = 3000.0f;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float SightLoseRadius = SightRadius + 500.0f;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float SightAge = 1.0f;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float SightFOV = 60.0f;
-
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float HearingRange = 4000.0f;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		float HearingAge = 1.0f;
+public:
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+		FAIDataStruct AIData;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
+		float ReturnSpeed = 1000.0f;
 public:
 	virtual void OnPossess(APawn* InPawn) override;
 	AMyAIController();
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
-		void UpdateAIPerception();
+		void UpdatePerceptionData();
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
-		void SetSenseSightOption(float Radius, float LoseRadius, float Age, float FOV);
+		void SetSenseOption(float SightRadius, float SightLoseRadius, float SightFov, float HearingRange, float Age);
+
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
-		void SetSenseHearingOption(float Range, float Age);
-	//UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
-	//	virtual void ChangeState(FString State);
+	void AttackReady(bool value);
 
 
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
@@ -90,6 +87,7 @@ public:
 
 	UFUNCTION()
 	void HitCall(FString msg);
+
 
 	UFUNCTION()
 	void DeadCall(FString msg);

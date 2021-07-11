@@ -18,20 +18,28 @@ class TEAMAI_API AAIBase : public ACharacter
 {
 	GENERATED_BODY()
 public:
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI", Meta = (MakeEditWidget = true))
 		class APatrolPoint* PatrolPoints;
 public:
 #pragma region BaseFunc
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "KGCA_AI")
+		void AttackEnemy();
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
-		virtual void AttackPlayer();
-	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
-		void SetSpeed(float speed);
+		void SetAIMove(float Speed, bool DesiredRot = true);
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		virtual void Patrol();
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		virtual void AIHit();
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		virtual void AIDead();
+
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
+		float HP = 100.0f;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
+		float Damage = 30.0f;
+	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
+		bool AIDeadCheck();
+
 #pragma endregion
 public:
 	AAIBase();
