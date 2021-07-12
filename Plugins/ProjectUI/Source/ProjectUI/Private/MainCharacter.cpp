@@ -117,7 +117,7 @@ void AMainCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInpu
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AMainCharacter::OnResetVR);
 
 	// 상호작용 키
-	PlayerInputComponent->BindAction("Interect", IE_Pressed, this, &AMainCharacter::ShowActionWidget);
+	PlayerInputComponent->BindAction("Talk", IE_Pressed, this, &AMainCharacter::ShowActionWidget);
 }
 
 void AMainCharacter::ShowActionWidget()

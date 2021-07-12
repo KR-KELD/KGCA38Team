@@ -11,7 +11,7 @@ public class ProjectUI : ModuleRules
 		PublicIncludePaths.AddRange(
 			new string[] {
 				// ... add public include paths required here ...
-			}
+            }
 			);
 				
 		
@@ -49,5 +49,5 @@ public class ProjectUI : ModuleRules
 				// ... add any modules that your module loads dynamically here ...
 			}
 			);
-	}
+    }
 }
