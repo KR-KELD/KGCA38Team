@@ -33,12 +33,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		virtual void AIDead();
 
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
-		float HP = 100.0f;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
-		float Damage = 30.0f;
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
-		bool AIDeadCheck();
+		virtual bool AIDeadCheck();
 
 #pragma endregion
 public:

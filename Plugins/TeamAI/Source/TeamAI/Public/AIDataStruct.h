@@ -20,8 +20,6 @@ struct FAIDataStruct
 	GENERATED_USTRUCT_BODY()
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int AIObjectCode;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float WalkSpeed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float RunSpeed;

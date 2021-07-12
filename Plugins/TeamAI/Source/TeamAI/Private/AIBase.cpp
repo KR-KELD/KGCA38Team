@@ -19,8 +19,8 @@ AAIBase::AAIBase()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 250.0f, 0.0f);
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
-	GetCharacterMovement()->BrakingDecelerationWalking = 200.0f;
-	GetCharacterMovement()->GroundFriction = 2.0f;
+	//GetCharacterMovement()->BrakingDecelerationWalking = 200.0f;
+	//GetCharacterMovement()->GroundFriction = 2.0f;
 }
 
 
@@ -82,9 +82,5 @@ void AAIBase::AIDead()
 
 bool AAIBase::AIDeadCheck()
 {
-	if (HP < 0.0f)
-	{
-		return true;
-	}
-	return false;
+	return true;
 }
