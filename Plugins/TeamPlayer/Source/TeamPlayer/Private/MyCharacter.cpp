@@ -10,14 +10,14 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Particles/ParticleSystem.h"
 
-#include "Kismet/GameplayStatics.h"
+
 #include "Kismet/KismetSystemLibrary.h"
 // Sets default values
 AMyCharacter::AMyCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	
 }
 
 AMyCharacter::AMyCharacter(const FObjectInitializer& obj)
@@ -36,19 +36,19 @@ AMyCharacter::AMyCharacter(const FObjectInitializer& obj)
 	m_TPSCameraBoomComponent->bUsePawnControlRotation = true;
 
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> skelMesh(TEXT("SkeletalMesh'/Game/LadyMarionCotillard/mesh/LadyMarion_RedEye.LadyMarion_RedEye'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> skelMesh(TEXT("SkeletalMesh'/TeamPlayer/LadyMarionCotillard/mesh/LadyMarion_RedEye.LadyMarion_RedEye'"));
 	if (skelMesh.Succeeded())
 	{
 		GetMesh()->SetSkeletalMesh(skelMesh.Object);
 		GetMesh()->SetRelativeLocation(FVector(0, 0, -90.0f));
 		GetMesh()->SetRelativeRotation(FRotator(0, -90.0f, 0).Quaternion());
 		GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
-		static ConstructorHelpers::FClassFinder<UAnimInstance> ABP_Player(TEXT("AnimBlueprint'/Game/Blueprints/Character/ABP_Player.ABP_Player_C'"));
+		static ConstructorHelpers::FClassFinder<UAnimInstance> ABP_Player(TEXT("AnimBlueprint'/TeamPlayer/Blueprints/Character/ABP_Player.ABP_Player_C'"));
 		if (ABP_Player.Succeeded())
 		{
 			GetMesh()->SetAnimInstanceClass(ABP_Player.Class);
 		}
-		static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMontage(TEXT("AnimMontage'/Game/ImportedAnimation/VampCharacter/Animation/AM_AttackCombo.AM_AttackCombo'"));
+		static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMontage(TEXT("AnimMontage'/TeamPlayer/ImportedAnimation/VampCharacter/Animation/AM_AttackCombo.AM_AttackCombo'"));
 		AM_AttackMontage = AttackMontage.Object;
 	}
 
@@ -56,14 +56,14 @@ AMyCharacter::AMyCharacter(const FObjectInitializer& obj)
 
 	m_SM_WeaponSocket = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponSocket"));
 	m_SM_WeaponSocket->SetupAttachment(GetMesh());
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> staticMesh(TEXT("StaticMesh'/Game/LadyMarionCotillard/mesh/SM_Kantana_Color.SM_Kantana_Color'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> staticMesh(TEXT("StaticMesh'/TeamPlayer/LadyMarionCotillard/mesh/SM_Kantana_Color.SM_Kantana_Color'"));
 	if (staticMesh.Succeeded())
 	{
 		m_SM_WeaponSocket->SetStaticMesh(staticMesh.Object);
 
 		m_SM_WeaponSocket->AttachTo(GetMesh(), "WeaponSocket");
 	}
-	static ConstructorHelpers::FObjectFinder<UParticleSystem> AttackParticle(TEXT("ParticleSystem'/Game/Effect/P_Hit.P_Hit'"));
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> AttackParticle(TEXT("ParticleSystem'/TeamPlayer/Effect/P_Hit.P_Hit'"));
 	m_PS_AttackParticle = AttackParticle.Object;
 	m_collision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("collision"));
 	m_collision->SetupAttachment(m_SM_WeaponSocket);
