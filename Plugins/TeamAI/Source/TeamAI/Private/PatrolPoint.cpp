@@ -8,6 +8,7 @@ APatrolPoint::APatrolPoint()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
 }
 
 // Called when the game starts or when spawned
@@ -24,6 +25,29 @@ void APatrolPoint::Tick(float DeltaTime)
 
 }
 
+FVector APatrolPoint::GetPatrolPoint()
+{
+	switch (PatrolType)
+	{
+		case EPatrolType::EPatrol_RandomPoint:
+		{
+			return GetActorLocation();
+		}break;
+		case EPatrolType::EPatrol_CirclePoints:
+		{
+			return GetCirclePoint();
+		}break;
+		case EPatrolType::EPatrol_RoundTripPoints:
+		{
+			return GetRoundTripPoint();
+		}break;
+		default:
+		{
+			return GetActorLocation();
+		}break;
+	}
+}
+
 FVector APatrolPoint::GetCirclePoint()
 {
 	DestIndex += Direction;
@@ -33,7 +57,7 @@ FVector APatrolPoint::GetCirclePoint()
 	}
 	if (PatrolPoints.IsValidIndex(DestIndex))
 	{
-		return PatrolPoints[DestIndex];
+		return (PatrolPoints[DestIndex] + GetActorLocation());
 	}
 	return FVector::ZeroVector;
 }
@@ -48,7 +72,7 @@ FVector APatrolPoint::GetRoundTripPoint()
 	}
 	if (PatrolPoints.IsValidIndex(DestIndex))
 	{
-		return PatrolPoints[DestIndex];
+		return (PatrolPoints[DestIndex] + GetActorLocation());
 	}
 	return FVector::ZeroVector;
 }

@@ -20,14 +20,15 @@ AMyAIController::AMyAIController()
 	HearingConfig->DetectionByAffiliation.bDetectFriendlies = true;
 	HearingConfig->DetectionByAffiliation.bDetectNeutrals = true;
 
+	SightConfig->SightRadius = 3000.0f;
+	SightConfig->LoseSightRadius = 3500.0f;
+	SightConfig->PeripheralVisionAngleDegrees = 60.0f;
+	SightConfig->SetMaxAge(1.0f);
 
-	SightConfig->SightRadius = SightRadius;
-	SightConfig->LoseSightRadius = SightLoseRadius;
-	SightConfig->PeripheralVisionAngleDegrees = SightFOV;
-	SightConfig->SetMaxAge(SightAge);
+	HearingConfig->HearingRange = 4000.0f;
+	HearingConfig->SetMaxAge(1.0f);
 
-	HearingConfig->HearingRange = HearingRange;
-	HearingConfig->SetMaxAge(HearingAge);
+	
 
 	GetPerceptionComponent()->ConfigureSense(*SightConfig);
 	GetPerceptionComponent()->ConfigureSense(*HearingConfig);
@@ -49,7 +50,7 @@ AMyAIController::AMyAIController()
 	}
 }
 
-void AMyAIController::UpdateAIPerception()
+void AMyAIController::UpdatePerceptionData()
 {
 	UAISenseConfig* SightConfigOrigin = GetAIPerceptionComponent()->GetSenseConfig(
 		UAISense::GetSenseID(UAISense_Sight::StaticClass()));
@@ -59,28 +60,23 @@ void AMyAIController::UpdateAIPerception()
 		UAISense::GetSenseID(UAISense_Hearing::StaticClass()));
 	UAISenseConfig_Hearing* Hearing = Cast<UAISenseConfig_Hearing>(HearingConfigOrigin);
 
-	Sight->SightRadius = SightRadius;
-	Sight->LoseSightRadius = SightLoseRadius;
-	Sight->PeripheralVisionAngleDegrees = SightFOV;
-	Sight->SetMaxAge(SightAge);
+	Sight->SightRadius = AIData.LookRange;
+	Sight->LoseSightRadius = AIData.LostRange;
+	Sight->PeripheralVisionAngleDegrees = AIData.SightAngle;
+	Sight->SetMaxAge(AIData.PerceptionAge);
 
-	Hearing->HearingRange = HearingRange;
-	Hearing->SetMaxAge(HearingAge);
+	Hearing->HearingRange = AIData.HearingRange;
+	Hearing->SetMaxAge(AIData.PerceptionAge);
 
 }
 
-void AMyAIController::SetSenseSightOption(float Radius, float LoseRadius, float Age, float FOV)
+void AMyAIController::SetSenseOption(float SightRadius, float SightLoseRadius, float SightFov, float HearingRange, float Age)
 {
-	SightRadius = Radius;
-	SightLoseRadius = LoseRadius;
-	SightAge = Age;
-	SightFOV = FOV;
-}
-
-void AMyAIController::SetSenseHearingOption(float Range, float Age)
-{
-	HearingRange = Range;
-	HearingAge = Age;
+	AIData.LookRange = SightRadius;
+	AIData.LostRange = SightLoseRadius;
+	AIData.SightAngle = SightFov;
+	AIData.HearingRange = HearingRange;
+	AIData.PerceptionAge = Age;
 }
 
 void AMyAIController::OnPossess(APawn* InPawn)
@@ -90,16 +86,27 @@ void AMyAIController::OnPossess(APawn* InPawn)
 	AIPawn->HitDelegate.AddDynamic(this, &AMyAIController::HitCall);
 	AIPawn->DeadDelegate.AddDynamic(this, &AMyAIController::DeadCall);
 
-
 	if (UseBlackboard(BBOject, Blackboard))
 	{
 		if (RunBehaviorTree(BTObject))
 		{
-			//AIState = "State_Idle";
-			//AIState = "State_Patrol";
 			//Blackboard->SetValueAsString(BehaviorState, AIState);
 
 			UpdateState("State_Patrol");
+			//UpdateState("State_Idle");
+			Blackboard->SetValueAsBool(BBIsBBDead, IsDead);
+			//Blackboard->SetValueAsBool(BBIsHit, IsHit);
+			Blackboard->SetValueAsBool(BBIsAttackReady, IsAttackReady);
+			if (AIPawn->PatrolPoints == nullptr)
+			{
+				Blackboard->SetValueAsBool(HasPatrolPoint, false);
+			}
+			else
+			{
+				Blackboard->SetValueAsBool(HasPatrolPoint, true);
+			}
+			Blackboard->SetValueAsString(BattleState, "Battle_Select");
+
 		}
 		else
 		{
@@ -110,19 +117,26 @@ void AMyAIController::OnPossess(APawn* InPawn)
 
 void AMyAIController::HitCall(FString msg)
 {
-	UpdateState("State_Hit");
+	IsHit = true;
+	//Blackboard->SetValueAsBool(BBIsHit, IsHit);
 }
 
 void AMyAIController::DeadCall(FString msg)
 {
-	UpdateState("State_Dead");
-
+	IsDead = true;
+	Blackboard->SetValueAsBool(BBIsBBDead, IsDead);
 }
 
 void AMyAIController::UpdateState(FString State)
 {
 	AIState = State;
 	GetBlackboardComponent()->SetValueAsString(BBAIState, AIState);
+}
+
+void AMyAIController::AttackReady(bool value)
+{
+	IsAttackReady = value;
+	Blackboard->SetValueAsBool(BBIsAttackReady, IsAttackReady);
 }
 
 void AMyAIController::AIPerceptionUpdate(AActor* Actor, FAIStimulus Info)
@@ -133,7 +147,7 @@ void AMyAIController::AIPerceptionUpdate(AActor* Actor, FAIStimulus Info)
 		if (AIState == "State_Idle" || AIState == "State_Patrol")
 		{
 			UpdateState("State_BattleReady");
-		//여기서 무기 꺼내는 명령 내리기
+		//전투준비
 			GetBlackboardComponent()->SetValueAsObject(TargetActor, Actor);
 		}
 
