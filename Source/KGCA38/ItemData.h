@@ -18,6 +18,7 @@ USTRUCT(Atomic, BlueprintType)
 struct FItemData : public FTableRowBase
 {
 public:
+
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
