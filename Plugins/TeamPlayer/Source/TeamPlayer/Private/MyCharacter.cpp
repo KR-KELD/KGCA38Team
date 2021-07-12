@@ -36,6 +36,7 @@ AMyCharacter::AMyCharacter(const FObjectInitializer& obj)
 	m_TPSCameraBoomComponent->bUsePawnControlRotation = true;
 
 
+
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> skelMesh(TEXT("SkeletalMesh'/TeamPlayer/LadyMarionCotillard/mesh/LadyMarion_RedEye.LadyMarion_RedEye'"));
 	if (skelMesh.Succeeded())
 	{
@@ -50,8 +51,10 @@ AMyCharacter::AMyCharacter(const FObjectInitializer& obj)
 		}
 		static ConstructorHelpers::FObjectFinder<UAnimMontage> AttackMontage(TEXT("AnimMontage'/TeamPlayer/ImportedAnimation/VampCharacter/Animation/AM_AttackCombo.AM_AttackCombo'"));
 		AM_AttackMontage = AttackMontage.Object;
+		static ConstructorHelpers::FObjectFinder<UAnimMontage> DodgeMontage(TEXT("AnimMontage'/TeamPlayer/ImportedAnimation/VampCharacter/Animation/AM_Dodge.AM_Dodge'"));
+		AM_DodgeMontage = DodgeMontage.Object;
+	
 	}
-
 
 
 	m_SM_WeaponSocket = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WeaponSocket"));
@@ -122,13 +125,14 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAxis("LookUp", this, &AMyCharacter::LookUpAtRate);
 	PlayerInputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &AMyCharacter::Attack);
 	PlayerInputComponent->BindAction("Interect", EInputEvent::IE_Pressed, this, &AMyCharacter::InterectOverlap);
+	PlayerInputComponent->BindAction("Dodge", EInputEvent::IE_Pressed, this, &AMyCharacter::Dodge);
 	//PlayerInputComponent->BindAction("Interect", EInputEvent::IE_Pressed, this, &AMyCharacter::InterectOverlap);
 
 }
 
 void AMyCharacter::Attack()
 {
-	if (IsDead == false)
+	if (IsDead == false && IsHit == false)
 	{
 		if (IsAttack == false)
 		{
@@ -157,6 +161,42 @@ void AMyCharacter::Attack()
 	}
 }
 
+void AMyCharacter::Dodge()
+{
+	//USceneComponent::GetWorld
+	float Roll, Pitch, Yaw;
+	m_TPSCameraBoomComponent->GetComponentRotation();
+	//m_SpringArmArrow->GetComponentRotation();
+	bDodge = true;//
+	FRotator CameraWorldRot = m_TPSCamera->GetComponentRotation();
+	UKismetMathLibrary::BreakRotator(CameraWorldRot, Roll, Pitch, Yaw);
+	FRotator newRot = UKismetMathLibrary::MakeRotator(Roll, 0.0f, Yaw);
+	SetActorRotation(newRot);
+	//PlayAnimMontage(AM_DodgeMontage, 1.0f, "Back");
+	switch (DodgeDir)
+	{
+	case 0:	//Forward
+		//LaunchCharacter()
+		PlayAnimMontage(AM_DodgeMontage, 1.0f, "Dash");
+		//PlayAnimMontage(AM_DodgeMontage, )
+		break;
+	case 1: //back
+		PlayAnimMontage(AM_DodgeMontage, 1.0f, "Back");
+		break;
+	case 2: //Right
+		PlayAnimMontage(AM_DodgeMontage, 1.0f, "Right");
+		break;
+	case 3: //Left
+		PlayAnimMontage(AM_DodgeMontage, 1.0f, "Left");
+		break;
+	default:
+		//DodgeDir = 0;
+		break;
+
+	}
+
+}
+
 void AMyCharacter::OverlappedActor(FName TagName)
 {
 	//UKismetSystemLibrary::PrintString(GetWorld(), TagName.ToString());
@@ -174,7 +214,9 @@ void AMyCharacter::InterectOverlap()
 
 void AMyCharacter::MoveForward(float value)
 {
-	if (IsDead == false)
+	//when player is not dead or get hit is false, player can move
+	if (IsDead == false && IsHit == false)
+	{
 		if (value != 0.0f && Controller != nullptr)
 		{
 			FRotator rot = this->Controller->GetControlRotation();
@@ -182,11 +224,28 @@ void AMyCharacter::MoveForward(float value)
 			FRotationMatrix mat = FRotationMatrix(yaw);
 			FVector dir = mat.GetUnitAxis(EAxis::X);
 			AddMovementInput(dir, value);
+			UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(value));
+			if (value == 1)
+			{
+				DodgeDir = 0;
+			}
+			else if (value == -1)
+			{
+				DodgeDir = 1;
+			}
+			else
+			{
+				DodgeDir = 1;
+			}
+
 		}
+	}
+
 }
 void AMyCharacter::MoveRight(float value)
 {
-	if (IsDead == false)
+	if (IsDead == false && IsHit == false)
+	{
 		if (value != 0.0f && Controller != nullptr)
 		{
 			FRotator rot = this->Controller->GetControlRotation();
@@ -194,7 +253,22 @@ void AMyCharacter::MoveRight(float value)
 			FRotationMatrix mat = FRotationMatrix(yaw);
 			FVector dir = mat.GetUnitAxis(EAxis::Y);
 			AddMovementInput(dir, value);
+			UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(value));
+			if (value == 1)
+			{
+				DodgeDir = 2;
+			}
+			else if (value == -1)
+			{
+				DodgeDir = 3;
+			}
+			else
+			{
+				DodgeDir = 1;
+			}
 		}
+	}
+
 }
 void AMyCharacter::TurnAtRate(float value)
 {
@@ -211,14 +285,12 @@ void AMyCharacter::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, cla
 	{
 		if (OtherComp->ComponentHasTag("EnemyCollision") == true)
 		{
-			if (m_collision->IsActive() == true)
+			if (m_collision->IsActive() == true)		//when give damage to enemy
 			{
 				UGameplayStatics::ApplyDamage(OtherActor, 20.0f, NULL, GetOwner(), NULL);
 				UKismetSystemLibrary::PrintString(GetWorld(), TEXT("Hit"));
-				//UParticleSystem* Emitter = 
-				//UGameplayStatics::SpawnEmitterAttached(m_PS_AttackParticle, OverlappedComp, NULL, NULL, NULL, NULL);
 				UGameplayStatics::SpawnEmitterAttached(m_PS_AttackParticle, OverlappedComp);
-				//UGameplayStatics::SpawnEmitterAttached(m_PS_AttackParticle, OverlappedComp, NULL);
+
 			}
 		}
 		else if (OtherComp->ComponentHasTag("Item") == true)
@@ -231,7 +303,7 @@ void AMyCharacter::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, cla
 
 void AMyCharacter::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if (OtherActor && (OtherActor != this) && OtherComp)
+	if (OtherActor && (OtherActor != this) && OtherComp)	//when player interect with item
 	{
 		UKismetSystemLibrary::PrintString(GetWorld(), TEXT("OverlappEnd"));
 		IsOverlapItem = false;
@@ -240,6 +312,7 @@ void AMyCharacter::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class
 
 float AMyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser)
 {
+	//when player get damge from enemy
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
 	fHP -= damage;

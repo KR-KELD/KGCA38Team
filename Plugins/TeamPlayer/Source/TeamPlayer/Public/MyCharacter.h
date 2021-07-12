@@ -7,6 +7,7 @@
 //#include "GameFramework/Actor.h"
 #include "Animation/AnimMontage.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/ArrowComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "MyCharacter.generated.h"
 
@@ -32,10 +33,14 @@ public:
 		bool ComboOn;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
 		bool IsOverlapItem;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
+		bool bDodge;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
 		UAnimMontage * AM_AttackMontage;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
+		UAnimMontage * AM_DodgeMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
+		int DodgeDir;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
@@ -48,6 +53,8 @@ public:
 		class UStaticMeshComponent*		m_SM_WeaponSocket;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
 		class UCapsuleComponent*		m_collision;
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
 		class UParticleSystem*			m_PS_AttackParticle;
 
@@ -68,6 +75,9 @@ protected:
 
 	void Attack();
 	void InterectOverlap();
+	void Dodge();
+
+	
 
 
 public:

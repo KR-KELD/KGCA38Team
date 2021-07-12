@@ -25,7 +25,7 @@ void AMyBoss::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	GetDirAndDistOfCharacter();
-
+	UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(SavePlayerDist));
 	if (AttackDist >= SavePlayerDist)
 	{
 		ECheckBossState = EBossState::EBS_Attack;
