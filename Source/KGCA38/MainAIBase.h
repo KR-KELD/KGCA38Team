@@ -18,6 +18,8 @@ class KGCA38_API AMainAIBase : public AAIBase
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
 		FCharacterDataStruct CharacterInfo;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
+		int Code;
 	virtual bool AIDeadCheck() override;
 	virtual void AIHit(float Damage) override;
 	UFUNCTION()

@@ -162,3 +162,13 @@ void AMyAIController::AIPerceptionUpdate(AActor* Actor, FAIStimulus Info)
 		//}
 	}
 }
+
+void AMyAIController::StartAI()
+{
+	GetBrainComponent()->StartLogic();
+}
+
+void AMyAIController::StopAI()
+{
+	GetBrainComponent()->StartLogic();
+}

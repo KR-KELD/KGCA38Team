@@ -85,6 +85,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 	void UpdateState(FString State);
 
+	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
+	void StartAI();
+
+	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
+	void StopAI();
+
 	UFUNCTION()
 	void HitCall(FString msg);
 
