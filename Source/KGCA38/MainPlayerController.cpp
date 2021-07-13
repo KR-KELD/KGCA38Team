@@ -304,7 +304,10 @@ void AMainPlayerController::UseItem(int32 index)
 	{
 		if (QuickSlot[index]->GetItemType() == EItemType::EIT_Food)
 		{
-			QuickSlot[index]->SetItemCount(QuickSlot[index]->GetItemCount() - 1);
+			if (QuickSlot[index]->GetItemCount() > 0)
+			{
+				QuickSlot[index]->SetItemCount(QuickSlot[index]->GetItemCount() - 1);
+			}
 		}
 	}
 }
