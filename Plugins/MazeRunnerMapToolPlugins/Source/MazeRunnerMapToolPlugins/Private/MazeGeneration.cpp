@@ -14,7 +14,7 @@ AMazeGeneration::AMazeGeneration()
 	MapActors = Cast<UClass>(StaticLoadObject(UClass::StaticClass(), NULL, *Path.ToString()));
 	TSubclassOf<AActor> wall = MapActors;
 	MaxX = 20;
-	MaxY = 8;
+	MaxY = 9;
 	ch.SetNum(MaxX);
 	for (int i = 0; i < MaxX; i++)
 	{
