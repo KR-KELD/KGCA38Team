@@ -20,8 +20,8 @@ struct FCharacterDataStruct
 {
 	GENERATED_USTRUCT_BODY()
 public:
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	//	int TeamNum;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		int Code;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float HP;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

@@ -19,5 +19,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
 		FCharacterDataStruct CharacterInfo;
 	virtual bool AIDeadCheck() override;
-	
+	virtual void AIHit(float Damage) override;
+	UFUNCTION()
+		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) override;
 };

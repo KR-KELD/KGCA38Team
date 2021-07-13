@@ -29,7 +29,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		virtual void Patrol();
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
-		virtual void AIHit();
+		virtual void AIHit(float Damage);
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		virtual void AIDead();
 

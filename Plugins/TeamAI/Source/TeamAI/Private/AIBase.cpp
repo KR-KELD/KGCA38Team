@@ -69,7 +69,7 @@ void AAIBase::Patrol()
 }
 
 //기본 히트함수를 호출시키던 이걸 쓰던 하기
-void AAIBase::AIHit()
+void AAIBase::AIHit(float Damage)
 {
 	if (HitDelegate.IsBound() == true) HitDelegate.Broadcast("Hit");
 }
