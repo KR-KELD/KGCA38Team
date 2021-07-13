@@ -16,8 +16,9 @@ void AMyBoss::BeginPlay()
 {
 	Super::BeginPlay();
 	pTarget = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-	ChaseDist = 100.0f;
-	AttackDist = 30.0f;
+	ChaseDist = 500.0f;
+	AttackDist = 120.0f;
+	JumpOrBreathDist = 700;
 }
 
 // Called every frame
@@ -33,6 +34,25 @@ void AMyBoss::Tick(float DeltaTime)
 	else if (ChaseDist >= SavePlayerDist)
 	{
 		ECheckBossState = EBossState::EBS_Chase;
+	}
+	else if (JumpOrBreathDist >= SavePlayerDist)
+	{
+		int temp = rand() % 1;
+		UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(temp));
+		switch (temp)
+		{
+		case 0:
+			ECheckBossState = EBossState::EBS_Breath;
+			break;
+		case 1:
+			ECheckBossState = EBossState::EBS_JumpAttack;
+			break;
+		}
+
+	}
+	else
+	{
+		ECheckBossState = EBossState::EBS_IDLE;
 	}
 
 
@@ -54,6 +74,10 @@ void AMyBoss::ChasePlayer()
 }
 void AMyBoss::BossStateAction(EBossState bs)
 {
+	if (bs != EPrevBossState)
+	{
+		EPrevBossState = bs;
+	}
 	switch (bs)
 	{
 	case  EBossState::EBS_Chase:

@@ -10,9 +10,11 @@
 UENUM(BlueprintType)
 enum class EBossState : uint8
 {
+	EBS_IDLE UMETA(DisplayName = "Idle"),
 	EBS_Chase UMETA(DisplayName = "Chase"),
 	EBS_Attack UMETA(DisplayName = "Attack"),
-
+	EBS_JumpAttack UMETA(DisplayName = "JumpAttack"),
+	EBS_Breath UMETA(DisplayName = "Breath"),
 };
 
 UCLASS()
@@ -30,9 +32,13 @@ public:
 	float		ChaseDist;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
 	float		AttackDist;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
+		float	JumpOrBreathDist;
 
 	UPROPERTY(EditAnywhere)
 		EBossState	ECheckBossState;
+	UPROPERTY(EditAnywhere)
+		EBossState	EPrevBossState;
 
 public:
 	// Sets default values for this character's properties

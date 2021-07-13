@@ -4,7 +4,7 @@
 #include "MyCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
-#include "Components/CapsuleComponent.h"
+//#include "Components/CapsuleComponent.h"
 #include "Math/UnrealMathUtility.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -74,7 +74,7 @@ AMyCharacter::AMyCharacter(const FObjectInitializer& obj)
 	m_collision->OnComponentBeginOverlap.AddDynamic(this, &AMyCharacter::OnOverlapBegin);
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AMyCharacter::OnOverlapBegin);
 	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &AMyCharacter::OnOverlapEnd);
-
+	
 	//collision->OnComponentBeginOverLap.AddDynamic(this, &AMyCharacter::OnOverlapBegin);
 }
 
@@ -93,21 +93,24 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	FRotator temp2 = UKismetMathLibrary::Conv_VectorToRotator(GetCharacterMovement()->GetCurrentAcceleration());
-	FRotator temp = FMath::RInterpTo(GetActorRotation(), temp2, DeltaTime, 10.0f);
-	float Yaw, Pitch, Roll;
-	UKismetMathLibrary::BreakRotator(GetControlRotation(), Roll, Pitch, Yaw);
-	FRotator breakRotZ = UKismetMathLibrary::MakeRotator(0, 0, Yaw);
-	FVector FVec = UKismetMathLibrary::GetForwardVector(breakRotZ);
-	if (GetInputAxisValue("MoveForward") != 0.0f || GetInputAxisValue("MoveRight") != 0.0f)
+	if (bDodge == false)
 	{
-		SetActorRotation(temp);
+		FRotator temp2 = UKismetMathLibrary::Conv_VectorToRotator(GetCharacterMovement()->GetCurrentAcceleration());
+		FRotator temp = FMath::RInterpTo(GetActorRotation(), temp2, DeltaTime, 10.0f);
+		float Yaw, Pitch, Roll;
+		UKismetMathLibrary::BreakRotator(GetControlRotation(), Roll, Pitch, Yaw);
+		FRotator breakRotZ = UKismetMathLibrary::MakeRotator(0, 0, Yaw);
+		FVector FVec = UKismetMathLibrary::GetForwardVector(breakRotZ);
 
+		if (GetInputAxisValue("MoveForward") != 0.0f || GetInputAxisValue("MoveRight") != 0.0f)
+		{
+			SetActorRotation(temp);
+
+		}
+
+
+		AddMovementInput(FVec, GetInputAxisValue("MovemForward"));
 	}
-
-	AddMovementInput(FVec, GetInputAxisValue("MovemForward"));
-
 	//
 	//
 	//SetActorRotation()
@@ -163,6 +166,7 @@ void AMyCharacter::Attack()
 
 void AMyCharacter::Dodge()
 {
+	if (bDodge == true) return;
 	//USceneComponent::GetWorld
 	float Roll, Pitch, Yaw;
 	m_TPSCameraBoomComponent->GetComponentRotation();
@@ -214,6 +218,7 @@ void AMyCharacter::InterectOverlap()
 
 void AMyCharacter::MoveForward(float value)
 {
+	if (bDodge == true) return;
 	//when player is not dead or get hit is false, player can move
 	if (IsDead == false && IsHit == false)
 	{
@@ -233,7 +238,7 @@ void AMyCharacter::MoveForward(float value)
 			{
 				DodgeDir = 1;
 			}
-			else
+			else if (value == 0)
 			{
 				DodgeDir = 1;
 			}
@@ -244,6 +249,7 @@ void AMyCharacter::MoveForward(float value)
 }
 void AMyCharacter::MoveRight(float value)
 {
+	if (bDodge == true) return;
 	if (IsDead == false && IsHit == false)
 	{
 		if (value != 0.0f && Controller != nullptr)
@@ -252,6 +258,7 @@ void AMyCharacter::MoveRight(float value)
 			FRotator yaw = FRotator(0, rot.Yaw, 0);
 			FRotationMatrix mat = FRotationMatrix(yaw);
 			FVector dir = mat.GetUnitAxis(EAxis::Y);
+			if(bDodge == false)
 			AddMovementInput(dir, value);
 			UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(value));
 			if (value == 1)
@@ -262,7 +269,7 @@ void AMyCharacter::MoveRight(float value)
 			{
 				DodgeDir = 3;
 			}
-			else
+			else if(value == 0)
 			{
 				DodgeDir = 1;
 			}
