@@ -8,7 +8,7 @@ public class KGCA38 : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","MazeRunnerMapToolPlugins", "TeamAI", "ProjectUI", "TeamEffect", "TeamPlayer" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore","MazeRunnerMapToolPlugins", "TeamAI", "ProjectUI", "TeamEffect", "TeamPlayer", "UMG" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

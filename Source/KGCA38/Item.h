@@ -12,7 +12,7 @@ class UWidgetComponent;
 class USoundCue;
 
 UCLASS()
-class PROJECTUI_API AItem : public AActor
+class KGCA38_API AItem : public AActor
 {
 	GENERATED_BODY()
 	

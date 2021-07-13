@@ -2,7 +2,6 @@
 
 #pragma once
 
-//#include "../../../../../Source/TeamProject/ItemData.h"
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "MainPlayerController.generated.h"
@@ -13,7 +12,7 @@ class AItem;
  * 
  */
 UCLASS()
-class PROJECTUI_API AMainPlayerController : public APlayerController
+class KGCA38_API AMainPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 	
@@ -51,7 +50,7 @@ private:
 	int8 OverlappedItemCount;
 
 	// 마지막에 히트된 액터
-	class ANPC_Characters* TraceHitLastActor;
+	//class ANPC_Characters* TraceHitLastActor;
 
 	// 마지막에 히트된 아이템
 	class AItem* TraceHitLastItem;
@@ -77,7 +76,7 @@ public:
 	// 상호작용 액션키 눌림을 유효 시킬지
 	void EnableInterActionKey();
 
-	FORCEINLINE ANPC_Characters* GetTraceHitLastActor() const {	return TraceHitLastActor; }
+	//FORCEINLINE ANPC_Characters* GetTraceHitLastActor() const {	return TraceHitLastActor; }
 	FORCEINLINE AItem* GetTraceHitLastItem() const { return TraceHitLastItem; }
 
 };

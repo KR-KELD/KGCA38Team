@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "ProjectUI.h"
 #include "GameObject.h"
 #include "Components/StaticMeshComponent.h"
 #include "Item.h"
