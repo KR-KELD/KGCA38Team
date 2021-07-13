@@ -12,7 +12,7 @@ class UStaticMeshComponent;
  * 
  */
 UCLASS()
-class PROJECTUI_API AGameObject : public AItem
+class KGCA38_API AGameObject : public AItem
 {
 	GENERATED_BODY()
 	

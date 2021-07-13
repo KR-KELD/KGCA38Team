@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "Kismet/KismetMathLibrary.h"
 #include "MapToolGameModeBase.h"
+#include "Kismet/KismetMathLibrary.h"
 
 AMapToolGameModeBase::AMapToolGameModeBase()
 {

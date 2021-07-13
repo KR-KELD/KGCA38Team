@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "ProjectUI.h"
 #include "Item.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
@@ -8,7 +7,6 @@
 #include "Sound/SoundCue.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/PlayerController.h"
-#include "MainCharacter.h"
 #include "MainPlayerController.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -54,11 +52,11 @@ void AItem::OnPickupSphereOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 {
 	if (OtherActor)
 	{
-		AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
+		//AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
 		AMainPlayerController* controller = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
 		// 겹친게 플레이어 캐릭터가 맞으면
-		if (MainCharacter && controller)
+		if (controller)
 		{
 			// 겹친 항목 수 증가
 			controller->IncreamentOverlappedItemCount(1);
@@ -71,11 +69,11 @@ void AItem::OnPickupSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, A
 {
 	if (OtherActor)
 	{
-		AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
+		//AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
 		AMainPlayerController* controller = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
 		// 겹친게 플레이어 캐릭터가 맞으면
-		if (MainCharacter && controller)
+		if (controller)
 		{
 			// 겹친 항목 수 감소
 			controller->IncreamentOverlappedItemCount(-1);

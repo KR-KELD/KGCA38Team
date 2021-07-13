@@ -1,16 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "ProjectUI.h"
 #include "MainPlayerController.h"
 #include "Item.h"
 #include "GameObject.h"
-#include "MainCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundCue.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "NPC_Characters.h"
 #include "DrawDebugHelpers.h"
 #include "Components/WidgetComponent.h"
 #include "Camera/CameraComponent.h"
@@ -56,7 +53,7 @@ void AMainPlayerController::BeginPlay()
 
 void AMainPlayerController::EnableInterActionKey()
 {
-	if (TraceHitLastActor || TraceHitLastItem)
+	if (/*TraceHitLastActor ||*/ TraceHitLastItem)
 	{
 		bInterActionKey = true;
 	}
@@ -69,12 +66,12 @@ void AMainPlayerController::TraceForActors()
 		// 라인 트레이스에 닿았는지. 닿으면 정보 위젯을 띄움.
 		FHitResult HitTraceResult;
 		FVector HitLocation;
-		TraceUnderScreen(HitTraceResult, HitLocation);
+		//TraceUnderScreen(HitTraceResult, HitLocation);
 		bool bCheckInventoryItem = false;
 
 		if (HitTraceResult.bBlockingHit)
 		{
-			auto npcActor = Cast<ANPC_Characters>(HitTraceResult.GetActor());
+		//	auto npcActor = Cast<ANPC_Characters>(HitTraceResult.GetActor());
 
 			auto Item = Cast<AGameObject>(HitTraceResult.GetActor());
 
@@ -136,7 +133,7 @@ void AMainPlayerController::TraceForActors()
 				}
 			}
 
-			if (npcActor && npcActor->GetInteractionWidget())
+			/*if (npcActor && npcActor->GetInteractionWidget())
 			{
 				npcActor->GetInteractionWidget()->SetVisibility(true);
 				bTraceIn = true;
@@ -147,17 +144,17 @@ void AMainPlayerController::TraceForActors()
 					bInterActionKey = false;
 				}
 
-			}
+			}*/
 
-			if (TraceHitLastActor)
-			{
-				if (TraceHitLastActor != npcActor)
-				{
-					// 마지막 충돌정보가 저장된 액터가 라인트레이스와 충돌되지 않으면 숨김.
-					TraceHitLastActor->GetInteractionWidget()->SetVisibility(false);
-					bTraceIn = false;
-				}
-			}
+			//if (TraceHitLastActor)
+			//{
+			//	if (TraceHitLastActor != npcActor)
+			//	{
+			//		// 마지막 충돌정보가 저장된 액터가 라인트레이스와 충돌되지 않으면 숨김.
+			//		TraceHitLastActor->GetInteractionWidget()->SetVisibility(false);
+			//		bTraceIn = false;
+			//	}
+			//}
 
 			if (TraceHitLastItem)
 			{
@@ -168,7 +165,7 @@ void AMainPlayerController::TraceForActors()
 			}
 
 			// 마지막에 충돌된 액터 저장
-			TraceHitLastActor = npcActor;
+			//TraceHitLastActor = npcActor;
 			TraceHitLastItem = Item;
 		}
 	}
@@ -177,10 +174,10 @@ void AMainPlayerController::TraceForActors()
 bool AMainPlayerController::TraceUnderScreen(FHitResult& OutHitResult, FVector& OutHitLocation)
 {
 	// 캐릭터로 캐스팅
-	auto character = Cast<AMainCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	//auto character = Cast<AMainCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 
-	if (character)
-	{
+	//if (character)
+	//{
 		FVector2D ViewportSize;
 		if (GEngine && GEngine->GameViewport)
 		{
@@ -189,9 +186,9 @@ bool AMainPlayerController::TraceUnderScreen(FHitResult& OutHitResult, FVector& 
 		}
 
 		// 캐릭터의 카메라와 스프링암을 얻어와야 한다.
-		FVector ScreenLocation = character->GetFollowCamera()->GetComponentLocation();
-		FVector EndTrace = ScreenLocation + (character->FollowCamera->GetForwardVector() * 
-										(character->GetCameraBoom()->TargetArmLength + 3000.0f));
+		FVector ScreenLocation;// = character->GetFollowCamera()->GetComponentLocation();
+		FVector EndTrace;// = ScreenLocation + (character->FollowCamera->GetForwardVector() *
+										//(character->GetCameraBoom()->TargetArmLength + 3000.0f));
 
 		//FVector2D ScreenLocation(ViewportSize.X / 2.0f, ViewportSize.Y / 2.0f);
 		// 위치를 중앙으로 맞춰준다.
@@ -225,7 +222,7 @@ bool AMainPlayerController::TraceUnderScreen(FHitResult& OutHitResult, FVector& 
 			OutHitResult.Location = OutHitLocation;
 			return true;
 		}
-	}
+	//}
 
 	return false;
 
@@ -248,16 +245,16 @@ void AMainPlayerController::DropActorSetInWorld(AItem* item)
 	if (item)
 	{
 		auto object = Cast<AGameObject>(item);
-		auto character = Cast<AMainCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+		//auto character = Cast<AMainCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
 
-		if (object && character)
+		if (object)// && character)
 		{
 			// 숨김처리와 충돌처리 등 off 했던 상태를 on으로 전환.
 			object->GetObjectMesh()->SetSimulatePhysics(true);
 			object->SetActorHiddenInGame(false);
 			object->SetActorEnableCollision(true);
 			object->SetActorTickEnabled(true);
-			object->SetActorTransform(character->GetSceneComponent()->GetComponentTransform());
+			//object->SetActorTransform(character->GetSceneComponent()->GetComponentTransform());
 
 			if (object->GetDropItemSound())
 			{
