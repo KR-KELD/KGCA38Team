@@ -35,15 +35,15 @@ FString UMyStaticLibrary::GetNPC_Text(int32 index)
 	return Text;
 }
 
-//void UMyStaticLibrary::ShowWidget(UUserWidget* widget)
-//{
-//	//widget->SetVisibility(ESlateVisibility::Visible);
-//}
-//
-//void UMyStaticLibrary::HideWidget(UUserWidget* widget)
-//{
-//	//widget->SetVisibility(ESlateVisibility::Hidden);
-//}
+void UMyStaticLibrary::ShowWidget(UUserWidget* widget)
+{
+	widget->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UMyStaticLibrary::HideWidget(UUserWidget* widget)
+{
+	widget->SetVisibility(ESlateVisibility::Hidden);
+}
 
 float UMyStaticLibrary::CallCharacterCurrentHealth(float curHealth)
 {

@@ -59,6 +59,76 @@ void AMainPlayerController::EnableInterActionKey()
 	}
 }
 
+void AMainPlayerController::OverlapEndItems()
+{
+	if (OverlapItem)
+	{
+		OverlapItem->GetPickupWidget()->SetVisibility(false);
+	}
+}
+
+void AMainPlayerController::OverlapSetInventoryItems(AItem* item)
+{
+
+	auto Item = Cast<AGameObject>(item);
+	bool bCheckInventoryItem = false;
+
+	if (Item && Item->GetPickupWidget())
+	{
+		Item->GetPickupWidget()->SetVisibility(true);
+
+		for (int i = 0; i < INVENTORY_MAXSIZE; i++)
+		{
+			if (Inventory[i] != nullptr)
+			{
+				if (Inventory[i]->GetItemName() == Item->GetItemName())
+				{
+					Inventory[i]->SetItemCount(Inventory[i]->GetItemCount() + Item->GetItemCount());
+					Item->Destroy();
+
+					bCheckInventoryItem = true;
+
+					if (Item->GetPickupSound())
+					{
+						UGameplayStatics::PlaySound2D(this, Item->GetPickupSound());
+					}
+
+					break;
+				}
+			}
+		}
+
+		if (!bCheckInventoryItem)
+		{
+			for (int i = 0; i < INVENTORY_MAXSIZE; i++)
+			{
+				if (Inventory[i] == nullptr)
+				{
+					//UE_LOG(LogTemp, Warning, TEXT("Inventory Index : %d"), i);
+
+					// 인벤토리에 넣을때 월드의 아이템을 삭제할 필요없이 숨기기만 하면 됨. 
+					Item->GetObjectMesh()->SetSimulatePhysics(false);
+					Item->SetActorHiddenInGame(true);
+					Item->SetActorEnableCollision(false);
+					Item->SetActorTickEnabled(false);
+
+					Inventory[i] = Item;
+
+					if (Item->GetPickupSound())
+					{
+						UGameplayStatics::PlaySound2D(this, Item->GetPickupSound());
+					}
+
+					break;
+				}
+			}
+		}
+
+		OverlapItem = Item;
+	}
+	
+}
+
 void AMainPlayerController::TraceForActors()
 {
 	if (bShouldTraceItem)

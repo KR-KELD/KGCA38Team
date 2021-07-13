@@ -55,6 +55,8 @@ private:
 	// 마지막에 히트된 아이템
 	class AItem* TraceHitLastItem;
 
+	AItem* OverlapItem;
+
 protected:
 
 	UFUNCTION(BlueprintCallable)
@@ -68,6 +70,12 @@ protected:
 
 	// 라인트레이스가 부딪혔는지
 	bool TraceUnderScreen(FHitResult& OutHitResult, FVector& OutHitLocation);
+
+	UFUNCTION(BlueprintCallable)
+	void OverlapSetInventoryItems(AItem* item);
+
+	UFUNCTION(BlueprintCallable)
+	void OverlapEndItems();
 
 public:
 	// 오버랩된 액터 수 확인. 액터가 겹쳤을때 팝업이 겹치지 않도록.

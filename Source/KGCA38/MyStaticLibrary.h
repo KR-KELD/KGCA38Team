@@ -22,11 +22,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	static FString GetNPC_Text(int32 index);
 
-	//UFUNCTION(BlueprintCallable)
-	//static void ShowWidget(class UUserWidget* widget);
+	UFUNCTION(BlueprintCallable)
+	static void ShowWidget(class UUserWidget* widget);
 
-	//UFUNCTION(BlueprintCallable)
-	//static void HideWidget(UUserWidget* widget);
+	UFUNCTION(BlueprintCallable)
+	static void HideWidget(UUserWidget* widget);
 
 	UFUNCTION(BlueprintCallable)
 	static float CallCharacterCurrentHealth(float curHealth);
