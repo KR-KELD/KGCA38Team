@@ -32,9 +32,10 @@ public:
 		virtual void AIHit(float Damage);
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		virtual void AIDead();
-
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		virtual bool AIDeadCheck();
+	UFUNCTION()
+		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) override;
 
 #pragma endregion
 public:

@@ -20,6 +20,7 @@ enum class EAIType : uint8
 {
 	EMonster UMETA(DisplayName = "Monster"),
 	ENPC UMETA(DisplayName = "Npc"),
+	EPartner UMETA(DisplayName = "Partner"),
 	EPlayer UMETA(DisplayName = "Player"),
 	EBoss UMETA(DisplayName = "Boss"),
 };
@@ -29,6 +30,8 @@ struct FCharacterDataStruct
 {
 	GENERATED_USTRUCT_BODY()
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FName Name;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		EAIType Type;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

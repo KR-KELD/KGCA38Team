@@ -142,7 +142,7 @@ void AMyAIController::AttackReady(bool value)
 void AMyAIController::AIPerceptionUpdate(AActor* Actor, FAIStimulus Info)
 {
 	//하나의 캐릭터를 상속받고 있지 않아서 태그로 구분
-	if (Actor->ActorHasTag(L"Player") || Actor->ActorHasTag(L"TownNPC"))
+	if (Actor->ActorHasTag(L"Player") || Actor->ActorHasTag(L"NPC"))
 	{
 		if (AIState == "State_Idle" || AIState == "State_Patrol")
 		{
