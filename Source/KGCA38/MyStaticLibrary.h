@@ -33,4 +33,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	static float CallCharacterMaxHealth(float maxHealth);
+
+	static bool bShowInventory;
+
+	UFUNCTION(BlueprintCallable)
+	static void SetShowInventory(bool bInventory);
+
+	UFUNCTION(BlueprintCallable)
+	static bool GetShowInventory();
 };

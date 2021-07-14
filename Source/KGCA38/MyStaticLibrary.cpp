@@ -5,6 +5,8 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/WidgetComponent.h"
 
+bool UMyStaticLibrary::bShowInventory = false;
+
 FString UMyStaticLibrary::GetNPC_Name(int32 index)
 {
 	FString Text = "";
@@ -53,4 +55,14 @@ float UMyStaticLibrary::CallCharacterCurrentHealth(float curHealth)
 float UMyStaticLibrary::CallCharacterMaxHealth(float maxHealth)
 {
 	return maxHealth;
+}
+
+void UMyStaticLibrary::SetShowInventory(bool bInventory)
+{
+	bShowInventory = bInventory;
+}
+
+bool UMyStaticLibrary::GetShowInventory()
+{
+	return bShowInventory;
 }
