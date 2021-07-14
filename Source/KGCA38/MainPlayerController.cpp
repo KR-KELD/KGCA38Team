@@ -71,7 +71,7 @@ void AMainPlayerController::OverlapBeginItems(AItem* item)
 {
 	if (item)
 	{
-		item->GetPickupWidget()->SetVisibility(false);
+		item->GetPickupWidget()->SetVisibility(true);
 	}
 }
 
@@ -82,8 +82,6 @@ void AMainPlayerController::OverlapSetInventoryItems(AItem* item)
 
 	if (item && item->GetPickupWidget())
 	{
-		item->GetPickupWidget()->SetVisibility(true);
-
 		for (int i = 0; i < INVENTORY_MAXSIZE; i++)
 		{
 			if (Inventory[i] != nullptr)
