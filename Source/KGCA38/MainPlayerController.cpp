@@ -67,6 +67,14 @@ void AMainPlayerController::OverlapEndItems()
 	}
 }
 
+void AMainPlayerController::OverlapBeginItems(AItem* item)
+{
+	if (item)
+	{
+		item->GetPickupWidget()->SetVisibility(false);
+	}
+}
+
 void AMainPlayerController::OverlapSetInventoryItems(AItem* item)
 {
 

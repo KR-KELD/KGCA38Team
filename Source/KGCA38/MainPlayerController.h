@@ -77,6 +77,9 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void OverlapEndItems();
 
+	UFUNCTION(BlueprintCallable)
+	void OverlapBeginItems(AItem* item);
+
 
 public:
 	// 오버랩된 액터 수 확인. 액터가 겹쳤을때 팝업이 겹치지 않도록.
