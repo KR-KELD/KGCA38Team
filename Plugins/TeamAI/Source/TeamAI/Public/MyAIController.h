@@ -78,24 +78,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 	void AttackReady(bool value);
 
-
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 	void AIPerceptionUpdate(AActor* Actor, FAIStimulus Info);
 
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 	void UpdateState(FString State);
 
-	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
-	void StartAI();
-
-	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
-	void StopAI();
-
 	UFUNCTION()
 	void HitCall(FString msg);
 
-
 	UFUNCTION()
 	void DeadCall(FString msg);
+
+	UFUNCTION()
+	void RespawnCall(FString msg);
 
 };

@@ -33,10 +33,21 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		virtual void AIDead();
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
+		virtual void AIRespawn();
+	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		virtual bool AIDeadCheck();
 	UFUNCTION()
-		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) override;
+		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, 
+			class AController* EventInstigator, class AActor* DamageCauser) override;
 
+	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
+		virtual void SetActorActive(bool IsActive);
+	UFUNCTION()
+		void DeadEvent();
+	UFUNCTION()
+		void RespawnEvent(FString msg);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
+		FTimerHandle DeadTimer;
 #pragma endregion
 public:
 	AAIBase();
@@ -47,6 +58,8 @@ public:
 	FOneDynamicMultiCastDelegate	HitDelegate;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable, BlueprintReadWrite, Category = "KGCA_AI")
 	FOneDynamicMultiCastDelegate	DeadDelegate;
+	UPROPERTY(BlueprintAssignable, BlueprintCallable, BlueprintReadWrite, Category = "KGCA_AI")
+	FOneDynamicMultiCastDelegate	RespawnDelegate;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

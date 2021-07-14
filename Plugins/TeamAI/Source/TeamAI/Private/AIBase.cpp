@@ -29,11 +29,7 @@ void AAIBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (PatrolPoints == nullptr)
-	{
-		//PatrolPoints = APatrolPoint::StaticClass();
-	}
-
+	RespawnDelegate.AddDynamic(this, &AAIBase::RespawnEvent);
 }
 
 void AAIBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -41,7 +37,7 @@ void AAIBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 	HitDelegate.Clear();
 	DeadDelegate.Clear();
-
+	RespawnDelegate.Clear();
 }
 
 // Called every frame
@@ -80,6 +76,11 @@ void AAIBase::AIDead()
 	if (DeadDelegate.IsBound() == true) DeadDelegate.Broadcast("Dead");
 }
 
+void AAIBase::AIRespawn()
+{
+	if (RespawnDelegate.IsBound() == true) RespawnDelegate.Broadcast("Respawn");
+}
+
 bool AAIBase::AIDeadCheck()
 {
 	return true;
@@ -92,6 +93,25 @@ float AAIBase::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 	if (AIDeadCheck())
 	{
 		AIDead();
+		GetWorldTimerManager().SetTimer(DeadTimer, this, &AAIBase::DeadEvent,5.0f, false);
 	}
 	return Damage;
+}
+
+void AAIBase::SetActorActive(bool IsActive)
+{
+	SetActorTickEnabled(IsActive);
+	SetActorEnableCollision(IsActive);
+	SetActorHiddenInGame(!IsActive);
+}
+
+void AAIBase::DeadEvent()
+{
+	SetActorActive(false);
+	GetWorldTimerManager().ClearTimer(DeadTimer);
+}
+
+void AAIBase::RespawnEvent(FString msg)
+{
+	SetActorActive(true);
 }
