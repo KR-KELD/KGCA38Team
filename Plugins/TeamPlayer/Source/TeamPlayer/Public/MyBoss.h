@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "MyCharacter.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "MyBoss.generated.h"
 
 UENUM(BlueprintType)
@@ -27,13 +30,19 @@ public:
 	ACharacter* pTarget;
 	float		SavePlayerDist;
 	FVector		SavePlayerDir;
-
+	FVector 	SavePlayerLoc;
+	float		SaveDeltaTime;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
 	float		ChaseDist;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
 	float		AttackDist;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
 		float	JumpOrBreathDist;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
+		bool	bBossChase;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
+		bool	bBossJumpAttack;
 
 	UPROPERTY(EditAnywhere)
 		EBossState	ECheckBossState;
@@ -59,6 +68,8 @@ public:
 	//for test
 	void ChasePlayer();
 	void AttackPlayer();
+	void JumpAttack();
+	void BreathAttack();
 	void GetDirAndDistOfCharacter();
 	void BossStateAction(EBossState bs);
 };
