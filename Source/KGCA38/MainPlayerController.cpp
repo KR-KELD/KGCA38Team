@@ -26,8 +26,8 @@ void AMainPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// 매 프레임 호출해야 함.
-	TraceForActors();
+	// 라인 트레이스 사용 시 매 프레임 호출해야 함.
+	//TraceForActors();
 
 }
 
@@ -70,27 +70,26 @@ void AMainPlayerController::OverlapEndItems()
 void AMainPlayerController::OverlapSetInventoryItems(AItem* item)
 {
 
-	auto Item = Cast<AGameObject>(item);
 	bool bCheckInventoryItem = false;
 
-	if (Item && Item->GetPickupWidget())
+	if (item && item->GetPickupWidget())
 	{
-		Item->GetPickupWidget()->SetVisibility(true);
+		item->GetPickupWidget()->SetVisibility(true);
 
 		for (int i = 0; i < INVENTORY_MAXSIZE; i++)
 		{
 			if (Inventory[i] != nullptr)
 			{
-				if (Inventory[i]->GetItemName() == Item->GetItemName())
+				if (Inventory[i]->GetItemName() == item->GetItemName())
 				{
-					Inventory[i]->SetItemCount(Inventory[i]->GetItemCount() + Item->GetItemCount());
-					Item->Destroy();
+					Inventory[i]->SetItemCount(Inventory[i]->GetItemCount() + item->GetItemCount());
+					item->Destroy();
 
 					bCheckInventoryItem = true;
 
-					if (Item->GetPickupSound())
+					if (item->GetPickupSound())
 					{
-						UGameplayStatics::PlaySound2D(this, Item->GetPickupSound());
+						UGameplayStatics::PlaySound2D(this, item->GetPickupSound());
 					}
 
 					break;
@@ -107,16 +106,16 @@ void AMainPlayerController::OverlapSetInventoryItems(AItem* item)
 					//UE_LOG(LogTemp, Warning, TEXT("Inventory Index : %d"), i);
 
 					// 인벤토리에 넣을때 월드의 아이템을 삭제할 필요없이 숨기기만 하면 됨. 
-					Item->GetObjectMesh()->SetSimulatePhysics(false);
-					Item->SetActorHiddenInGame(true);
-					Item->SetActorEnableCollision(false);
-					Item->SetActorTickEnabled(false);
+					item->GetObjectMesh()->SetSimulatePhysics(false);
+					item->SetActorHiddenInGame(true);
+					item->SetActorEnableCollision(false);
+					item->SetActorTickEnabled(false);
 
-					Inventory[i] = Item;
+					Inventory[i] = item;
 
-					if (Item->GetPickupSound())
+					if (item->GetPickupSound())
 					{
-						UGameplayStatics::PlaySound2D(this, Item->GetPickupSound());
+						UGameplayStatics::PlaySound2D(this, item->GetPickupSound());
 					}
 
 					break;
@@ -124,7 +123,7 @@ void AMainPlayerController::OverlapSetInventoryItems(AItem* item)
 			}
 		}
 
-		OverlapItem = Item;
+		OverlapItem = item;
 	}
 	
 }

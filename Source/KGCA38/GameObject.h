@@ -20,9 +20,6 @@ public:
 	AGameObject();
 
 private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Object, meta = (AllowPrivateAccess = "true"))
-	UStaticMeshComponent* ObjectMesh;
 
 public:
-	FORCEINLINE UStaticMeshComponent* GetObjectMesh() const { return ObjectMesh; }
 };

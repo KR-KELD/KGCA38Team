@@ -40,6 +40,9 @@ public:
 			int32 OtherBodyIndex);
 
 private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Object, meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* ObjectMesh;
+
 	// 아이템 타입
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	EItemType ItemType;
@@ -95,5 +98,6 @@ public:
 	FORCEINLINE USoundCue* GetDropItemSound() const { return DropItemSound; }
 	FORCEINLINE USoundCue* GetUseItemSound() const { return UseItemSound; }
 	FORCEINLINE EItemType GetItemType() const { return ItemType; }
+	FORCEINLINE UStaticMeshComponent* GetObjectMesh() const { return ObjectMesh; }
 
 };
