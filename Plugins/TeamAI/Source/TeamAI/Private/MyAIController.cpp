@@ -85,6 +85,7 @@ void AMyAIController::OnPossess(APawn* InPawn)
 	AAIBase* AIPawn = Cast<AAIBase>(InPawn);
 	AIPawn->HitDelegate.AddDynamic(this, &AMyAIController::HitCall);
 	AIPawn->DeadDelegate.AddDynamic(this, &AMyAIController::DeadCall);
+	AIPawn->RespawnDelegate.AddDynamic(this, &AMyAIController::RespawnCall);
 
 	if (UseBlackboard(BBOject, Blackboard))
 	{
@@ -127,6 +128,17 @@ void AMyAIController::DeadCall(FString msg)
 	Blackboard->SetValueAsBool(BBIsBBDead, IsDead);
 }
 
+void AMyAIController::RespawnCall(FString msg)
+{
+	IsDead = false;
+	IsHit = false;
+	AttackReady(true);
+	Blackboard->SetValueAsBool(BBIsBBDead, IsDead);
+	UpdateState("State_Patrol");
+	Blackboard->SetValueAsString(BattleState, "Battle_Select");
+	GetBrainComponent()->StartLogic();
+}
+
 void AMyAIController::UpdateState(FString State)
 {
 	AIState = State;
@@ -161,14 +173,4 @@ void AMyAIController::AIPerceptionUpdate(AActor* Actor, FAIStimulus Info)
 
 		//}
 	}
-}
-
-void AMyAIController::StartAI()
-{
-	GetBrainComponent()->StartLogic();
-}
-
-void AMyAIController::StopAI()
-{
-	GetBrainComponent()->StartLogic();
 }
