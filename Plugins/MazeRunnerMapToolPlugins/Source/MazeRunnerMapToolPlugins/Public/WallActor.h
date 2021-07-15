@@ -32,7 +32,8 @@ public:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	USceneComponent* D;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		class USceneComponent* D;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		class UStaticMeshComponent* Up;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -56,6 +57,8 @@ public:
 		void ReMoveBool();
 	UFUNCTION()
 		void UpdateWall(UStaticMeshComponent* Mesh, float z);
+	//UFUNCTION(BlueprintCallable, CallInEditor)
+
 public:
 	//FReMoveMap ReMove;
 };

@@ -63,9 +63,6 @@ void AMazeGeneration::BeginPlay()
 	CellStack.Add(ch[UKismetMathLibrary::RandomInteger(MaxX)][UKismetMathLibrary::RandomInteger(MaxY)]);
 	GetNextCell(CellStack[0]);
 	//static ConstructorHelpers::FObjectFinder<AActor> Wall(TEXT("Class'/Script/MazeRunnerMapToolPlugins.WallActor'"));
-
-
-
 }
 
 void	AMazeGeneration::GetNextCell(UChildActorComponent* Actor)
@@ -178,6 +175,6 @@ void AMazeGeneration::ReSet()
 
 void	AMazeGeneration::OpenTheDoor()
 {
-	((AWallActor*)ch[0][1]->GetChildActor())->DownVisibility(false);
+	((AWallActor*)ch[0][4]->GetChildActor())->DownVisibility(false);
 	//ch[0][1]->DownVisibility(false);
 }
