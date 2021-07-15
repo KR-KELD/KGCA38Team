@@ -137,6 +137,7 @@ void AMyAIController::RespawnCall(FString msg)
 	UpdateState("State_Patrol");
 	Blackboard->SetValueAsString(BattleState, "Battle_Select");
 	GetBrainComponent()->StartLogic();
+	Cast<AAIBase>(GetPawn())->SetAIMove(AIData.WalkSpeed);
 }
 
 void AMyAIController::UpdateState(FString State)
