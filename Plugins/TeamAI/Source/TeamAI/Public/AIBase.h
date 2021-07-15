@@ -36,6 +36,8 @@ public:
 		virtual void AIRespawn();
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		virtual bool AIDeadCheck();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "KGCA_AI")
+		void AIReset();
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, 
 			class AController* EventInstigator, class AActor* DamageCauser) override;
@@ -48,6 +50,8 @@ public:
 		void RespawnEvent(FString msg);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
 		FTimerHandle DeadTimer;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
+		bool IsAIActive = true;
 #pragma endregion
 public:
 	AAIBase();

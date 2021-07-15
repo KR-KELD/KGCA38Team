@@ -100,6 +100,7 @@ float AAIBase::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 
 void AAIBase::SetActorActive(bool IsActive)
 {
+	IsAIActive = IsActive;
 	SetActorTickEnabled(IsActive);
 	SetActorEnableCollision(IsActive);
 	SetActorHiddenInGame(!IsActive);
@@ -114,4 +115,5 @@ void AAIBase::DeadEvent()
 void AAIBase::RespawnEvent(FString msg)
 {
 	SetActorActive(true);
+	AIReset();
 }
