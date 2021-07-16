@@ -9,6 +9,9 @@ AMyBoss::AMyBoss()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> JumpAttackMontage(TEXT("AnimMontage'/TeamPlayer/Boss/EnemyAnimation/FrostGiant/AM_JumpAttack.AM_JumpAttack'"));
+	AM_JumpAttack = JumpAttackMontage.Object;
+
 }
 
 // Called when the game starts or when spawned
@@ -17,7 +20,7 @@ void AMyBoss::BeginPlay()
 	Super::BeginPlay();
 	pTarget = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	ChaseDist = 700.0f;
-	AttackDist = 230.0f;
+	AttackDist = 300.0f;
 	JumpOrBreathDist = 1000;
 	bBossChase = false;
 }
@@ -29,40 +32,54 @@ void AMyBoss::Tick(float DeltaTime)
 	GetDirAndDistOfCharacter();
 	//UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(SavePlayerDist));
 	SaveDeltaTime = DeltaTime;
-	if (AttackDist >= SavePlayerDist)
+
+	
+	if (AttackDist >= SavePlayerDist && 
+		ECheckBossState != EBossState::EBS_Breath &&
+		ECheckBossState != EBossState::EBS_JumpAttack)
 	{
+		if (ECheckBossState != EBossState::EBS_Attack)
+		{
+			FRotator LookAtRot = LookAtPlayer();
+			SetActorRotation(LookAtRot);
+		}
 		ECheckBossState = EBossState::EBS_Attack;
 	}
+	else if (ChaseDist >= SavePlayerDist &&
+		ECheckBossState != EBossState::EBS_Breath &&
+		ECheckBossState != EBossState::EBS_JumpAttack &&
+		ECheckBossState != EBossState::EBS_Attack)
+	{
 
-	else if (JumpOrBreathDist >= SavePlayerDist && EPrevBossState != EBossState::EBS_Chase /*||  EPrevBossState != EBossState::EBS_IDLE)*/)
+		ECheckBossState = EBossState::EBS_Chase;
+		bBossChase = true;
+	}
+	else if (JumpOrBreathDist >= SavePlayerDist && 
+		SavePlayerDist > 700.0f && 
+		bBossChase == true &&
+		ECheckBossState != EBossState::EBS_Breath &&
+		ECheckBossState != EBossState::EBS_JumpAttack)
 	{
 		int temp = rand() % 2;
 		UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(temp));
-		switch (1)
+		switch (temp)
 		{
 		case 0:
 			ECheckBossState = EBossState::EBS_Breath;
+			//BreathAttack();
 			break;
 		case 1:
-			ECheckBossState = EBossState::EBS_JumpAttack;
-			SavePlayerLoc = pTarget->GetActorLocation();
+			if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_JumpAttack) == false)
+			{
+				FRotator LookAtRot = LookAtPlayer();
+				SetActorRotation(LookAtRot);
+				SavePlayerLoc = pTarget->GetActorLocation();
+				//bBossJumpAttack = true;
+				ECheckBossState = EBossState::EBS_JumpAttack;
+			}
 			break;
 		}
 
-	}
-	else if (ChaseDist >= SavePlayerDist)
-	{
-		//FRotator temp2 = UKismetMathLibrary::Conv_VectorToRotator(GetCharacterMovement()->GetCurrentAcceleration());
-		//FRotator temp = FMath::RInterpTo(GetActorRotation(), temp2, DeltaTime, 10.0f);
-		//float Yaw, Pitch, Roll;
-		//UKismetMathLibrary::BreakRotator(GetControlRotation(), Roll, Pitch, Yaw);
-		//FRotator breakRotZ = UKismetMathLibrary::MakeRotator(0, 0, Yaw);
-		//FVector FVec = UKismetMathLibrary::GetForwardVector(breakRotZ);
-		//SetActorRotation(temp);
-		
-		ECheckBossState = EBossState::EBS_Chase;
-		bBossChase = true;
-		//JumpAttack();
 	}
 	else if(bBossChase == false)
 	{
@@ -88,9 +105,9 @@ void AMyBoss::ChasePlayer()
 }
 void AMyBoss::BossStateAction(EBossState bs)
 {
-	if (bs != EPrevBossState)
+	if (ECheckBossState != EPrevBossState)
 	{
-		EPrevBossState = bs;
+		EPrevBossState = ECheckBossState;
 	}
 	switch (bs)
 	{
@@ -144,17 +161,47 @@ void AMyBoss::JumpAttack()
 	float Roll, Pitch, Yaw;
 	FVector TargetXY, SelfXY;
 	UKismetMathLibrary::BreakVector(pTarget->GetActorLocation(), Roll, Pitch, Yaw);
-	TargetXY = UKismetMathLibrary::MakeVector(Roll, Pitch, 0);
+	TargetXY = UKismetMathLibrary::MakeVector(Roll, Pitch, Yaw);
 	UKismetMathLibrary::BreakVector(GetActorLocation(), Roll, Pitch, Yaw);
-	SelfXY = UKismetMathLibrary::MakeVector(Roll, Pitch, 0);
-	
-	SavePlayerLoc = FMath::VInterpTo(SelfXY, TargetXY, SaveDeltaTime, 10.0f);
-	
-	SetActorLocation(SavePlayerLoc);
-	
+	SelfXY = UKismetMathLibrary::MakeVector(Roll, Pitch, Yaw);
+	SavePlayerLoc = FMath::VInterpTo(SelfXY, TargetXY, SaveDeltaTime, 3.0f);
+
+	//FRotator CameraWorldRot = GetCapsuleComponent()->GetComponentRotation();
+	//UKismetMathLibrary::BreakRotator(CameraWorldRot, Roll, Pitch, Yaw);
+	//FRotator newRot = UKismetMathLibrary::MakeRotator(Roll, 0.0f, Yaw);
+
+
+	FName JumpStart = "JumpStart";
+	FName DropDown = "DropDown";
+	if (SavePlayerLoc.Size() + 5 < (GetActorLocation() - SavePlayerLoc).Size())
+	{
+		PlayAnimMontage(AM_JumpAttack, 3.0f, "DropDown");
+	}
+	else if (GetMesh()->GetAnimInstance()->Montage_GetCurrentSection() != JumpStart && GetMesh()->GetAnimInstance()->Montage_GetCurrentSection() != DropDown)
+	{
+		//GetMesh()->GetAnimInstance()->Montage_Pause();
+		SetActorLocation(SavePlayerLoc);
+	}
+	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_JumpAttack) == false)
+	{
+		PlayAnimMontage(AM_JumpAttack, 1.0f, "JumpStart");
+	}
+
+
 }
 
 void AMyBoss::BreathAttack()
 {
 
+}
+
+FRotator AMyBoss::LookAtPlayer()
+{
+	float Roll, Pitch, Yaw;
+	FVector TargetLocation = pTarget->GetActorLocation();
+	FRotator rotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetLocation);
+	UKismetMathLibrary::BreakRotator(rotator, Roll, Pitch, Yaw);
+	rotator = UKismetMathLibrary::MakeRotator(Roll, 0.0f, Yaw);
+
+	return rotator;
 }

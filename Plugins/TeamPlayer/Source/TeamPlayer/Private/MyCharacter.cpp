@@ -229,7 +229,7 @@ void AMyCharacter::MoveForward(float value)
 			FRotationMatrix mat = FRotationMatrix(yaw);
 			FVector dir = mat.GetUnitAxis(EAxis::X);
 			AddMovementInput(dir, value);
-			UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(value));
+
 			if (value == 1)
 			{
 				DodgeDir = 0;
@@ -260,7 +260,7 @@ void AMyCharacter::MoveRight(float value)
 			FVector dir = mat.GetUnitAxis(EAxis::Y);
 			if(bDodge == false)
 			AddMovementInput(dir, value);
-			UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(value));
+
 			if (value == 1)
 			{
 				DodgeDir = 2;

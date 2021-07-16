@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Animation/AnimInstance.h"
 #include "MyBoss.generated.h"
 
 UENUM(BlueprintType)
@@ -44,10 +45,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
 		bool	bBossJumpAttack;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStateCheck)
 		EBossState	ECheckBossState;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStateCheck)
 		EBossState	EPrevBossState;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Boss)
+		UAnimMontage * AM_JumpAttack;
 
 public:
 	// Sets default values for this character's properties
@@ -72,5 +76,8 @@ public:
 	void BreathAttack();
 	void GetDirAndDistOfCharacter();
 	void BossStateAction(EBossState bs);
+
+
+	FRotator LookAtPlayer();
 };
 
