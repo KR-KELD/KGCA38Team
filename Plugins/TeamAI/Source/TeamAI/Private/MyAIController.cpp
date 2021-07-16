@@ -2,7 +2,7 @@
 
 
 #include "MyAIController.h"
-#include "AIBase.h"
+
 
 AMyAIController::AMyAIController()
 {
@@ -34,7 +34,7 @@ AMyAIController::AMyAIController()
 	GetPerceptionComponent()->ConfigureSense(*HearingConfig);
 	GetPerceptionComponent()->SetDominantSense(*SightConfig->GetSenseImplementation());
 
-	GetPerceptionComponent()->OnTargetPerceptionUpdated.AddDynamic(this, &AMyAIController::AIPerceptionUpdate);
+	
 	
 #pragma endregion
 
@@ -152,26 +152,3 @@ void AMyAIController::AttackReady(bool value)
 	Blackboard->SetValueAsBool(BBIsAttackReady, IsAttackReady);
 }
 
-void AMyAIController::AIPerceptionUpdate(AActor* Actor, FAIStimulus Info)
-{
-	//하나의 캐릭터를 상속받고 있지 않아서 태그로 구분
-	if (Actor->ActorHasTag(L"Player") || Actor->ActorHasTag(L"NPC"))
-	{
-		if (AIState == "State_Idle" || AIState == "State_Patrol")
-		{
-			UpdateState("State_BattleReady");
-		//전투준비
-			GetBlackboardComponent()->SetValueAsObject(TargetActor, Actor);
-		}
-
-		//사운드 추가코드
-		//if (Info.Tag == L"Sound")
-		//{
-
-		//}
-		//else
-		//{
-
-		//}
-	}
-}
