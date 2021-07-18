@@ -10,8 +10,8 @@
 
 #include "AIBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOneDynamicMultiCastDelegate, FString, msg);
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOneDynamicMultiCastDelegateString, FString, msg);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOneDynamicMultiCastDelegateActor, AActor*, actor);
 
 UCLASS()
 class TEAMAI_API AAIBase : public ACharacter
@@ -29,7 +29,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		virtual void Patrol();
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
-		virtual void AIHit(float Damage);
+		virtual void AIHit(AActor* AttackActor, float Damage);
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		virtual void AIDead();
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
@@ -40,7 +40,7 @@ public:
 		void AIReset();
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, 
-			class AController* EventInstigator, class AActor* DamageCauser) override;
+			class AController* EventInstigator, class AActor* DamageCursor) override;
 
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		virtual void SetActorActive(bool IsActive);
@@ -59,11 +59,11 @@ public:
 	//Ä³¸¯ÅÍÀÇ hit dead µ¨¸®°ÔÀÌÆ®¸¦ È£­ŒÇÏ¸é ÄÁÆ®·Ñ·¯ÀÇ ½ºÅ×ÀÌÆ®°¡ ¹Ù²î°í
 	//Ãß°¡ÀÛ¾÷À» ÇÏ·Á¸é ¹ÙÀÎµù ÇØÁÖ¸é µÈ´Ù ±ÔÄ¢Àº ½ºÆ®¸µ oneparam
 	UPROPERTY(BlueprintAssignable, BlueprintCallable, BlueprintReadWrite, Category = "KGCA_AI")
-	FOneDynamicMultiCastDelegate	HitDelegate;
+		FOneDynamicMultiCastDelegateActor	HitDelegate;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable, BlueprintReadWrite, Category = "KGCA_AI")
-	FOneDynamicMultiCastDelegate	DeadDelegate;
+		FOneDynamicMultiCastDelegateString	DeadDelegate;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable, BlueprintReadWrite, Category = "KGCA_AI")
-	FOneDynamicMultiCastDelegate	RespawnDelegate;
+		FOneDynamicMultiCastDelegateString	RespawnDelegate;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

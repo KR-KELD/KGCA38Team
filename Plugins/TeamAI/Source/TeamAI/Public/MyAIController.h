@@ -13,6 +13,7 @@
 #include "Math/UnrealMathUtility.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "AIDataStruct.h"
+#include "AIBase.h"
 
 #include "MyAIController.generated.h"
 /**
@@ -51,6 +52,10 @@ public:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
 		FString AIState = "State_Idle";
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
+		TArray<FString> AIStateList;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
+		TArray<FString> AIBattleStateList;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
 		bool IsAttackReady = true;
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
 		bool IsHit = false;
@@ -78,19 +83,20 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 	void AttackReady(bool value);
 
-	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
-	void AIPerceptionUpdate(AActor* Actor, FAIStimulus Info);
-
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "KGCA_AI")
+		FString StateSelect(AAIBase* AIBase);
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "KGCA_AI")
+		FString BattleSelect(AAIBase* AIBase);
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 	void UpdateState(FString State);
 
-	UFUNCTION()
-	void HitCall(FString msg);
+	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
+	void HitCall(AActor* AttackActor);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 	void DeadCall(FString msg);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 	void RespawnCall(FString msg);
 
 };

@@ -21,6 +21,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
 		int ObjectCode;
 	virtual bool AIDeadCheck() override;
-	virtual void AIHit(float Damage) override;
+	virtual void AIHit(AActor* AttackActor, float Damage) override;
 
 };

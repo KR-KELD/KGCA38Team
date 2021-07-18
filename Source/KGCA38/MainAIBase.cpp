@@ -12,8 +12,8 @@ bool AMainAIBase::AIDeadCheck()
 	return false;
 }
 
-void AMainAIBase::AIHit(float Damage)
+void AMainAIBase::AIHit(AActor* AttackActor, float Damage)
 {
-	AAIBase::AIHit(Damage);
+	AAIBase::AIHit(AttackActor, Damage);
 	CharacterInfo.HP -= Damage;
 }
