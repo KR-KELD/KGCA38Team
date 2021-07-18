@@ -212,7 +212,7 @@ void AMyCharacter::InterectOverlap()
 	//UKismetSystemLibrary::PrintString(GetWorld(), TEXT("OverlapOn"));
 	if (IsOverlapItem == true)
 	{
-		UKismetSystemLibrary::PrintString(GetWorld(), TEXT("OverlappedItem"));
+		//UKismetSystemLibrary::PrintString(GetWorld(), TEXT("OverlappedItem"));
 	}
 }
 
@@ -295,7 +295,7 @@ void AMyCharacter::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, cla
 			if (m_collision->IsActive() == true)		//when give damage to enemy
 			{
 				UGameplayStatics::ApplyDamage(OtherActor, 20.0f, NULL, GetOwner(), NULL);
-				UKismetSystemLibrary::PrintString(GetWorld(), TEXT("Hit"));
+				//UKismetSystemLibrary::PrintString(GetWorld(), TEXT("Hit"));
 				UGameplayStatics::SpawnEmitterAttached(m_PS_AttackParticle, OverlappedComp);
 
 			}
@@ -312,7 +312,7 @@ void AMyCharacter::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class
 {
 	if (OtherActor && (OtherActor != this) && OtherComp)	//when player interect with item
 	{
-		UKismetSystemLibrary::PrintString(GetWorld(), TEXT("OverlappEnd"));
+		//UKismetSystemLibrary::PrintString(GetWorld(), TEXT("OverlappEnd"));
 		IsOverlapItem = false;
 	}
 }
@@ -325,7 +325,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 	fHP -= damage;
 	IsHit = true;
 
-	UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(fHP));
+	//UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(fHP));
 	if (fHP <= 0.0f)
 	{
 		IsDead = true;
