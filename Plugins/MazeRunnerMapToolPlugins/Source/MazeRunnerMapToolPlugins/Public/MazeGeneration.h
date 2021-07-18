@@ -35,5 +35,8 @@ public:
 		void	ReSet();
 	UFUNCTION(BlueprintCallable, CallInEditor)
 		void	OpenTheDoor();
-
+	UFUNCTION(BlueprintCallable, CallInEditor)
+		void	BattleDoor();
+	UFUNCTION(BlueprintCallable, CallInEditor)
+		void	PuzzleDoor();
 };

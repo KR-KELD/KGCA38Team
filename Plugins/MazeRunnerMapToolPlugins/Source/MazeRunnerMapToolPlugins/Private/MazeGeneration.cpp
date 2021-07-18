@@ -178,3 +178,14 @@ void	AMazeGeneration::OpenTheDoor()
 	((AWallActor*)ch[0][4]->GetChildActor())->DownVisibility(false);
 	//ch[0][1]->DownVisibility(false);
 }
+
+
+void	AMazeGeneration::BattleDoor()
+{
+
+}
+
+void	AMazeGeneration::PuzzleDoor()
+{
+
+}
