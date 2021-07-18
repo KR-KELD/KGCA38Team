@@ -65,9 +65,9 @@ void AAIBase::Patrol()
 }
 
 //기본 히트함수를 호출시키던 이걸 쓰던 하기
-void AAIBase::AIHit(float Damage)
+void AAIBase::AIHit(AActor* AttackActor, float Damage)
 {
-	if (HitDelegate.IsBound() == true) HitDelegate.Broadcast("Hit");
+	if (HitDelegate.IsBound() == true) HitDelegate.Broadcast(AttackActor);
 }
 
 //
@@ -86,10 +86,10 @@ bool AAIBase::AIDeadCheck()
 	return true;
 }
 
-float AAIBase::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser)
+float AAIBase::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCursor)
 {
-	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	AIHit(Damage);
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCursor);
+	AIHit(DamageCursor, DamageAmount);
 	if (AIDeadCheck())
 	{
 		AIDead();
@@ -108,6 +108,7 @@ void AAIBase::SetActorActive(bool IsActive)
 
 void AAIBase::DeadEvent()
 {
+	SetActorLocation(FVector(9999.0f, 9999.0f, 9999.0f));
 	SetActorActive(false);
 	GetWorldTimerManager().ClearTimer(DeadTimer);
 }

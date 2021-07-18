@@ -25,6 +25,16 @@ enum class EAIType : uint8
 	EBoss UMETA(DisplayName = "Boss"),
 };
 
+UENUM(BlueprintType)
+enum class EControlMode : uint8
+{
+	EControl_None UMETA(DisplayName = "None"),
+	EControl_Accompany UMETA(DisplayName = "Accompany"),
+	EControl_Accompnay_Aggressive UMETA(DisplayName = "Accompany_Aggressive"),
+	EControl_Waiting_Aggressive UMETA(DisplayName = "Waiting_Aggressive"),
+};
+
+
 USTRUCT(Atomic, BlueprintType)
 struct FCharacterDataStruct
 {

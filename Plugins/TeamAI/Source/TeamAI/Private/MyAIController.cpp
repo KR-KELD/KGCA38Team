@@ -93,8 +93,8 @@ void AMyAIController::OnPossess(APawn* InPawn)
 		{
 			//Blackboard->SetValueAsString(BehaviorState, AIState);
 
-			UpdateState("State_Patrol");
-			//UpdateState("State_Idle");
+			//UpdateState("State_Patrol");
+			UpdateState("State_Idle");
 			Blackboard->SetValueAsBool(BBIsBBDead, IsDead);
 			//Blackboard->SetValueAsBool(BBIsHit, IsHit);
 			Blackboard->SetValueAsBool(BBIsAttackReady, IsAttackReady);
@@ -116,7 +116,7 @@ void AMyAIController::OnPossess(APawn* InPawn)
 	}
 }
 
-void AMyAIController::HitCall(FString msg)
+void AMyAIController::HitCall(AActor* AttackActor)
 {
 	IsHit = true;
 	//Blackboard->SetValueAsBool(BBIsHit, IsHit);

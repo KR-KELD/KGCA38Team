@@ -90,13 +90,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 	void UpdateState(FString State);
 
-	UFUNCTION()
-	void HitCall(FString msg);
+	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
+	void HitCall(AActor* AttackActor);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 	void DeadCall(FString msg);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 	void RespawnCall(FString msg);
 
 };
