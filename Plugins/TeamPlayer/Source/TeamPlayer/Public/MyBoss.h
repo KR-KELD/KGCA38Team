@@ -19,6 +19,7 @@ enum class EBossState : uint8
 	EBS_Attack UMETA(DisplayName = "Attack"),
 	EBS_JumpAttack UMETA(DisplayName = "JumpAttack"),
 	EBS_Breath UMETA(DisplayName = "Breath"),
+	EBS_Rage UMETA(Displayname = "Rage"),
 };
 
 UCLASS()
@@ -44,6 +45,19 @@ public:
 		bool	bBossChase;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
 		bool	bBossJumpAttack;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
+		int		iBossNormalAttackSplit;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
+		int		iRageCount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStat)
+		float HP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStat)
+		float MaxHP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStat)
+		float Damage;
+
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStateCheck)
 		EBossState	ECheckBossState;
@@ -52,7 +66,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Boss)
 		UAnimMontage * AM_JumpAttack;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Boss)
+		UAnimMontage * AM_NormalAttack;
 public:
 	// Sets default values for this character's properties
 	AMyBoss();

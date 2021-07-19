@@ -12,6 +12,9 @@ AMyBoss::AMyBoss()
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> JumpAttackMontage(TEXT("AnimMontage'/TeamPlayer/Boss/EnemyAnimation/FrostGiant/AM_JumpAttack.AM_JumpAttack'"));
 	AM_JumpAttack = JumpAttackMontage.Object;
 
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> NormalAttackMontage(TEXT("AnimMontage'/TeamPlayer/Boss/EnemyAnimation/FrostGiant/AM_FGAttackmontage.AM_FGAttackmontage'"));
+	AM_NormalAttack = NormalAttackMontage.Object;
+
 }
 
 // Called when the game starts or when spawned
@@ -23,6 +26,11 @@ void AMyBoss::BeginPlay()
 	AttackDist = 300.0f;
 	JumpOrBreathDist = 1000;
 	bBossChase = false;
+	iBossNormalAttackSplit = 0;
+	iRageCount = 0;
+	Damage = 0.0f;
+	MaxHP = 1000.0f;
+	HP = 1000.0f;
 }
 
 // Called every frame
@@ -32,8 +40,11 @@ void AMyBoss::Tick(float DeltaTime)
 	GetDirAndDistOfCharacter();
 	//UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(SavePlayerDist));
 	SaveDeltaTime = DeltaTime;
+	if (iBossNormalAttackSplit >= 3)
+	{
+		iBossNormalAttackSplit = 0;
+	}
 
-	
 	if (AttackDist >= SavePlayerDist && 
 		ECheckBossState != EBossState::EBS_Breath &&
 		ECheckBossState != EBossState::EBS_JumpAttack)
@@ -58,16 +69,28 @@ void AMyBoss::Tick(float DeltaTime)
 		SavePlayerDist > 700.0f && 
 		bBossChase == true &&
 		ECheckBossState != EBossState::EBS_Breath &&
-		ECheckBossState != EBossState::EBS_JumpAttack)
+		ECheckBossState != EBossState::EBS_JumpAttack && 
+		ECheckBossState != EBossState::EBS_Attack)
 	{
 		int temp = rand() % 2;
-		UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(temp));
+		//UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(temp));
+		if (iBossNormalAttackSplit < 2 || iBossNormalAttackSplit != 0)
+		{
+			if(ECheckBossState != EBossState::EBS_Breath && ECheckBossState != EBossState::EBS_JumpAttack)
+				iRageCount++;
+		}
+		iBossNormalAttackSplit = 0;
+
 		switch (temp)
 		{
 		case 0:
-			ECheckBossState = EBossState::EBS_Breath;
-			//BreathAttack();
-			break;
+		{
+		ECheckBossState = EBossState::EBS_Breath;
+		FRotator LookAtRot = LookAtPlayer();
+		SetActorRotation(LookAtRot);
+		SavePlayerLoc = pTarget->GetActorLocation();
+		//BreathAttack();
+		}	break;
 		case 1:
 			if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_JumpAttack) == false)
 			{
@@ -86,6 +109,10 @@ void AMyBoss::Tick(float DeltaTime)
 		ECheckBossState = EBossState::EBS_IDLE;
 	}
 
+	if (iRageCount > 2)
+	{
+		ECheckBossState = EBossState::EBS_Rage;
+	}
 
 	BossStateAction(ECheckBossState);
 }
@@ -124,6 +151,8 @@ void AMyBoss::BossStateAction(EBossState bs)
 	case EBossState::EBS_Breath:
 		BreathAttack();
 		break;
+	case EBossState::EBS_Rage:
+		break;
 	default:
 		break;
 	}
@@ -134,7 +163,7 @@ void AMyBoss::GetDirAndDistOfCharacter()
 	FVector FVTemp;
 	if (pTarget == NULL)
 	{
-		UKismetSystemLibrary::PrintString(GetWorld(), TEXT("Target is NULL"));
+		//UKismetSystemLibrary::PrintString(GetWorld(), TEXT("Target is NULL"));
 		return;
 	}
 	FVTemp = pTarget->GetActorLocation();
@@ -151,13 +180,31 @@ void AMyBoss::GetDirAndDistOfCharacter()
 
 void AMyBoss::AttackPlayer()
 {
-
+	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_NormalAttack) == true) return;
+	if (iBossNormalAttackSplit == 0)
+	{
+		PlayAnimMontage(AM_NormalAttack, 1.0f, "Attack1");
+		Damage = 30.0f;
+		iBossNormalAttackSplit++;
+	}
+	else if (iBossNormalAttackSplit == 1)
+	{
+		PlayAnimMontage(AM_NormalAttack, 1.0f, "Attack2");
+		Damage = 30.0f;
+		iBossNormalAttackSplit++;
+	}
+	else if (iBossNormalAttackSplit == 2)
+	{
+		PlayAnimMontage(AM_NormalAttack, 1.0f, "Attack3");
+		Damage = 50.0f;
+		iBossNormalAttackSplit++;
+	}
 }
 
 void AMyBoss::JumpAttack()
 {
 
-	UKismetSystemLibrary::PrintString(GetWorld(), SavePlayerLoc.ToString());
+	//UKismetSystemLibrary::PrintString(GetWorld(), SavePlayerLoc.ToString());
 	float Roll, Pitch, Yaw;
 	FVector TargetXY, SelfXY;
 	UKismetMathLibrary::BreakVector(pTarget->GetActorLocation(), Roll, Pitch, Yaw);
@@ -175,7 +222,8 @@ void AMyBoss::JumpAttack()
 	FName DropDown = "DropDown";
 	if (SavePlayerLoc.Size() + 5 < (GetActorLocation() - SavePlayerLoc).Size())
 	{
-		PlayAnimMontage(AM_JumpAttack, 3.0f, "DropDown");
+		PlayAnimMontage(AM_JumpAttack, 10.0f, "DropDown");
+		Damage = 80.0f;
 	}
 	else if (GetMesh()->GetAnimInstance()->Montage_GetCurrentSection() != JumpStart && GetMesh()->GetAnimInstance()->Montage_GetCurrentSection() != DropDown)
 	{
