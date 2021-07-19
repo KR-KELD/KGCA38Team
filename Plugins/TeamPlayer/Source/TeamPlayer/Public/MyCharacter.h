@@ -19,27 +19,42 @@ class TEAMPLAYER_API AMyCharacter : public ACharacter
 
 		//º¯¼ö
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
-		bool IsAttack;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
-		bool IsHit;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerStat)
 		float fHP;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerStat)
 		float fMaxHP;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerStat)
+		float KnockBackRateFromEnemy;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerStat)
+		float HitBackRateFromEnemy;
+
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
+		bool IsAttack;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
+		bool IsHit;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
 		bool IsDead;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
 		bool ComboOn;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
+		bool bHitOnAir;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
 		bool IsOverlapItem;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
 		bool bDodge;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
 		UAnimMontage * AM_AttackMontage;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
 		UAnimMontage * AM_DodgeMontage;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
+		UAnimMontage * AM_KnockDownTwistMontage;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DodgeDirection)
 		int DodgeDir;
 
 
@@ -77,7 +92,8 @@ protected:
 	void InterectOverlap();
 	void Dodge();
 
-	
+	UFUNCTION(BlueprintCallable)
+		void KnockbackPlayer(float KnockBackPower, float PushBack,FVector Loc);
 
 
 public:

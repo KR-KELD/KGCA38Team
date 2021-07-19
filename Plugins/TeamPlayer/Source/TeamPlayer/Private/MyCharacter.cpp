@@ -53,6 +53,9 @@ AMyCharacter::AMyCharacter(const FObjectInitializer& obj)
 		AM_AttackMontage = AttackMontage.Object;
 		static ConstructorHelpers::FObjectFinder<UAnimMontage> DodgeMontage(TEXT("AnimMontage'/TeamPlayer/ImportedAnimation/VampCharacter/Animation/AM_Dodge.AM_Dodge'"));
 		AM_DodgeMontage = DodgeMontage.Object;
+		static ConstructorHelpers::FObjectFinder<UAnimMontage> KnockDownMontage(TEXT("AnimMontage'/TeamPlayer/ImportedAnimation/VampCharacter/Animation/AM_AirKnockBackIDLE.AM_AirKnockBackIDLE'"));
+		AM_KnockDownTwistMontage = KnockDownMontage.Object;
+
 	
 	}
 
@@ -83,7 +86,9 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	m_collision->SetActive(false);
-	fHP = 100;
+	fHP = 1000.0f;
+	fMaxHP = 1000.0f;
+	bHitOnAir = false;
 
 	//collision->Activate(true);
 	//collision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -93,7 +98,7 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (bDodge == false)
+	if (bDodge == false && IsHit == false && bHitOnAir == false && IsDead == false)
 	{
 		FRotator temp2 = UKismetMathLibrary::Conv_VectorToRotator(GetCharacterMovement()->GetCurrentAcceleration());
 		FRotator temp = FMath::RInterpTo(GetActorRotation(), temp2, DeltaTime, 10.0f);
@@ -135,7 +140,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void AMyCharacter::Attack()
 {
-	if (IsDead == false && IsHit == false)
+	if (IsDead == false && IsHit == false && bHitOnAir == false && IsDead == false)
 	{
 		if (IsAttack == false)
 		{
@@ -166,7 +171,7 @@ void AMyCharacter::Attack()
 
 void AMyCharacter::Dodge()
 {
-	if (bDodge == true) return;
+	if (bDodge == true || bHitOnAir == true || IsDead == true) return;
 	//USceneComponent::GetWorld
 	float Roll, Pitch, Yaw;
 	m_TPSCameraBoomComponent->GetComponentRotation();
@@ -218,7 +223,7 @@ void AMyCharacter::InterectOverlap()
 
 void AMyCharacter::MoveForward(float value)
 {
-	if (bDodge == true) return;
+	if (bDodge == true || bHitOnAir == true || IsDead == true) return;
 	//when player is not dead or get hit is false, player can move
 	if (IsDead == false && IsHit == false)
 	{
@@ -249,7 +254,7 @@ void AMyCharacter::MoveForward(float value)
 }
 void AMyCharacter::MoveRight(float value)
 {
-	if (bDodge == true) return;
+	if (bDodge == true || bHitOnAir == true || IsDead == true) return;
 	if (IsDead == false && IsHit == false)
 	{
 		if (value != 0.0f && Controller != nullptr)
@@ -321,9 +326,9 @@ float AMyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 {
 	//when player get damge from enemy
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	
 
 	fHP -= damage;
-	IsHit = true;
 
 	//UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(fHP));
 	if (fHP <= 0.0f)
@@ -332,5 +337,59 @@ float AMyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 		//PlayAnimMontage()
 		return damage;
 	}
+
+	IsHit = true;
+	float Roll, Pitch, Yaw;
+	FRotator rot = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), DamageCauser->GetActorLocation());
+	UKismetMathLibrary::BreakRotator(rot, Roll, Pitch, Yaw);
+	rot = UKismetMathLibrary::MakeRotator(0.0f, 0.0f, Yaw);
+
+	SetActorRotation(rot);
+	if (KnockBackRateFromEnemy != 0.0f)
+	{
+		bHitOnAir = true;
+	}
+	KnockbackPlayer(0.0f, 0.0f, DamageCauser->GetActorForwardVector());
+
 	return damage;
+}
+
+
+void AMyCharacter::KnockbackPlayer(float KnockBackPower, float PushBack, FVector Loc)
+{
+	FVector FV = Loc;
+	FVector FUV = GetActorUpVector();
+
+	if (bHitOnAir == true)
+	{
+		FUV.Normalize();
+		FV.Normalize();
+		//FV.X *= -1.0f;
+		//FV.Y *= -1.0f;
+		FV.X *= HitBackRateFromEnemy;
+		FV.Y *= HitBackRateFromEnemy;
+		FUV.Z *= KnockBackRateFromEnemy;
+		FV = UKismetMathLibrary::MakeVector(FV.X, FV.Y, FUV.Z);
+		if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_KnockDownTwistMontage) == false)
+		{
+			PlayAnimMontage(AM_KnockDownTwistMontage, 1.0f, "Default");
+			//bHitOnAir = true;
+			
+		}
+
+		LaunchCharacter(FV, false, false);
+	}
+	else if (HitBackRateFromEnemy != 0.0f && KnockBackRateFromEnemy == 0.0f)
+	{
+
+		FUV.Normalize();
+		FV.Normalize();
+		FV.X *= HitBackRateFromEnemy;
+		FV.Y *= HitBackRateFromEnemy;
+		//FV.X *= -1.0f;
+		//FV.Y *= -1.0f;
+		FUV.Z *= KnockBackRateFromEnemy;
+		FV = UKismetMathLibrary::MakeVector(FV.X, FV.Y, FUV.Z);
+		LaunchCharacter(FV, false, false);
+	}
 }

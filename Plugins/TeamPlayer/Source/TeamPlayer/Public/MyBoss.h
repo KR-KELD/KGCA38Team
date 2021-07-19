@@ -56,8 +56,10 @@ public:
 		float MaxHP;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStat)
 		float Damage;
-
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStat)
+		float HitBackRate;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStat)
+		float AirBorneRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStateCheck)
 		EBossState	ECheckBossState;

@@ -44,11 +44,12 @@ void AMyBoss::Tick(float DeltaTime)
 	{
 		iBossNormalAttackSplit = 0;
 	}
-
+	
 	if (AttackDist >= SavePlayerDist && 
 		ECheckBossState != EBossState::EBS_Breath &&
 		ECheckBossState != EBossState::EBS_JumpAttack)
 	{
+
 		if (ECheckBossState != EBossState::EBS_Attack)
 		{
 			FRotator LookAtRot = LookAtPlayer();
@@ -61,7 +62,8 @@ void AMyBoss::Tick(float DeltaTime)
 		ECheckBossState != EBossState::EBS_JumpAttack &&
 		ECheckBossState != EBossState::EBS_Attack)
 	{
-
+		HitBackRate = 0.0f;
+		AirBorneRate = 0.0f;
 		ECheckBossState = EBossState::EBS_Chase;
 		bBossChase = true;
 	}
@@ -138,6 +140,9 @@ void AMyBoss::BossStateAction(EBossState bs)
 	}
 	switch (bs)
 	{
+	case EBossState::EBS_Rage:
+
+		break;
 	case  EBossState::EBS_Chase:
 		ChasePlayer();
 		break;
@@ -150,8 +155,6 @@ void AMyBoss::BossStateAction(EBossState bs)
 		break;
 	case EBossState::EBS_Breath:
 		BreathAttack();
-		break;
-	case EBossState::EBS_Rage:
 		break;
 	default:
 		break;
@@ -185,18 +188,24 @@ void AMyBoss::AttackPlayer()
 	{
 		PlayAnimMontage(AM_NormalAttack, 1.0f, "Attack1");
 		Damage = 30.0f;
+		HitBackRate = 500.0f;
+		AirBorneRate = 0.0f;
 		iBossNormalAttackSplit++;
 	}
 	else if (iBossNormalAttackSplit == 1)
 	{
 		PlayAnimMontage(AM_NormalAttack, 1.0f, "Attack2");
 		Damage = 30.0f;
+		HitBackRate = 300.0f;
+		AirBorneRate = 500.0f;
 		iBossNormalAttackSplit++;
 	}
 	else if (iBossNormalAttackSplit == 2)
 	{
 		PlayAnimMontage(AM_NormalAttack, 1.0f, "Attack3");
 		Damage = 50.0f;
+		HitBackRate = 300.0f;
+		//AirBorneRate = 
 		iBossNormalAttackSplit++;
 	}
 }
@@ -220,10 +229,12 @@ void AMyBoss::JumpAttack()
 
 	FName JumpStart = "JumpStart";
 	FName DropDown = "DropDown";
-	if (SavePlayerLoc.Size() + 5 < (GetActorLocation() - SavePlayerLoc).Size())
+	if (SavePlayerLoc.Size() + 10 < (GetActorLocation() - SavePlayerLoc).Size())
 	{
 		PlayAnimMontage(AM_JumpAttack, 10.0f, "DropDown");
 		Damage = 80.0f;
+		HitBackRate = 300.0f;
+		AirBorneRate = 400.0f;
 	}
 	else if (GetMesh()->GetAnimInstance()->Montage_GetCurrentSection() != JumpStart && GetMesh()->GetAnimInstance()->Montage_GetCurrentSection() != DropDown)
 	{
