@@ -70,8 +70,6 @@ private:
 public:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
 		FAIDataStruct AIData;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite)
-		float ReturnSpeed = 1000.0f;
 public:
 	virtual void OnPossess(APawn* InPawn) override;
 	AMyAIController();
@@ -87,6 +85,8 @@ public:
 		FString StateSelect(AAIBase* AIBase);
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "KGCA_AI")
 		FString BattleSelect(AAIBase* AIBase);
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "KGCA_AI")
+		void SetAIState(const FString& StartState);
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 	void UpdateState(FString State);
 

@@ -107,7 +107,7 @@ void AMyAIController::OnPossess(APawn* InPawn)
 				Blackboard->SetValueAsBool(HasPatrolPoint, true);
 			}
 			Blackboard->SetValueAsString(BattleState, "Battle_Select");
-
+			GetBrainComponent()->StopLogic("StartGame");
 		}
 		else
 		{

@@ -19,6 +19,7 @@ UENUM(BlueprintType)
 enum class EAIType : uint8
 {
 	EMonster UMETA(DisplayName = "Monster"),
+	EEventMonster UMETA(DisplayName = "EventMonster"),
 	ENPC UMETA(DisplayName = "Npc"),
 	EPartner UMETA(DisplayName = "Partner"),
 	EPlayer UMETA(DisplayName = "Player"),

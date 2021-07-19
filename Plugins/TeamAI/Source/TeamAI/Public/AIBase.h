@@ -52,6 +52,8 @@ public:
 		FTimerHandle DeadTimer;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
 		bool IsAIActive = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
+		bool IsDead = false;
 #pragma endregion
 public:
 	AAIBase();

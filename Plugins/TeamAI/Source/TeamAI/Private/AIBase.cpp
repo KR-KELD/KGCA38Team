@@ -19,6 +19,8 @@ AAIBase::AAIBase()
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 250.0f, 0.0f);
 	GetCharacterMovement()->bUseControllerDesiredRotation = true;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
+	GetCharacterMovement()->bUseRVOAvoidance = true;
+	GetCharacterMovement()->AvoidanceConsiderationRadius = 450.0f;
 	//GetCharacterMovement()->BrakingDecelerationWalking = 200.0f;
 	//GetCharacterMovement()->GroundFriction = 2.0f;
 }
@@ -67,13 +69,20 @@ void AAIBase::Patrol()
 //기본 히트함수를 호출시키던 이걸 쓰던 하기
 void AAIBase::AIHit(AActor* AttackActor, float Damage)
 {
-	if (HitDelegate.IsBound() == true) HitDelegate.Broadcast(AttackActor);
+	if (IsDead == false)
+	{
+		if (HitDelegate.IsBound() == true) HitDelegate.Broadcast(AttackActor);	
+	}
 }
 
 //
 void AAIBase::AIDead()
 {
-	if (DeadDelegate.IsBound() == true) DeadDelegate.Broadcast("Dead");
+	if (IsDead == false)
+	{
+		if (DeadDelegate.IsBound() == true) DeadDelegate.Broadcast("Dead");
+		IsDead = true;
+	}
 }
 
 void AAIBase::AIRespawn()
@@ -93,6 +102,7 @@ float AAIBase::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 	if (AIDeadCheck())
 	{
 		AIDead();
+		SetActorEnableCollision(false);
 		GetWorldTimerManager().SetTimer(DeadTimer, this, &AAIBase::DeadEvent,5.0f, false);
 	}
 	return Damage;
@@ -115,6 +125,7 @@ void AAIBase::DeadEvent()
 
 void AAIBase::RespawnEvent(FString msg)
 {
+	IsDead = false;
 	SetActorActive(true);
 	AIReset();
 }
