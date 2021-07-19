@@ -13,7 +13,7 @@ AMazeGeneration::AMazeGeneration()
 	FName Path = TEXT("Class'/Script/MazeRunnerMapToolPlugins.WallActor'");
 	MapActors = Cast<UClass>(StaticLoadObject(UClass::StaticClass(), NULL, *Path.ToString()));
 	TSubclassOf<AActor> wall = MapActors;
-	MaxX = 20;
+	MaxX = 13;
 	MaxY = 9;
 	ch.SetNum(MaxX);
 	for (int i = 0; i < MaxX; i++)

@@ -36,10 +36,10 @@ AWallActor::AWallActor()
 		Left->SetupAttachment(RootComponent);
 	}
 	//FRotator abc(0,0,0);	
-	Up->SetRelativeTransform(FTransform(FRotator(0.0f, 0.0f, 0.0f), FVector(740.0f, 0, 540.0f), FVector(2.0f,8.0f, 20.0f)));
-	Down->SetRelativeTransform(FTransform(FRotator(0.0f, 0.0f, 0.0f), FVector(-740.0f, 0, 540.0f), FVector(2.0f, 8.0f, 20.0f)));
-	Right->SetRelativeTransform(FTransform(FRotator(0.0f, 90.0f, 0.0f), FVector(0, 740.0f, 540.0f), FVector(2.0f, 8.0f, 20.0f)));
-	Left->SetRelativeTransform(FTransform(FRotator(0.0f, 90.0f, 0.0f), FVector(0, -740.0f, 540.0f), FVector(2.0f, 8.0f, 20.0f)));
+	Up->SetRelativeTransform(FTransform(FRotator(0.0f, 0.0f, 0.0f), FVector(740.0f, 0, 540.0f), FVector(2.0f,8.0f, 5.0f)));
+	Down->SetRelativeTransform(FTransform(FRotator(0.0f, 0.0f, 0.0f), FVector(-740.0f, 0, 540.0f), FVector(2.0f, 8.0f, 5.0f)));
+	Right->SetRelativeTransform(FTransform(FRotator(0.0f, 90.0f, 0.0f), FVector(0, 740.0f, 540.0f), FVector(2.0f, 8.0f, 5.0f)));
+	Left->SetRelativeTransform(FTransform(FRotator(0.0f, 90.0f, 0.0f), FVector(0, -740.0f, 540.0f), FVector(2.0f, 8.0f, 5.0f)));
 
 	UpVeow = true;
 	DownVeow = true;
@@ -73,9 +73,9 @@ void AWallActor::Tick(float DeltaTime)
 	}
 	else
 	{
-		if (Up->GetRelativeLocation().Z > -2549.0f)
+		if (Up->GetRelativeLocation().Z > -699.0f)
 		{
-			UpdateWall(Up, -2550.0f);
+			UpdateWall(Up, -700.0f);
 		}
 	}
 
@@ -89,9 +89,9 @@ void AWallActor::Tick(float DeltaTime)
 	}
 	else
 	{
-		if (Down->GetRelativeLocation().Z > -2549.0f)
+		if (Down->GetRelativeLocation().Z > -699.0f)
 		{
-			UpdateWall(Down, -2550.0f);
+			UpdateWall(Down, -700.0f);
 		}
 	}
 
@@ -104,9 +104,9 @@ void AWallActor::Tick(float DeltaTime)
 	}
 	else
 	{
-		if (Right->GetRelativeLocation().Z > -2549.0f)
+		if (Right->GetRelativeLocation().Z > -699.0f)
 		{
-			UpdateWall(Right, -2550.0f);
+			UpdateWall(Right, -700.0f);
 		}
 	}
 
@@ -120,9 +120,9 @@ void AWallActor::Tick(float DeltaTime)
 	}
 	else
 	{
-		if (Left->GetRelativeLocation().Z > -2549.0f)
+		if (Left->GetRelativeLocation().Z > -699.0f)
 		{
-			UpdateWall(Left, -2550.0f);
+			UpdateWall(Left, -700.0f);
 		}
 	}
 }
