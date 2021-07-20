@@ -3,3 +3,10 @@
 
 #include "MainAINPC.h"
 
+bool AMainAINPC::AddFavorability(int iFavorPoint)
+{
+	if (Favorability >= 100) return false;
+	Favorability += iFavorPoint;
+	if (Favorability >= 100) Favorability = 100;
+	return false;
+}

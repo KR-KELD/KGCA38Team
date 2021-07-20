@@ -15,5 +15,11 @@ class KGCA38_API AMainAINPC : public AMainAIBase
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
-	int DialogueCode = -1;
+		int DialogueCode = -1;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
+		int Favorability = 0;
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
+		int MaxFavorability = 100;
+	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
+		bool AddFavorability(int iFavorPoint);
 };
