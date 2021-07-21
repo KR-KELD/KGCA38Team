@@ -20,6 +20,7 @@ enum class EBossState : uint8
 	EBS_JumpAttack UMETA(DisplayName = "JumpAttack"),
 	EBS_Breath UMETA(DisplayName = "Breath"),
 	EBS_Rage UMETA(Displayname = "Rage"),
+	EBS_RageAttack UMETA(Displayname = "RageAttack"),
 };
 
 UCLASS()
@@ -91,10 +92,11 @@ public:
 	void AttackPlayer();
 	void JumpAttack();
 	void BreathAttack();
+	void RageAttack();
 	void GetDirAndDistOfCharacter();
 	void BossStateAction(EBossState bs);
 
-
 	FRotator LookAtPlayer();
+
 };
 

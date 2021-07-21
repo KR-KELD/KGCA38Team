@@ -143,6 +143,10 @@ void AMyBoss::BossStateAction(EBossState bs)
 	case EBossState::EBS_Rage:
 
 		break;
+	case EBossState::EBS_RageAttack:
+		RageAttack();
+		break;
+
 	case  EBossState::EBS_Chase:
 		ChasePlayer();
 		break;
@@ -250,6 +254,11 @@ void AMyBoss::JumpAttack()
 }
 
 void AMyBoss::BreathAttack()
+{
+
+}
+
+void AMyBoss::RageAttack()
 {
 
 }

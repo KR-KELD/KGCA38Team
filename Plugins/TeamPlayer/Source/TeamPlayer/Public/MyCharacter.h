@@ -45,6 +45,10 @@ public:
 		bool IsOverlapItem;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
 		bool bDodge;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
+		bool bParrying;
+
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
 		UAnimMontage * AM_AttackMontage;
@@ -52,6 +56,9 @@ public:
 		UAnimMontage * AM_DodgeMontage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
 		UAnimMontage * AM_KnockDownTwistMontage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
+		UAnimMontage * AM_Parrying;
+
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DodgeDirection)
@@ -91,6 +98,7 @@ protected:
 	void Attack();
 	void InterectOverlap();
 	void Dodge();
+	void Parry();
 
 	UFUNCTION(BlueprintCallable)
 		void KnockbackPlayer(float KnockBackPower, float PushBack,FVector Loc);
@@ -110,6 +118,6 @@ public:
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) override;
 	UFUNCTION()
-		void OverlappedActor(FName TagName);
+		void OverlappedActor(AActor* TagName);
 
 };
