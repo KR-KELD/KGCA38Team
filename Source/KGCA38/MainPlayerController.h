@@ -33,6 +33,8 @@ public:
 	// 라인트레이스로 인한 팝업창이 떠 있고, 액션키가 눌렸을 때, 액션키 누른 시점에서 라인트레이스 충돌이 발생해있나 확인하는 용도.
 	bool bTraceIn;
 
+	bool bSetOverlap = true;
+
 private:
 	const int32 INVENTORY_MAXSIZE = 10;
 	const int32 QUICKSLOT_MAXSIZE = 6;
@@ -57,10 +59,12 @@ private:
 
 	AItem* OverlapItem;
 
+	FTimerHandle OverlapTimer;
+
 protected:
 
 	UFUNCTION(BlueprintCallable)
-	void DropActorSetInWorld(AItem* item);
+	void DropActorSetInWorld(AItem* item, FTransform transform);
 
 	UFUNCTION(BlueprintCallable)
 	void UseItem(int32 index);
@@ -72,13 +76,16 @@ protected:
 	bool TraceUnderScreen(FHitResult& OutHitResult, FVector& OutHitLocation);
 
 	UFUNCTION(BlueprintCallable)
-	void OverlapSetInventoryItems(AItem* item);
-
-	UFUNCTION(BlueprintCallable)
 	void OverlapEndItems();
 
 	UFUNCTION(BlueprintCallable)
 	void OverlapBeginItems(AItem* item);
+
+	void ChangeSetOverlap();
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void OverlapSetInventoryItems(AItem* item);
 
 
 public:

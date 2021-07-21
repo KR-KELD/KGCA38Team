@@ -80,7 +80,7 @@ void AMainPlayerController::OverlapSetInventoryItems(AItem* item)
 
 	bool bCheckInventoryItem = false;
 
-	if (item && item->GetPickupWidget())
+	if (item)
 	{
 		for (int i = 0; i < INVENTORY_MAXSIZE; i++)
 		{
@@ -317,30 +317,35 @@ void AMainPlayerController::UseItem(int32 index)
 	}
 }
 
-void AMainPlayerController::DropActorSetInWorld(AItem* item)
+void AMainPlayerController::DropActorSetInWorld(AItem* item, FTransform transform)
 {
 
 	if (item)
 	{
 		auto object = Cast<AGameObject>(item);
-		//auto character = Cast<AMainCharacter>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
-
-		if (object)// && character)
-		{
+		if (object)
+		{	
+			bSetOverlap = false;
 			// 숨김처리와 충돌처리 등 off 했던 상태를 on으로 전환.
 			object->GetObjectMesh()->SetSimulatePhysics(true);
 			object->SetActorHiddenInGame(false);
 			object->SetActorEnableCollision(true);
 			object->SetActorTickEnabled(true);
-			//object->SetActorTransform(character->GetSceneComponent()->GetComponentTransform());
+			object->SetActorTransform(transform);			
 
 			if (object->GetDropItemSound())
 			{
 				UGameplayStatics::PlaySound2D(this, object->GetDropItemSound());
 			}
+			GetWorld()->GetTimerManager().SetTimer(OverlapTimer, this, &AMainPlayerController::ChangeSetOverlap, 2.0f);
 		}
 	}
 
+}
+
+void AMainPlayerController::ChangeSetOverlap()
+{
+	bSetOverlap = true;
 }
 
 void AMainPlayerController::IncreamentOverlappedItemCount(int8 Amount)
