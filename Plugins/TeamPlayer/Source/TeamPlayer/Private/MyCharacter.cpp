@@ -157,7 +157,11 @@ void AMyCharacter::Attack()
 			}
 			if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() == true) GetMesh()->GetAnimInstance()->StopAllMontages(0.0);
 
+
 			PlayAnimMontage(AM_AttackMontage, 1.0f, "Attack1");
+
+			//AM_MontageSet = AM_AttackMontage;
+			//PlayAnimMontage(AM_MontageSet, 1.0f, "Attack1");
 			IsAttack = true;
 		}
 		else if (IsAttack == true && ComboOn == true)
@@ -165,16 +169,19 @@ void AMyCharacter::Attack()
 			FName SectionNameOfMontage = GetMesh()->GetAnimInstance()->Montage_GetCurrentSection(AM_AttackMontage);
 			if (SectionNameOfMontage == "Attack1")
 			{
+
 				PlayAnimMontage(AM_AttackMontage, 1.0f, "Attack2");
 				ComboOn = false;
 			}
 			else if (SectionNameOfMontage == "Attack2")
 			{
+
 				PlayAnimMontage(AM_AttackMontage, 1.0f, "Attack3");
 				ComboOn = false;
 			}
 			else if (SectionNameOfMontage == "Attack3")
 			{
+
 				PlayAnimMontage(AM_AttackMontage, 1.0f, "Attack4");
 				ComboOn = false;
 			}
@@ -227,7 +234,9 @@ void AMyCharacter::Parry()
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() == true) GetMesh()->GetAnimInstance()->StopAllMontages(0.0);
 
 	bParrying = true;
-
+	IsAttack = false;
+	StopAnimMontage(AM_AttackMontage);
+	//AM_MontageSet = AM_Parrying;
 	PlayAnimMontage(AM_Parrying, 1.0f, "Default");
 }
 
@@ -364,7 +373,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 			{
 				//StopAnimMontage(AM_Parrying);
 				PlayAnimMontage(AM_Parrying, 1.0f, "ParryingSucceed");
-
+				//UGameplayStatics::PlaySoundAtLocation(,GetActorLocation());
 				return NULL;
 			}
 		}

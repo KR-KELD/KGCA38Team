@@ -58,7 +58,8 @@ public:
 		UAnimMontage * AM_KnockDownTwistMontage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
 		UAnimMontage * AM_Parrying;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
+		UAnimMontage * AM_MontageSet;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DodgeDirection)
