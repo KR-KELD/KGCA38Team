@@ -28,6 +28,7 @@ public:
 
 public:
 	// 팝업위젯이 뜬 상태에서 액션키를 눌렀는지.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Inventory)
 	bool bInterActionKey;
 
 	// 라인트레이스로 인한 팝업창이 떠 있고, 액션키가 눌렸을 때, 액션키 누른 시점에서 라인트레이스 충돌이 발생해있나 확인하는 용도.
@@ -57,6 +58,7 @@ private:
 	// 마지막에 히트된 아이템
 	class AItem* TraceHitLastItem;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Inventory, meta = (AllowPrivateAccess = "true"))
 	AItem* OverlapItem;
 
 	FTimerHandle OverlapTimer;
@@ -97,5 +99,6 @@ public:
 
 	//FORCEINLINE ANPC_Characters* GetTraceHitLastActor() const {	return TraceHitLastActor; }
 	FORCEINLINE AItem* GetTraceHitLastItem() const { return TraceHitLastItem; }
+	FORCEINLINE void SetOverlapItem(AItem* item) { OverlapItem = item; }
 
 };

@@ -65,7 +65,8 @@ void AItem::OnPickupSphereOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 			{
 				// 겹친 항목 수 증가
 				PickupWidget->SetVisibility(true);
-				controller->OverlapSetInventoryItems(this);
+				controller->bInterActionKey = true;
+				controller->SetOverlapItem(this);
 				controller->IncreamentOverlappedItemCount(1);
 			}
 		}
@@ -86,6 +87,7 @@ void AItem::OnPickupSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, A
 			// 겹친 항목 수 감소
 			controller->IncreamentOverlappedItemCount(-1);
 			controller->bInterActionKey = false;
+			controller->SetOverlapItem(nullptr);
 		}
 
 		PickupWidget->SetVisibility(false);

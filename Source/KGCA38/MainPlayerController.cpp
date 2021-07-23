@@ -80,7 +80,7 @@ void AMainPlayerController::OverlapSetInventoryItems(AItem* item)
 
 	bool bCheckInventoryItem = false;
 
-	if (item)
+	if (item && bInterActionKey)
 	{
 		for (int i = 0; i < INVENTORY_MAXSIZE; i++)
 		{
@@ -97,6 +97,8 @@ void AMainPlayerController::OverlapSetInventoryItems(AItem* item)
 					{
 						UGameplayStatics::PlaySound2D(this, item->GetPickupSound());
 					}
+
+					OverlapItem = nullptr;
 
 					break;
 				}
@@ -124,13 +126,16 @@ void AMainPlayerController::OverlapSetInventoryItems(AItem* item)
 						UGameplayStatics::PlaySound2D(this, item->GetPickupSound());
 					}
 
+					OverlapItem = nullptr;
+
 					break;
 				}
 			}
 		}
 
-		OverlapItem = item;
 	}
+
+	bInterActionKey = false;
 	
 }
 
@@ -337,7 +342,7 @@ void AMainPlayerController::DropActorSetInWorld(AItem* item, FTransform transfor
 			{
 				UGameplayStatics::PlaySound2D(this, object->GetDropItemSound());
 			}
-			GetWorld()->GetTimerManager().SetTimer(OverlapTimer, this, &AMainPlayerController::ChangeSetOverlap, 2.0f);
+			GetWorld()->GetTimerManager().SetTimer(OverlapTimer, this, &AMainPlayerController::ChangeSetOverlap, 0.5f);
 		}
 	}
 
