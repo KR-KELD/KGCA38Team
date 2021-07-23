@@ -95,10 +95,10 @@ bool AAIBase::AIDeadCheck()
 	return true;
 }
 
-float AAIBase::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCursor)
+float AAIBase::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser)
 {
-	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCursor);
-	AIHit(DamageCursor, DamageAmount);
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	AIHit(DamageCauser, DamageAmount);
 	if (AIDeadCheck())
 	{
 		AIDead();
