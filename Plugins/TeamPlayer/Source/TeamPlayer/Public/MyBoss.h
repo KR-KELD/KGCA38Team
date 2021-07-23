@@ -34,6 +34,8 @@ public:
 	float		SavePlayerDist;
 	FVector		SavePlayerDir;
 	FVector 	SavePlayerLoc;
+	FVector		SaveBossRunDist;
+
 	float		SaveDeltaTime;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
@@ -47,9 +49,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
 		bool	bBossJumpAttack;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
+		bool	bBossRageAttackRun;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
 		int		iBossNormalAttackSplit;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
 		int		iRageCount;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
+		int		iRageAttackCount;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStat)
 		float HP;

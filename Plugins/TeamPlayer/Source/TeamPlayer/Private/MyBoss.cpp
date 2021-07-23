@@ -37,86 +37,100 @@ void AMyBoss::BeginPlay()
 void AMyBoss::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	GetDirAndDistOfCharacter();
-	//UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(SavePlayerDist));
-	SaveDeltaTime = DeltaTime;
-	if (iBossNormalAttackSplit >= 3)
-	{
-		iBossNormalAttackSplit = 0;
-	}
-	
-	if (AttackDist >= SavePlayerDist && 
-		ECheckBossState != EBossState::EBS_Breath &&
-		ECheckBossState != EBossState::EBS_JumpAttack)
+
+	if (pTarget != NULL)
 	{
 
-		if (ECheckBossState != EBossState::EBS_Attack)
-		{
-			FRotator LookAtRot = LookAtPlayer();
-			SetActorRotation(LookAtRot);
-		}
-		ECheckBossState = EBossState::EBS_Attack;
-	}
-	else if (ChaseDist >= SavePlayerDist &&
-		ECheckBossState != EBossState::EBS_Breath &&
-		ECheckBossState != EBossState::EBS_JumpAttack &&
-		ECheckBossState != EBossState::EBS_Attack)
-	{
-		HitBackRate = 0.0f;
-		AirBorneRate = 0.0f;
-		ECheckBossState = EBossState::EBS_Chase;
-		bBossChase = true;
-	}
-	else if (JumpOrBreathDist >= SavePlayerDist && 
-		SavePlayerDist > 700.0f && 
-		bBossChase == true &&
-		ECheckBossState != EBossState::EBS_Breath &&
-		ECheckBossState != EBossState::EBS_JumpAttack && 
-		ECheckBossState != EBossState::EBS_Attack)
-	{
-		int temp = rand() % 2;
-		//UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(temp));
-		if (iBossNormalAttackSplit < 2 || iBossNormalAttackSplit != 0)
-		{
-			if(ECheckBossState != EBossState::EBS_Breath && ECheckBossState != EBossState::EBS_JumpAttack)
-				iRageCount++;
-		}
-		iBossNormalAttackSplit = 0;
-
-		switch (temp)
-		{
-		case 0:
-		{
-		ECheckBossState = EBossState::EBS_Breath;
-		FRotator LookAtRot = LookAtPlayer();
-		SetActorRotation(LookAtRot);
-		SavePlayerLoc = pTarget->GetActorLocation();
-		//BreathAttack();
-		}	break;
-		case 1:
-			if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_JumpAttack) == false)
+			GetDirAndDistOfCharacter();
+			//UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(SavePlayerDist));
+			SaveDeltaTime = DeltaTime;
+			if (iBossNormalAttackSplit >= 3)
 			{
-				FRotator LookAtRot = LookAtPlayer();
-				SetActorRotation(LookAtRot);
-				SavePlayerLoc = pTarget->GetActorLocation();
-				//bBossJumpAttack = true;
-				ECheckBossState = EBossState::EBS_JumpAttack;
+				iBossNormalAttackSplit = 0;
 			}
-			break;
-		}
 
-	}
-	else if(bBossChase == false)
-	{
-		ECheckBossState = EBossState::EBS_IDLE;
-	}
+			if (AttackDist >= SavePlayerDist &&
+				ECheckBossState != EBossState::EBS_Breath &&
+				ECheckBossState != EBossState::EBS_JumpAttack &&
+				ECheckBossState != EBossState::EBS_RageAttack)
+			{
 
-	if (iRageCount > 2)
-	{
-		ECheckBossState = EBossState::EBS_Rage;
-	}
+				if (ECheckBossState != EBossState::EBS_Attack)
+				{
+					FRotator LookAtRot = LookAtPlayer();
+					SetActorRotation(LookAtRot);
+				}
+				ECheckBossState = EBossState::EBS_Attack;
+			}
+			else if (ChaseDist >= SavePlayerDist &&
+				ECheckBossState != EBossState::EBS_Breath &&
+				ECheckBossState != EBossState::EBS_JumpAttack &&
+				ECheckBossState != EBossState::EBS_Attack &&
+				ECheckBossState != EBossState::EBS_RageAttack)
+			{
+				HitBackRate = 0.0f;
+				AirBorneRate = 0.0f;
+				ECheckBossState = EBossState::EBS_Chase;
+				bBossChase = true;
+			}
+			else if (JumpOrBreathDist >= SavePlayerDist &&
+				SavePlayerDist > 700.0f &&
+				bBossChase == true &&
+				ECheckBossState != EBossState::EBS_Breath &&
+				ECheckBossState != EBossState::EBS_JumpAttack &&
+				ECheckBossState != EBossState::EBS_Attack &&
+				ECheckBossState != EBossState::EBS_RageAttack)
+			{
+				int temp = rand() % 2;
+				//UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(temp));
+				if (iBossNormalAttackSplit < 2 || iBossNormalAttackSplit != 0)
+				{
+					if (ECheckBossState != EBossState::EBS_Breath && ECheckBossState != EBossState::EBS_JumpAttack)
+						iRageCount++;
+				}
+				iBossNormalAttackSplit = 0;
 
-	BossStateAction(ECheckBossState);
+				switch (temp)
+				{
+				case 0:
+				{
+					ECheckBossState = EBossState::EBS_Breath;
+					FRotator LookAtRot = LookAtPlayer();
+					SetActorRotation(LookAtRot);
+					SavePlayerLoc = pTarget->GetActorLocation();
+					//BreathAttack();
+				}	break;
+				case 1:
+					if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_JumpAttack) == false)
+					{
+						FRotator LookAtRot = LookAtPlayer();
+						SetActorRotation(LookAtRot);
+						SavePlayerLoc = pTarget->GetActorLocation();
+						//bBossJumpAttack = true;
+						ECheckBossState = EBossState::EBS_JumpAttack;
+					}
+					break;
+				}
+
+			}
+			else if (bBossChase == false)
+			{
+				ECheckBossState = EBossState::EBS_IDLE;
+			}
+
+			if (iRageCount > 3 && ECheckBossState != EBossState::EBS_RageAttack)
+			{
+				ECheckBossState = EBossState::EBS_Rage;
+			}
+
+			//if (iRageAttackCount > 3)
+			//{
+			//	ECheckBossState = EBossState::EBS_RageAttack;
+			//}
+
+			BossStateAction(ECheckBossState);
+		
+	}
 }
 
 // Called to bind functionality to input
@@ -260,6 +274,22 @@ void AMyBoss::BreathAttack()
 
 void AMyBoss::RageAttack()
 {
+	
+	if (bBossRageAttackRun == false)
+	{
+		FRotator LookAtRot = LookAtPlayer();
+		SetActorRotation(LookAtRot);
+		SavePlayerLoc = pTarget->GetActorLocation();
+		SaveBossRunDist = GetActorLocation();
+	}
+	else if(bBossRageAttackRun == true)
+	{
+		//FVector temp = SaveBossRunDist - GetActorLocation();
+		//temp = temp.Size();
+		
+	}
+
+
 
 }
 

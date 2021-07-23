@@ -87,7 +87,7 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	m_collision->SetActive(false);
-	fHP = 800.0f;
+	fHP = 1000.0f;
 	fMaxHP = 1000.0f;
 	bHitOnAir = false;
 
@@ -334,7 +334,7 @@ void AMyCharacter::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, cla
 		{
 			if (m_collision->IsActive() == true)		//when give damage to enemy
 			{
-				UGameplayStatics::ApplyDamage(OtherActor, 20.0f, NULL, GetOwner(), NULL);
+				UGameplayStatics::ApplyDamage(OtherActor, 20.0f, NULL, this, NULL);
 				//UKismetSystemLibrary::PrintString(GetWorld(), TEXT("Hit"));
 				UGameplayStatics::SpawnEmitterAttached(m_PS_AttackParticle, OverlappedComp);
 
@@ -381,6 +381,12 @@ float AMyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 
 
 	fHP -= damage;
+	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_AttackMontage) == true)
+	{
+		IsAttack = false;
+		//GetMesh()->GetAnimInstance()->Montage_Stop(0.0f, AM_Parrying);
+		StopAnimMontage(AM_AttackMontage);
+	}
 	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Parrying) == true)
 	{
 		bParrying = false;
