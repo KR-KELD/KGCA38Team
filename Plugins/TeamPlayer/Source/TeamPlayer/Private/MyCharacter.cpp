@@ -87,7 +87,7 @@ void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	m_collision->SetActive(false);
-	fHP = 1000.0f;
+	fHP = 800.0f;
 	fMaxHP = 1000.0f;
 	bHitOnAir = false;
 
