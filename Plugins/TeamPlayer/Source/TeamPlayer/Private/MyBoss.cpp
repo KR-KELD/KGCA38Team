@@ -15,6 +15,9 @@ AMyBoss::AMyBoss()
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> NormalAttackMontage(TEXT("AnimMontage'/TeamPlayer/Boss/EnemyAnimation/FrostGiant/AM_FGAttackmontage.AM_FGAttackmontage'"));
 	AM_NormalAttack = NormalAttackMontage.Object;
 
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> RageAttack(TEXT("AnimMontage'/TeamPlayer/Boss/EnemyAnimation/FrostGiant/AM_RageAttack.AM_RageAttack'"));
+	AM_RageAttack = RageAttack.Object;
+
 }
 
 // Called when the game starts or when spawned
@@ -72,6 +75,7 @@ void AMyBoss::Tick(float DeltaTime)
 				AirBorneRate = 0.0f;
 				ECheckBossState = EBossState::EBS_Chase;
 				bBossChase = true;
+				bBossRageAttackRun = false;
 			}
 			else if (JumpOrBreathDist >= SavePlayerDist &&
 				SavePlayerDist > 700.0f &&
@@ -123,10 +127,10 @@ void AMyBoss::Tick(float DeltaTime)
 				ECheckBossState = EBossState::EBS_Rage;
 			}
 
-			//if (iRageAttackCount > 3)
-			//{
-			//	ECheckBossState = EBossState::EBS_RageAttack;
-			//}
+			if (iRageAttackCount > 3)
+			{
+				ECheckBossState = EBossState::EBS_RageAttack;
+			}
 
 			BossStateAction(ECheckBossState);
 		
@@ -274,7 +278,11 @@ void AMyBoss::BreathAttack()
 
 void AMyBoss::RageAttack()
 {
-	
+	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_RageAttack) == false)
+	{
+		PlayAnimMontage(AM_RageAttack, 1.0f, "Default");
+	}
+
 	if (bBossRageAttackRun == false)
 	{
 		FRotator LookAtRot = LookAtPlayer();
@@ -284,8 +292,11 @@ void AMyBoss::RageAttack()
 	}
 	else if(bBossRageAttackRun == true)
 	{
-		//FVector temp = SaveBossRunDist - GetActorLocation();
-		//temp = temp.Size();
+		if (SaveBossRunDist.Size() - GetActorLocation().Size() > 2000)
+		{
+			ECheckBossState = EBossState::EBS_Chase;
+
+		}
 		
 	}
 

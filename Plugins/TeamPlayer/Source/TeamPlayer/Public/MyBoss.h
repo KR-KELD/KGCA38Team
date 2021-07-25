@@ -80,6 +80,9 @@ public:
 		UAnimMontage * AM_JumpAttack;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Boss)
 		UAnimMontage * AM_NormalAttack;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Boss)
+		UAnimMontage * AM_RageAttack;
+
 public:
 	// Sets default values for this character's properties
 	AMyBoss();
