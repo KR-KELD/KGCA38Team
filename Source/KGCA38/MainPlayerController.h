@@ -34,7 +34,8 @@ public:
 	// 라인트레이스로 인한 팝업창이 떠 있고, 액션키가 눌렸을 때, 액션키 누른 시점에서 라인트레이스 충돌이 발생해있나 확인하는 용도.
 	bool bTraceIn;
 
-	bool bSetOverlap = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Inventory)
+	bool bSetOverlap = false;
 
 private:
 	const int32 INVENTORY_MAXSIZE = 10;
@@ -69,7 +70,7 @@ protected:
 	void DropActorSetInWorld(AItem* item, FTransform transform);
 
 	UFUNCTION(BlueprintCallable)
-	void UseItem(int32 index);
+	AItem* UseItem(int32 index);
 
 	// 오버랩 된 액터 확인
 	void TraceForActors();
