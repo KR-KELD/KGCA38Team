@@ -241,19 +241,15 @@ void AMyCharacter::Parry()
 }
 
 
-void AMyCharacter::OverlappedActor(AActor* TagName)
-{
-	//UKismetSystemLibrary::PrintString(GetWorld(), TagName.ToString());
-	IsOverlapItem = true;
-}
+
 
 void AMyCharacter::InterectOverlap()
 {
 	//UKismetSystemLibrary::PrintString(GetWorld(), TEXT("OverlapOn"));
-	if (IsOverlapItem == true)
-	{
-		//UKismetSystemLibrary::PrintString(GetWorld(), TEXT("OverlappedItem"));
-	}
+	//if (IsOverlapItem == true)
+	//{
+	//	//UKismetSystemLibrary::PrintString(GetWorld(), TEXT("OverlappedItem"));
+	//}
 }
 
 void AMyCharacter::MoveForward(float value)
@@ -345,6 +341,11 @@ void AMyCharacter::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, cla
 			OverlappedActor(OtherActor);
 			//IsOverlapItem = true;
 		}
+		else if (OtherActor->ActorHasTag("TownNPC") == true || OtherActor->ActorHasTag("Partner"))
+		{
+			bNPC = true;
+			OverlappedActor(OtherActor);
+		}
 	}
 }
 
@@ -354,6 +355,7 @@ void AMyCharacter::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class
 	{
 		//UKismetSystemLibrary::PrintString(GetWorld(), TEXT("OverlappEnd"));
 		IsOverlapItem = false;
+		bNPC = false;
 	}
 }
 

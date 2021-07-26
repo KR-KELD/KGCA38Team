@@ -48,7 +48,8 @@ public:
 		bool bDodge;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
 		bool bParrying;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
+		bool bNPC;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
@@ -119,7 +120,7 @@ public:
 
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) override;
-	UFUNCTION()
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void OverlappedActor(AActor* TagName);
 
 };
