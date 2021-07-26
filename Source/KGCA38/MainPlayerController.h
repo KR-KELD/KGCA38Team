@@ -59,6 +59,8 @@ private:
 	// 마지막에 히트된 아이템
 	class AItem* TraceHitLastItem;
 
+	FVector MeshScale;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Inventory, meta = (AllowPrivateAccess = "true"))
 	AItem* OverlapItem;
 
@@ -66,11 +68,14 @@ private:
 
 protected:
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void UseItemHealingPoint(int32 IncreaseHealth);
+
 	UFUNCTION(BlueprintCallable)
 	void DropActorSetInWorld(AItem* item, FTransform transform);
 
 	UFUNCTION(BlueprintCallable)
-	AItem* UseItem(int32 index);
+	void UseItem(int32 index);
 
 	// 오버랩 된 액터 확인
 	void TraceForActors();

@@ -56,7 +56,7 @@ private:
 	int32 ItemCount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (AllowPrivateAccess = "true"))
-	int32 UseItemHealth;
+	int32 ItemHealingPoint;
 
 	// 아이템 이름
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (AllowPrivateAccess = "true"))
@@ -102,5 +102,6 @@ public:
 	FORCEINLINE USoundCue* GetUseItemSound() const { return UseItemSound; }
 	FORCEINLINE EItemType GetItemType() const { return ItemType; }
 	FORCEINLINE UStaticMeshComponent* GetObjectMesh() const { return ObjectMesh; }
+	FORCEINLINE int32 GetItemHealingPoint() { return ItemHealingPoint; }
 
 };
