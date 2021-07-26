@@ -36,10 +36,10 @@ AWallActor::AWallActor()
 		Left->SetupAttachment(RootComponent);
 	}
 	//FRotator abc(0,0,0);	
-	Up->SetRelativeTransform(FTransform(FRotator(0.0f, 0.0f, 0.0f), FVector(740.0f, 0, 540.0f), FVector(2.0f,8.0f, 5.0f)));
-	Down->SetRelativeTransform(FTransform(FRotator(0.0f, 0.0f, 0.0f), FVector(-740.0f, 0, 540.0f), FVector(2.0f, 8.0f, 5.0f)));
-	Right->SetRelativeTransform(FTransform(FRotator(0.0f, 90.0f, 0.0f), FVector(0, 740.0f, 540.0f), FVector(2.0f, 8.0f, 5.0f)));
-	Left->SetRelativeTransform(FTransform(FRotator(0.0f, 90.0f, 0.0f), FVector(0, -740.0f, 540.0f), FVector(2.0f, 8.0f, 5.0f)));
+	Up->SetRelativeTransform(FTransform(FRotator(0.0f, 0.0f, 0.0f), FVector(750.0f, 0, 540.0f), FVector(2.0f,8.0f, 5.0f)));
+	Down->SetRelativeTransform(FTransform(FRotator(0.0f, 0.0f, 0.0f), FVector(-750.0f, 0, 540.0f), FVector(2.0f, 8.0f, 5.0f)));
+	Right->SetRelativeTransform(FTransform(FRotator(0.0f, 90.0f, 0.0f), FVector(0, 750.0f, 540.0f), FVector(2.0f, 8.0f, 5.0f)));
+	Left->SetRelativeTransform(FTransform(FRotator(0.0f, 90.0f, 0.0f), FVector(0, -750.0f, 540.0f), FVector(2.0f, 8.0f, 5.0f)));
 
 	UpVeow = true;
 	DownVeow = true;

@@ -28,7 +28,7 @@ AMazeGeneration::AMazeGeneration()
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.Owner = this;
 			FRotator rotator(0.0f, 0.0f, 0.0f);
-			FVector  SpawnLocation(i * 1480, j * 1480, -410.0f);
+			FVector  SpawnLocation(i * 1500, j * 1500, -410.0f);
 			FString a;
 			a += FString::FromInt(i);
 			a += ",";
@@ -62,6 +62,7 @@ void AMazeGeneration::BeginPlay()
 
 	CellStack.Add(ch[UKismetMathLibrary::RandomInteger(MaxX)][UKismetMathLibrary::RandomInteger(MaxY)]);
 	GetNextCell(CellStack[0]);
+	PuzzleDoor();
 	//static ConstructorHelpers::FObjectFinder<AActor> Wall(TEXT("Class'/Script/MazeRunnerMapToolPlugins.WallActor'"));
 }
 
@@ -171,6 +172,7 @@ void AMazeGeneration::ReSet()
 
 	CellStack.Add(ch[UKismetMathLibrary::RandomInteger(MaxX)][UKismetMathLibrary::RandomInteger(MaxY)]);
 	GetNextCell(CellStack[0]);
+	PuzzleDoor();
 }
 
 void	AMazeGeneration::OpenTheDoor()
@@ -187,5 +189,5 @@ void	AMazeGeneration::BattleDoor()
 
 void	AMazeGeneration::PuzzleDoor()
 {
-
+	((AWallActor*)ch[7][0]->GetChildActor())->LeftVisibility(false);
 }
