@@ -118,6 +118,7 @@ void AMainPlayerController::OverlapSetInventoryItems(AItem* item)
 					item->SetActorHiddenInGame(true);
 					item->SetActorEnableCollision(false);
 					item->SetActorTickEnabled(false);
+					MeshScale = item->GetObjectMesh()->GetRelativeScale3D();
 
 					Inventory[i] = item;
 
@@ -308,7 +309,7 @@ bool AMainPlayerController::TraceUnderScreen(FHitResult& OutHitResult, FVector& 
 
 }
 
-AItem* AMainPlayerController::UseItem(int32 index)
+void AMainPlayerController::UseItem(int32 index)
 {
 	if (QuickSlot[index])
 	{
@@ -316,7 +317,8 @@ AItem* AMainPlayerController::UseItem(int32 index)
 		{
 			if (QuickSlot[index]->GetItemCount() > 0)
 			{
-				QuickSlot[index]->SetItemCount(QuickSlot[index]->GetItemCount() - 1);				
+				QuickSlot[index]->SetItemCount(QuickSlot[index]->GetItemCount() - 1);
+				UseItemHealingPoint(QuickSlot[index]->GetItemHealingPoint());
 			}
 
 			if (QuickSlot[index]->GetItemCount() <= 0 && QuickSlot[index] != nullptr)
@@ -341,11 +343,11 @@ AItem* AMainPlayerController::UseItem(int32 index)
 				}
 			}
 
-			return QuickSlot[index];
+			//return QuickSlot[index];
 		}
 	}
 
-	return nullptr;
+	//return nullptr;
 }
 
 void AMainPlayerController::DropActorSetInWorld(AItem* item, FTransform transform)
@@ -362,7 +364,8 @@ void AMainPlayerController::DropActorSetInWorld(AItem* item, FTransform transfor
 			object->SetActorHiddenInGame(false);
 			object->SetActorEnableCollision(true);
 			object->SetActorTickEnabled(true);
-			object->SetActorTransform(transform);			
+			transform.SetScale3D(MeshScale);
+			object->SetActorTransform(transform);
 
 			if (object->GetDropItemSound())
 			{

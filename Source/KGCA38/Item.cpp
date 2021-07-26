@@ -17,9 +17,11 @@ AItem::AItem()
 	PrimaryActorTick.bCanEverTick = true;
 
 	ObjectMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ObjectMesh"));
+	//ObjectMesh->SetWorldScale3D(FVector(2.0f));
 	SetRootComponent(ObjectMesh);
 
 	PickupSphere = CreateDefaultSubobject<USphereComponent>(TEXT("PickupSphere"));
+	PickupSphere->SetSphereRadius(300.0f);
 	PickupSphere->SetupAttachment(GetRootComponent());
 
 	PickupWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("PickupWidget"));
