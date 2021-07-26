@@ -40,7 +40,7 @@ public:
 		void AIReset();
 	UFUNCTION()
 		virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, 
-			class AController* EventInstigator, class AActor* DamageCursor) override;
+			class AController* EventInstigator, class AActor* DamageCauser) override;
 
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		virtual void SetActorActive(bool IsActive);

@@ -4,7 +4,7 @@
 #include "MyCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
-//#include "Components/CapsuleComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Math/UnrealMathUtility.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -55,7 +55,8 @@ AMyCharacter::AMyCharacter(const FObjectInitializer& obj)
 		AM_DodgeMontage = DodgeMontage.Object;
 		static ConstructorHelpers::FObjectFinder<UAnimMontage> KnockDownMontage(TEXT("AnimMontage'/TeamPlayer/ImportedAnimation/VampCharacter/Animation/AM_AirKnockBackIDLE.AM_AirKnockBackIDLE'"));
 		AM_KnockDownTwistMontage = KnockDownMontage.Object;
-
+		static ConstructorHelpers::FObjectFinder<UAnimMontage> ParryingMontage(TEXT("AnimMontage'/TeamPlayer/ImportedAnimation/VampCharacter/Animation/AM_Parrying.AM_Parrying'"));
+		AM_Parrying = ParryingMontage.Object;
 	
 	}
 
@@ -98,7 +99,7 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (bDodge == false && IsHit == false && bHitOnAir == false && IsDead == false)
+	if (bDodge == false && IsHit == false && bHitOnAir == false && IsDead == false && bParrying == false)
 	{
 		FRotator temp2 = UKismetMathLibrary::Conv_VectorToRotator(GetCharacterMovement()->GetCurrentAcceleration());
 		FRotator temp = FMath::RInterpTo(GetActorRotation(), temp2, DeltaTime, 10.0f);
@@ -134,17 +135,33 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Attack", EInputEvent::IE_Pressed, this, &AMyCharacter::Attack);
 	PlayerInputComponent->BindAction("Interect", EInputEvent::IE_Pressed, this, &AMyCharacter::InterectOverlap);
 	PlayerInputComponent->BindAction("Dodge", EInputEvent::IE_Pressed, this, &AMyCharacter::Dodge);
-	//PlayerInputComponent->BindAction("Interect", EInputEvent::IE_Pressed, this, &AMyCharacter::InterectOverlap);
+	PlayerInputComponent->BindAction("Parrying", EInputEvent::IE_Pressed, this, &AMyCharacter::Parry);
 
 }
 
 void AMyCharacter::Attack()
 {
-	if (IsDead == false && IsHit == false && bHitOnAir == false && IsDead == false)
+
+	if (IsDead == false && IsHit == false && bHitOnAir == false && IsDead == false && bDodge == false && bParrying == false)
 	{
+
 		if (IsAttack == false)
 		{
+			if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Parrying) == true)
+			{
+				StopAnimMontage(AM_Parrying);
+			}
+			if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_DodgeMontage) == true)
+			{
+				StopAnimMontage(AM_DodgeMontage);
+			}
+			if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() == true) GetMesh()->GetAnimInstance()->StopAllMontages(0.0);
+
+
 			PlayAnimMontage(AM_AttackMontage, 1.0f, "Attack1");
+
+			//AM_MontageSet = AM_AttackMontage;
+			//PlayAnimMontage(AM_MontageSet, 1.0f, "Attack1");
 			IsAttack = true;
 		}
 		else if (IsAttack == true && ComboOn == true)
@@ -152,16 +169,19 @@ void AMyCharacter::Attack()
 			FName SectionNameOfMontage = GetMesh()->GetAnimInstance()->Montage_GetCurrentSection(AM_AttackMontage);
 			if (SectionNameOfMontage == "Attack1")
 			{
+
 				PlayAnimMontage(AM_AttackMontage, 1.0f, "Attack2");
 				ComboOn = false;
 			}
 			else if (SectionNameOfMontage == "Attack2")
 			{
+
 				PlayAnimMontage(AM_AttackMontage, 1.0f, "Attack3");
 				ComboOn = false;
 			}
 			else if (SectionNameOfMontage == "Attack3")
 			{
+
 				PlayAnimMontage(AM_AttackMontage, 1.0f, "Attack4");
 				ComboOn = false;
 			}
@@ -171,7 +191,8 @@ void AMyCharacter::Attack()
 
 void AMyCharacter::Dodge()
 {
-	if (bDodge == true || bHitOnAir == true || IsDead == true) return;
+	if (bDodge == true || bHitOnAir == true || IsDead == true || bParrying == true) return;
+	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_KnockDownTwistMontage) == true) return;
 	//USceneComponent::GetWorld
 	float Roll, Pitch, Yaw;
 	m_TPSCameraBoomComponent->GetComponentRotation();
@@ -206,7 +227,21 @@ void AMyCharacter::Dodge()
 
 }
 
-void AMyCharacter::OverlappedActor(FName TagName)
+void AMyCharacter::Parry()
+{
+	if (IsDead == true || IsHit == true || bHitOnAir == true || IsDead == true || bParrying == true || bDodge == true) return;
+	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Parrying) == true) return;
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() == true) GetMesh()->GetAnimInstance()->StopAllMontages(0.0);
+
+	bParrying = true;
+	IsAttack = false;
+	StopAnimMontage(AM_AttackMontage);
+	//AM_MontageSet = AM_Parrying;
+	PlayAnimMontage(AM_Parrying, 1.0f, "Default");
+}
+
+
+void AMyCharacter::OverlappedActor(AActor* TagName)
 {
 	//UKismetSystemLibrary::PrintString(GetWorld(), TagName.ToString());
 	IsOverlapItem = true;
@@ -223,7 +258,7 @@ void AMyCharacter::InterectOverlap()
 
 void AMyCharacter::MoveForward(float value)
 {
-	if (bDodge == true || bHitOnAir == true || IsDead == true) return;
+	if (bDodge == true || bHitOnAir == true || IsDead == true || bParrying == true) return;
 	//when player is not dead or get hit is false, player can move
 	if (IsDead == false && IsHit == false)
 	{
@@ -254,7 +289,7 @@ void AMyCharacter::MoveForward(float value)
 }
 void AMyCharacter::MoveRight(float value)
 {
-	if (bDodge == true || bHitOnAir == true || IsDead == true) return;
+	if (bDodge == true || bHitOnAir == true || IsDead == true || bParrying == true) return;
 	if (IsDead == false && IsHit == false)
 	{
 		if (value != 0.0f && Controller != nullptr)
@@ -299,7 +334,7 @@ void AMyCharacter::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, cla
 		{
 			if (m_collision->IsActive() == true)		//when give damage to enemy
 			{
-				UGameplayStatics::ApplyDamage(OtherActor, 20.0f, NULL, GetOwner(), NULL);
+				UGameplayStatics::ApplyDamage(OtherActor, 20.0f, NULL, this, NULL);
 				//UKismetSystemLibrary::PrintString(GetWorld(), TEXT("Hit"));
 				UGameplayStatics::SpawnEmitterAttached(m_PS_AttackParticle, OverlappedComp);
 
@@ -307,7 +342,7 @@ void AMyCharacter::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, cla
 		}
 		else if (OtherComp->ComponentHasTag("Item") == true)
 		{
-			OverlappedActor(OtherComp->ComponentTags[0]);
+			OverlappedActor(OtherActor);
 			//IsOverlapItem = true;
 		}
 	}
@@ -326,11 +361,47 @@ float AMyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 {
 	//when player get damge from enemy
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	
+	if (GetCapsuleComponent()->IsActive() == false)
+	{
+		return NULL;
+	}
+	if (bParrying == true)
+	{
+		if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Parrying) == true)
+		{
+			if (GetMesh()->GetAnimInstance()->Montage_GetCurrentSection() != "ParryingSucceed")
+			{
+				//StopAnimMontage(AM_Parrying);
+				PlayAnimMontage(AM_Parrying, 1.0f, "ParryingSucceed");
+				//UGameplayStatics::PlaySoundAtLocation(,GetActorLocation());
+				return NULL;
+			}
+		}
+	}
+
 
 	fHP -= damage;
+	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_AttackMontage) == true)
+	{
+		IsAttack = false;
+		//GetMesh()->GetAnimInstance()->Montage_Stop(0.0f, AM_Parrying);
+		StopAnimMontage(AM_AttackMontage);
+	}
+	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Parrying) == true)
+	{
+		bParrying = false;
+		//GetMesh()->GetAnimInstance()->Montage_Stop(0.0f, AM_Parrying);
+		StopAnimMontage(AM_Parrying);
+	}
 
 	//UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(fHP));
+	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_DodgeMontage) == true)
+	{
+		bDodge = false;
+		StopAnimMontage(AM_DodgeMontage);
+	}
+
+	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() == true) GetMesh()->GetAnimInstance()->StopAllMontages(0.0);
 	if (fHP <= 0.0f)
 	{
 		IsDead = true;
@@ -372,6 +443,7 @@ void AMyCharacter::KnockbackPlayer(float KnockBackPower, float PushBack, FVector
 		FV = UKismetMathLibrary::MakeVector(FV.X, FV.Y, FUV.Z);
 		if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_KnockDownTwistMontage) == false)
 		{
+
 			PlayAnimMontage(AM_KnockDownTwistMontage, 1.0f, "Default");
 			//bHitOnAir = true;
 			

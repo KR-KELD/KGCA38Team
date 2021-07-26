@@ -28,6 +28,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float AttackRange;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		float AttackCooltime;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float LookRange;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float LostRange;

@@ -57,12 +57,18 @@ void AItem::OnPickupSphereOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 	{
 		//AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
 		AMainPlayerController* controller = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-
+		UE_LOG(LogTemp, Warning, TEXT("Item Overlap"));
 		// 겹친게 플레이어 캐릭터가 맞으면
 		if (controller)
 		{
-			// 겹친 항목 수 증가
-			controller->IncreamentOverlappedItemCount(1);
+			if (controller->bSetOverlap == true)
+			{
+				// 겹친 항목 수 증가
+				PickupWidget->SetVisibility(true);
+				controller->bInterActionKey = true;
+				controller->SetOverlapItem(this);
+				controller->IncreamentOverlappedItemCount(1);
+			}
 		}
 	}
 }
@@ -81,6 +87,7 @@ void AItem::OnPickupSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, A
 			// 겹친 항목 수 감소
 			controller->IncreamentOverlappedItemCount(-1);
 			controller->bInterActionKey = false;
+			controller->SetOverlapItem(nullptr);
 		}
 
 		PickupWidget->SetVisibility(false);

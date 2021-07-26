@@ -134,7 +134,7 @@ void AMyAIController::RespawnCall(FString msg)
 	IsHit = false;
 	AttackReady(true);
 	Blackboard->SetValueAsBool(BBIsBBDead, IsDead);
-	UpdateState("State_Patrol");
+	UpdateState("State_Idle");
 	Blackboard->SetValueAsString(BattleState, "Battle_Select");
 	GetBrainComponent()->StartLogic();
 	Cast<AAIBase>(GetPawn())->SetAIMove(AIData.WalkSpeed);

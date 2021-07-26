@@ -13,5 +13,7 @@ UCLASS()
 class KGCA38_API AMainAIMonster : public AMainAIBase
 {
 	GENERATED_BODY()
-	
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
+		bool IsDayMonster = true;
 };

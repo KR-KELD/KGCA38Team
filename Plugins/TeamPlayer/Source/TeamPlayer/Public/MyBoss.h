@@ -20,6 +20,7 @@ enum class EBossState : uint8
 	EBS_JumpAttack UMETA(DisplayName = "JumpAttack"),
 	EBS_Breath UMETA(DisplayName = "Breath"),
 	EBS_Rage UMETA(Displayname = "Rage"),
+	EBS_RageAttack UMETA(Displayname = "RageAttack"),
 };
 
 UCLASS()
@@ -33,6 +34,8 @@ public:
 	float		SavePlayerDist;
 	FVector		SavePlayerDir;
 	FVector 	SavePlayerLoc;
+	FVector		SaveBossRunDist;
+
 	float		SaveDeltaTime;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
@@ -46,9 +49,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
 		bool	bBossJumpAttack;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
+		bool	bBossRageAttackRun;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
 		int		iBossNormalAttackSplit;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
 		int		iRageCount;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
+		int		iRageAttackCount;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BossStat)
 		float HP;
@@ -70,6 +80,9 @@ public:
 		UAnimMontage * AM_JumpAttack;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Boss)
 		UAnimMontage * AM_NormalAttack;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Boss)
+		UAnimMontage * AM_RageAttack;
+
 public:
 	// Sets default values for this character's properties
 	AMyBoss();
@@ -91,10 +104,11 @@ public:
 	void AttackPlayer();
 	void JumpAttack();
 	void BreathAttack();
+	void RageAttack();
 	void GetDirAndDistOfCharacter();
 	void BossStateAction(EBossState bs);
 
-
 	FRotator LookAtPlayer();
+
 };
 
