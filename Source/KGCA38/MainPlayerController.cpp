@@ -308,18 +308,44 @@ bool AMainPlayerController::TraceUnderScreen(FHitResult& OutHitResult, FVector& 
 
 }
 
-void AMainPlayerController::UseItem(int32 index)
+AItem* AMainPlayerController::UseItem(int32 index)
 {
 	if (QuickSlot[index])
 	{
-		if (QuickSlot[index]->GetItemType() == EItemType::EIT_Food)
+		if (QuickSlot[index]->GetItemType() == EItemType::EIT_Food || QuickSlot[index]->GetItemType() == EItemType::EIT_Medical)
 		{
 			if (QuickSlot[index]->GetItemCount() > 0)
 			{
-				QuickSlot[index]->SetItemCount(QuickSlot[index]->GetItemCount() - 1);
+				QuickSlot[index]->SetItemCount(QuickSlot[index]->GetItemCount() - 1);				
 			}
+
+			if (QuickSlot[index]->GetItemCount() <= 0 && QuickSlot[index] != nullptr)
+			{
+				for (int i = 0; i < INVENTORY_MAXSIZE; i++)
+				{
+					if (Inventory[i]->GetItemName() == QuickSlot[index]->GetItemName())
+					{
+						for (int j = 0; j < QUICKSLOT_MAXSIZE; j++)
+						{
+							if (QuickSlot[j] != nullptr)
+							{
+								if (Inventory[i]->GetItemName() == QuickSlot[j]->GetItemName())
+								{
+									QuickSlot[j] = nullptr;
+								}
+							}
+						}
+						Inventory[i] = nullptr;
+						break;
+					}
+				}
+			}
+
+			return QuickSlot[index];
 		}
 	}
+
+	return nullptr;
 }
 
 void AMainPlayerController::DropActorSetInWorld(AItem* item, FTransform transform)
