@@ -21,6 +21,7 @@ enum class EBossState : uint8
 	EBS_Breath UMETA(DisplayName = "Breath"),
 	EBS_Rage UMETA(Displayname = "Rage"),
 	EBS_RageAttack UMETA(Displayname = "RageAttack"),
+	EBS_BossDead UMETA(Displayname = "BossDead"),
 };
 
 UCLASS()
@@ -37,11 +38,11 @@ public:
 	FVector		SaveBossRunDist;
 
 	float		SaveDeltaTime;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
-	float		ChaseDist;
+		float		ChaseDist;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
-	float		AttackDist;
+		float		AttackDist;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
 		float	JumpOrBreathDist;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
@@ -50,6 +51,8 @@ public:
 		bool	bBossJumpAttack;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
 		bool	bBossRageAttackRun;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
+		bool	bBossDead;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerDistCheck)
@@ -91,7 +94,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
