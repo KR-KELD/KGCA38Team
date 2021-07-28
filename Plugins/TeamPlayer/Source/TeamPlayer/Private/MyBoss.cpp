@@ -6,7 +6,7 @@
 // Sets default values
 AMyBoss::AMyBoss()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+ 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> JumpAttackMontage(TEXT("AnimMontage'/TeamPlayer/Boss/EnemyAnimation/FrostGiant/AM_JumpAttack.AM_JumpAttack'"));
@@ -40,105 +40,100 @@ void AMyBoss::BeginPlay()
 void AMyBoss::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (HP <= 0.0f)
-	{
-		ECheckBossState = EBossState::EBS_BossDead;
-	}
 
-	if (pTarget != NULL && ECheckBossState != EBossState::EBS_BossDead)
+	if (pTarget != NULL)
 	{
 
-		GetDirAndDistOfCharacter();
-		//UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(SavePlayerDist));
-		SaveDeltaTime = DeltaTime;
-		if (iBossNormalAttackSplit >= 3)
-		{
-			iBossNormalAttackSplit = 0;
-		}
-
-		if (AttackDist >= SavePlayerDist &&
-			ECheckBossState != EBossState::EBS_Breath &&
-			ECheckBossState != EBossState::EBS_JumpAttack &&
-			ECheckBossState != EBossState::EBS_RageAttack)
-		{
-
-			if (ECheckBossState != EBossState::EBS_Attack)
+			GetDirAndDistOfCharacter();
+			//UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(SavePlayerDist));
+			SaveDeltaTime = DeltaTime;
+			if (iBossNormalAttackSplit >= 3)
 			{
-				FRotator LookAtRot = LookAtPlayer();
-				SetActorRotation(LookAtRot);
+				iBossNormalAttackSplit = 0;
 			}
-			ECheckBossState = EBossState::EBS_Attack;
-		}
-		else if (ChaseDist >= SavePlayerDist &&
-			ECheckBossState != EBossState::EBS_Breath &&
-			ECheckBossState != EBossState::EBS_JumpAttack &&
-			ECheckBossState != EBossState::EBS_Attack &&
-			ECheckBossState != EBossState::EBS_RageAttack)
-		{
-			HitBackRate = 0.0f;
-			AirBorneRate = 0.0f;
-			ECheckBossState = EBossState::EBS_Chase;
-			bBossChase = true;
-			bBossRageAttackRun = false;
-		}
-		else if (JumpOrBreathDist >= SavePlayerDist &&
-			SavePlayerDist > 700.0f &&
-			bBossChase == true &&
-			ECheckBossState != EBossState::EBS_Breath &&
-			ECheckBossState != EBossState::EBS_JumpAttack &&
-			ECheckBossState != EBossState::EBS_Attack &&
-			ECheckBossState != EBossState::EBS_RageAttack &&
-			ECheckBossState != EBossState::EBS_Rage)
-		{
-			int temp = rand() % 2;
-			//UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(temp));
-			if (iBossNormalAttackSplit < 2 || iBossNormalAttackSplit != 0)
-			{
-				if (ECheckBossState != EBossState::EBS_Breath && ECheckBossState != EBossState::EBS_JumpAttack)
-					iRageCount++;
-			}
-			iBossNormalAttackSplit = 0;
 
-			switch (temp)
+			if (AttackDist >= SavePlayerDist &&
+				ECheckBossState != EBossState::EBS_Breath &&
+				ECheckBossState != EBossState::EBS_JumpAttack &&
+				ECheckBossState != EBossState::EBS_RageAttack)
 			{
-			case 0:
-			{
-				ECheckBossState = EBossState::EBS_Breath;
-				FRotator LookAtRot = LookAtPlayer();
-				SetActorRotation(LookAtRot);
-				SavePlayerLoc = pTarget->GetActorLocation();
-				//BreathAttack();
-			}	break;
-			case 1:
-				if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_JumpAttack) == false)
+
+				if (ECheckBossState != EBossState::EBS_Attack)
 				{
 					FRotator LookAtRot = LookAtPlayer();
 					SetActorRotation(LookAtRot);
-					SavePlayerLoc = pTarget->GetActorLocation();
-					//bBossJumpAttack = true;
-					ECheckBossState = EBossState::EBS_JumpAttack;
 				}
-				break;
+				ECheckBossState = EBossState::EBS_Attack;
+			}
+			else if (ChaseDist >= SavePlayerDist &&
+				ECheckBossState != EBossState::EBS_Breath &&
+				ECheckBossState != EBossState::EBS_JumpAttack &&
+				ECheckBossState != EBossState::EBS_Attack &&
+				ECheckBossState != EBossState::EBS_RageAttack)
+			{
+				HitBackRate = 0.0f;
+				AirBorneRate = 0.0f;
+				ECheckBossState = EBossState::EBS_Chase;
+				bBossChase = true;
+				bBossRageAttackRun = false;
+			}
+			else if (JumpOrBreathDist >= SavePlayerDist &&
+				SavePlayerDist > 700.0f &&
+				bBossChase == true &&
+				ECheckBossState != EBossState::EBS_Breath &&
+				ECheckBossState != EBossState::EBS_JumpAttack &&
+				ECheckBossState != EBossState::EBS_Attack &&
+				ECheckBossState != EBossState::EBS_RageAttack)
+			{
+				int temp = rand() % 2;
+				//UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(temp));
+				if (iBossNormalAttackSplit < 2 || iBossNormalAttackSplit != 0)
+				{
+					if (ECheckBossState != EBossState::EBS_Breath && ECheckBossState != EBossState::EBS_JumpAttack)
+						iRageCount++;
+				}
+				iBossNormalAttackSplit = 0;
+
+				switch (temp)
+				{
+				case 0:
+				{
+					ECheckBossState = EBossState::EBS_Breath;
+					FRotator LookAtRot = LookAtPlayer();
+					SetActorRotation(LookAtRot);
+					SavePlayerLoc = pTarget->GetActorLocation();
+					//BreathAttack();
+				}	break;
+				case 1:
+					if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_JumpAttack) == false)
+					{
+						FRotator LookAtRot = LookAtPlayer();
+						SetActorRotation(LookAtRot);
+						SavePlayerLoc = pTarget->GetActorLocation();
+						//bBossJumpAttack = true;
+						ECheckBossState = EBossState::EBS_JumpAttack;
+					}
+					break;
+				}
+
+			}
+			else if (bBossChase == false)
+			{
+				ECheckBossState = EBossState::EBS_IDLE;
 			}
 
-		}
-		else if (bBossChase == false)
-		{
-			ECheckBossState = EBossState::EBS_IDLE;
-		}
+			if (iRageCount > 3 && ECheckBossState != EBossState::EBS_RageAttack)
+			{
+				ECheckBossState = EBossState::EBS_Rage;
+			}
 
-		if (iRageCount > 3 && ECheckBossState != EBossState::EBS_RageAttack && ECheckBossState == EBossState::EBS_Chase)
-		{
-			ECheckBossState = EBossState::EBS_Rage;
-		}
+			if (iRageAttackCount > 3)
+			{
+				ECheckBossState = EBossState::EBS_RageAttack;
+			}
 
-		if (iRageAttackCount > 3)
-		{
-			ECheckBossState = EBossState::EBS_RageAttack;
-		}
-
-		BossStateAction(ECheckBossState);
-
+			BossStateAction(ECheckBossState);
+		
 	}
 }
 
@@ -248,7 +243,7 @@ void AMyBoss::JumpAttack()
 	UKismetMathLibrary::BreakVector(GetActorLocation(), Roll, Pitch, Yaw);
 	SelfXY = UKismetMathLibrary::MakeVector(Roll, Pitch, Yaw);
 	SavePlayerLoc = FMath::VInterpTo(SelfXY, TargetXY, SaveDeltaTime, 3.0f);
-	
+
 	//FRotator CameraWorldRot = GetCapsuleComponent()->GetComponentRotation();
 	//UKismetMathLibrary::BreakRotator(CameraWorldRot, Roll, Pitch, Yaw);
 	//FRotator newRot = UKismetMathLibrary::MakeRotator(Roll, 0.0f, Yaw);
@@ -256,12 +251,7 @@ void AMyBoss::JumpAttack()
 
 	FName JumpStart = "JumpStart";
 	FName DropDown = "DropDown";
-	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_JumpAttack) == false && GetMesh()->GetAnimInstance()->Montage_GetCurrentSection() != "DropDown" && bBossJumpAttack == false)
-	{
-		bBossJumpAttack = true;
-		PlayAnimMontage(AM_JumpAttack, 1.0f, "JumpStart");
-	}
-	else if (SavePlayerLoc.Size() < (GetActorLocation() - SavePlayerLoc).Size())
+	if (SavePlayerLoc.Size() + 10 < (GetActorLocation() - SavePlayerLoc).Size())
 	{
 		PlayAnimMontage(AM_JumpAttack, 10.0f, "DropDown");
 		Damage = 80.0f;
@@ -271,10 +261,12 @@ void AMyBoss::JumpAttack()
 	else if (GetMesh()->GetAnimInstance()->Montage_GetCurrentSection() != JumpStart && GetMesh()->GetAnimInstance()->Montage_GetCurrentSection() != DropDown)
 	{
 		//GetMesh()->GetAnimInstance()->Montage_Pause();
-		SavePlayerLoc = SavePlayerLoc - 10.0f;
 		SetActorLocation(SavePlayerLoc);
 	}
-
+	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_JumpAttack) == false)
+	{
+		PlayAnimMontage(AM_JumpAttack, 1.0f, "JumpStart");
+	}
 
 
 }
@@ -290,9 +282,7 @@ void AMyBoss::RageAttack()
 	{
 		PlayAnimMontage(AM_RageAttack, 1.0f, "Default");
 	}
-	Damage = 200.0f;
-	HitBackRate = 400.0f;
-	AirBorneRate = 500.0f;
+
 	if (bBossRageAttackRun == false)
 	{
 		FRotator LookAtRot = LookAtPlayer();
@@ -300,20 +290,14 @@ void AMyBoss::RageAttack()
 		SavePlayerLoc = pTarget->GetActorLocation();
 		SaveBossRunDist = GetActorLocation();
 	}
-	else if (bBossRageAttackRun == true)
+	else if(bBossRageAttackRun == true)
 	{
-		//GetCharacterMovement()->Speed
-		if (GetActorLocation().Size() - SaveBossRunDist.Size() > 2000.0f)
+		if (SaveBossRunDist.Size() - GetActorLocation().Size() > 2000)
 		{
-			bBossRageAttackRun = false;
-			GetCharacterMovement()->MaxWalkSpeed = 700.0f;
-			iRageCount = 0;
-			iRageAttackCount = 0;
-			GetMesh()->GetAnimInstance()->StopAllMontages(0.0f);
 			ECheckBossState = EBossState::EBS_Chase;
 
 		}
-
+		
 	}
 
 
