@@ -52,10 +52,6 @@ public:
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
 		FString AIState = "State_Idle";
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
-		TArray<FString> AIStateList;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
-		TArray<FString> AIBattleStateList;
-	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
 		bool IsAttackReady = true;
 	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category = "KGCA_AI")
 		bool IsHit = false;
