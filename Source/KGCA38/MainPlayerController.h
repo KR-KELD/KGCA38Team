@@ -38,8 +38,8 @@ public:
 	bool bSetOverlap = false;
 
 private:
-	const int32 INVENTORY_MAXSIZE = 10;
-	const int32 QUICKSLOT_MAXSIZE = 6;
+	const int32 INVENTORY_MAXSIZE = 20;
+	const int32 QUICKSLOT_MAXSIZE = 10;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Inventory, meta = (AllowPrivateAccess = "true"))
 	TArray<AItem*> Inventory;

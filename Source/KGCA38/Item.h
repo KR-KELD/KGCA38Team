@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+ï»¿// Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
 
@@ -29,12 +29,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	// PickupSphere¿Í °ãÄ¡¸é È£Ãâ
+	// PickupSphereì™€ ê²¹ì¹˜ë©´ í˜¸ì¶œ
 	UFUNCTION()
 	void OnPickupSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 			int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	// PickupSphereÀÇ ¿À¹ö·¦ÀÌ ³¡³ª¸é È£Ãâ
+	// PickupSphereì˜ ì˜¤ë²„ë©ì´ ëë‚˜ë©´ í˜¸ì¶œ
 	UFUNCTION()
 	void OnPickupSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 			int32 OtherBodyIndex);
@@ -43,51 +43,51 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Object, meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* ObjectMesh;
 
-	// ¾ÆÀÌÅÛ Å¸ÀÔ
+	// ì•„ì´í…œ íƒ€ì…
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	EItemType ItemType;
 
-	// ÀÎº¥Åä¸®¿¡ ³ÖÀ» Ä­ ¹øÈ£
+	// ì¸ë²¤í† ë¦¬ì— ë„£ì„ ì¹¸ ë²ˆí˜¸
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	int32 ItemIndex;
 
-	// ¾ÆÀÌÅÛ °¹¼ö
+	// ì•„ì´í…œ ê°¯ìˆ˜
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	int32 ItemCount;
 
-	// ¾ÆÀÌÅÛ È¸º¹·®
+	// ì•„ì´í…œ íšŒë³µëŸ‰
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	int32 ItemHealingPoint;
 
-	// ¾ÆÀÌÅÛ È£°¨µµ ¼öÄ¡
+	// ì•„ì´í…œ í˜¸ê°ë„ ìˆ˜ì¹˜
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	int32 ItemProbabilityPoint;
 
-	// ¾ÆÀÌÅÛ ÀÌ¸§
+	// ì•„ì´í…œ ì´ë¦„
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	FString ItemName;
 
-	// ¾ÆÀÌÅÛ ¾ÆÀÌÄÜ ÅØ½ºÃ³
+	// ì•„ì´í…œ ì•„ì´ì½˜ í…ìŠ¤ì²˜
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", meta = (AllowPrivateAccess = "true"))
 	UTexture2D* ItemIcon;
 
-	// °ãÃÄÁ³À»¶§ ¶óÀÎÆ®·¹ÀÌ½º È°¼ºÈ­
+	// ê²¹ì³ì¡Œì„ë•Œ ë¼ì¸íŠ¸ë ˆì´ìŠ¤ í™œì„±í™”
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
 	USphereComponent* PickupSphere;
 
-	// Ä³¸¯ÅÍ°¡ ¹Ù¶óºÃÀ»¶§ ÆË¾÷µÉ À§Á¬
+	// ìºë¦­í„°ê°€ ë°”ë¼ë´¤ì„ë•Œ íŒì—…ë  ìœ„ì ¯
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
 	UWidgetComponent* PickupWidget;
 
-	// ÇÈ¾÷½Ã Àç»ıµÉ »ç¿îµå
+	// í”½ì—…ì‹œ ì¬ìƒë  ì‚¬ìš´ë“œ
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
 	USoundCue* PickupSound;
 
-	// ÀÎº¥Åä¸®¿¡¼­ ¿ùµå·Î ¶³¾î¶ß¸±¶§ Àç»ıµÉ »ç¿îµå
+	// ì¸ë²¤í† ë¦¬ì—ì„œ ì›”ë“œë¡œ ë–¨ì–´ëœ¨ë¦´ë•Œ ì¬ìƒë  ì‚¬ìš´ë“œ
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
 	USoundCue* DropItemSound;
 
-	// ¾ÆÀÌÅÛ »ç¿ë½Ã Àç»ıµÉ »ç¿îµå
+	// ì•„ì´í…œ ì‚¬ìš©ì‹œ ì¬ìƒë  ì‚¬ìš´ë“œ
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
 	USoundCue* UseItemSound;
 

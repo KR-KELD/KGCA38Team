@@ -325,20 +325,24 @@ void AMainPlayerController::UseItem(int32 index)
 			{
 				for (int i = 0; i < INVENTORY_MAXSIZE; i++)
 				{
-					if (Inventory[i]->GetItemName() == QuickSlot[index]->GetItemName())
+					if (Inventory[i] != nullptr)
 					{
-						for (int j = 0; j < QUICKSLOT_MAXSIZE; j++)
+						if (Inventory[i]->GetItemName() == QuickSlot[index]->GetItemName())
 						{
-							if (QuickSlot[j] != nullptr)
+							for (int j = 0; j < QUICKSLOT_MAXSIZE; j++)
 							{
-								if (Inventory[i]->GetItemName() == QuickSlot[j]->GetItemName())
+								if (QuickSlot[j] != nullptr)
 								{
-									QuickSlot[j] = nullptr;
+									if (Inventory[i]->GetItemName() == QuickSlot[j]->GetItemName())
+									{
+										QuickSlot[j] = nullptr;
+									}
 								}
 							}
+
+							Inventory[i] = nullptr;
+							break;
 						}
-						Inventory[i] = nullptr;
-						break;
 					}
 				}
 			}
