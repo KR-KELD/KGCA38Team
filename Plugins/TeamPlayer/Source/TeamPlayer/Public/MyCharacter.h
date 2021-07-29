@@ -9,7 +9,6 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/ArrowComponent.h"
 #include "Kismet/GameplayStatics.h"
-
 #include "MyCharacter.generated.h"
 
 
@@ -49,6 +48,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
 		bool bParrying;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
+		bool bSkill_1;
+
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
 		bool bNPC;
 
 
@@ -60,6 +63,9 @@ public:
 		UAnimMontage * AM_KnockDownTwistMontage;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
 		UAnimMontage * AM_Parrying;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
+		UAnimMontage * AM_Skill_1;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
 		UAnimMontage * AM_MontageSet;
 
@@ -102,6 +108,9 @@ protected:
 	void InterectOverlap();
 	void Dodge();
 	void Parry();
+	void Skill_1();
+	FRotator LookAtTarget();
+	
 
 	UFUNCTION(BlueprintCallable)
 		void KnockbackPlayer(float KnockBackPower, float PushBack,FVector Loc);

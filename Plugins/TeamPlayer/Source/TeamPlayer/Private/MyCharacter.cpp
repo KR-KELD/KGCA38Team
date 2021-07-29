@@ -57,7 +57,8 @@ AMyCharacter::AMyCharacter(const FObjectInitializer& obj)
 		AM_KnockDownTwistMontage = KnockDownMontage.Object;
 		static ConstructorHelpers::FObjectFinder<UAnimMontage> ParryingMontage(TEXT("AnimMontage'/TeamPlayer/ImportedAnimation/VampCharacter/Animation/AM_Parrying.AM_Parrying'"));
 		AM_Parrying = ParryingMontage.Object;
-	
+		static ConstructorHelpers::FObjectFinder<UAnimMontage> Skill_1(TEXT("AnimMontage'/TeamPlayer/ImportedAnimation/AttackAnim/AM_Skill1Montage.AM_Skill1Montage'"));
+		AM_Skill_1 = Skill_1.Object;
 	}
 
 
@@ -99,7 +100,7 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (bDodge == false && IsHit == false && bHitOnAir == false && IsDead == false && bParrying == false)
+	if (bDodge == false && IsHit == false && bHitOnAir == false && IsDead == false && bParrying == false && IsAttack == false)
 	{
 		FRotator temp2 = UKismetMathLibrary::Conv_VectorToRotator(GetCharacterMovement()->GetCurrentAcceleration());
 		FRotator temp = FMath::RInterpTo(GetActorRotation(), temp2, DeltaTime, 10.0f);
@@ -136,6 +137,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Interect", EInputEvent::IE_Pressed, this, &AMyCharacter::InterectOverlap);
 	PlayerInputComponent->BindAction("Dodge", EInputEvent::IE_Pressed, this, &AMyCharacter::Dodge);
 	PlayerInputComponent->BindAction("Parrying", EInputEvent::IE_Pressed, this, &AMyCharacter::Parry);
+	PlayerInputComponent->BindAction("Skill_1", EInputEvent::IE_Pressed, this, &AMyCharacter::Skill_1);
+	PlayerInputComponent->BindAction("Skill_1", EInputEvent::IE_Released, this, &AMyCharacter::Skill_1);
 
 }
 
@@ -144,7 +147,13 @@ void AMyCharacter::Attack()
 
 	if (IsDead == false && IsHit == false && bHitOnAir == false && IsDead == false && bDodge == false && bParrying == false)
 	{
-
+		//FRotator LookAtRot = LookAtTarget();
+		//SetActorRotation(LookAtRot);
+		float roll, pitch, yaw;
+		FVector lookRot;
+		UKismetMathLibrary::BreakVector(m_TPSCamera->GetForwardVector(), roll, pitch, yaw);
+		lookRot = UKismetMathLibrary::MakeVector(roll, pitch, 0.0f);
+		SetActorRotation(UKismetMathLibrary::Conv_VectorToRotator(lookRot));
 		if (IsAttack == false)
 		{
 			if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Parrying) == true)
@@ -187,6 +196,13 @@ void AMyCharacter::Attack()
 			}
 		}
 	}
+}
+
+void AMyCharacter::Skill_1()
+{
+	bSkill_1 = true;
+	if(GetMesh()->GetAnimInstance()->Montage_IsActive(AM_Skill_1) == false)
+		PlayAnimMontage(AM_Skill_1, 1.0f, "Default");
 }
 
 void AMyCharacter::Dodge()
@@ -467,3 +483,17 @@ void AMyCharacter::KnockbackPlayer(float KnockBackPower, float PushBack, FVector
 		LaunchCharacter(FV, false, false);
 	}
 }
+
+FRotator AMyCharacter::LookAtTarget()
+{
+	//float Roll, Pitch, Yaw;
+	//m_TPSCameraBoomComponent->GetComponentRotation();
+	//FRotator rotator = m_TPSCameraBoomComponent->; //UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), );
+	//FRotator rotator = m_TPSCamera->GetForwardVector()
+	//UKismetMathLibrary::BreakRotator(rotator, Roll, Pitch, Yaw);
+	//rotator = UKismetMathLibrary::MakeRotator(Roll, 0.0f, Yaw);
+	//
+	//return rotator;
+	return FRotator(0, 0, 0);
+}
+
