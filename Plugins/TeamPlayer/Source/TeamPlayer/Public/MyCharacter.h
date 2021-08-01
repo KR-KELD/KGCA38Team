@@ -49,7 +49,14 @@ public:
 		bool bParrying;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
 		bool bSkill_1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
+		bool bHold;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
+		bool bSkill_2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
+		bool bMove;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
 		bool bNPC;
@@ -72,6 +79,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DodgeDirection)
 		int DodgeDir;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DodgeDirection)
+		float SaveDeltaTime;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
@@ -109,6 +119,7 @@ protected:
 	void Dodge();
 	void Parry();
 	void Skill_1();
+	void Skill_1_Trigger();
 	FRotator LookAtTarget();
 	
 

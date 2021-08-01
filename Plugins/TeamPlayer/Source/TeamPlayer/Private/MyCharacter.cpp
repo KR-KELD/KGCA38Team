@@ -91,6 +91,7 @@ void AMyCharacter::BeginPlay()
 	fHP = 1000.0f;
 	fMaxHP = 1000.0f;
 	bHitOnAir = false;
+	bMove = true;
 
 	//collision->Activate(true);
 	//collision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
@@ -100,7 +101,9 @@ void AMyCharacter::BeginPlay()
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (bDodge == false && IsHit == false && bHitOnAir == false && IsDead == false && bParrying == false && IsAttack == false)
+	SaveDeltaTime = DeltaTime;
+	if (bDodge == false && IsHit == false && bHitOnAir == false && IsDead == false && bParrying == false && IsAttack == false &&
+		bSkill_1 == false)
 	{
 		FRotator temp2 = UKismetMathLibrary::Conv_VectorToRotator(GetCharacterMovement()->GetCurrentAcceleration());
 		FRotator temp = FMath::RInterpTo(GetActorRotation(), temp2, DeltaTime, 10.0f);
@@ -138,22 +141,24 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Dodge", EInputEvent::IE_Pressed, this, &AMyCharacter::Dodge);
 	PlayerInputComponent->BindAction("Parrying", EInputEvent::IE_Pressed, this, &AMyCharacter::Parry);
 	PlayerInputComponent->BindAction("Skill_1", EInputEvent::IE_Pressed, this, &AMyCharacter::Skill_1);
-	PlayerInputComponent->BindAction("Skill_1", EInputEvent::IE_Released, this, &AMyCharacter::Skill_1);
+	PlayerInputComponent->BindAction("Skill_1", EInputEvent::IE_Released, this, &AMyCharacter::Skill_1_Trigger);
 
 }
 
 void AMyCharacter::Attack()
 {
 
-	if (IsDead == false && IsHit == false && bHitOnAir == false && IsDead == false && bDodge == false && bParrying == false)
+	if (IsDead == false && IsHit == false && bHitOnAir == false && IsDead == false && bDodge == false && bParrying == false && bSkill_1 == false)
 	{
 		//FRotator LookAtRot = LookAtTarget();
 		//SetActorRotation(LookAtRot);
 		float roll, pitch, yaw;
 		FVector lookRot;
+		FRotator look;
 		UKismetMathLibrary::BreakVector(m_TPSCamera->GetForwardVector(), roll, pitch, yaw);
 		lookRot = UKismetMathLibrary::MakeVector(roll, pitch, 0.0f);
-		SetActorRotation(UKismetMathLibrary::Conv_VectorToRotator(lookRot));
+		look = FMath::RInterpTo(GetActorRotation(), UKismetMathLibrary::Conv_VectorToRotator(lookRot), SaveDeltaTime, 0.1f);
+		SetActorRotation(look);
 		if (IsAttack == false)
 		{
 			if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Parrying) == true)
@@ -200,14 +205,22 @@ void AMyCharacter::Attack()
 
 void AMyCharacter::Skill_1()
 {
+	if (bSkill_1 == true) return;
+
 	bSkill_1 = true;
+	bHold = true;
 	if(GetMesh()->GetAnimInstance()->Montage_IsActive(AM_Skill_1) == false)
 		PlayAnimMontage(AM_Skill_1, 1.0f, "Default");
 }
 
+void AMyCharacter::Skill_1_Trigger()
+{
+	bHold = false;
+}
+
 void AMyCharacter::Dodge()
 {
-	if (bDodge == true || bHitOnAir == true || IsDead == true || bParrying == true) return;
+	if (bDodge == true || bHitOnAir == true || IsDead == true || bParrying == true || bSkill_1 == true) return;
 	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_KnockDownTwistMontage) == true) return;
 	//USceneComponent::GetWorld
 	float Roll, Pitch, Yaw;
@@ -245,7 +258,7 @@ void AMyCharacter::Dodge()
 
 void AMyCharacter::Parry()
 {
-	if (IsDead == true || IsHit == true || bHitOnAir == true || IsDead == true || bParrying == true || bDodge == true) return;
+	if (IsDead == true || IsHit == true || bHitOnAir == true || IsDead == true || bParrying == true || bDodge == true || bSkill_1 == true) return;
 	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Parrying) == true) return;
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() == true) GetMesh()->GetAnimInstance()->StopAllMontages(0.0);
 
@@ -331,7 +344,8 @@ void AMyCharacter::MoveRight(float value)
 }
 void AMyCharacter::TurnAtRate(float value)
 {
-	AddControllerYawInput(value);
+	if(bSkill_1 == false)
+		AddControllerYawInput(value);
 }
 void AMyCharacter::LookUpAtRate(float value)
 {
@@ -399,6 +413,11 @@ float AMyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 
 
 	fHP -= damage;
+	if (bSkill_1 == true)
+	{
+		return NULL;
+	}
+
 	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_AttackMontage) == true)
 	{
 		IsAttack = false;
