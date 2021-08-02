@@ -54,6 +54,8 @@ public:
 		bool IsAIActive = true;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
 		bool IsDead = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
+		bool IsHit = false;
 #pragma endregion
 public:
 	AAIBase();
