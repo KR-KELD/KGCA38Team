@@ -7,6 +7,7 @@
 //#include "GameFramework/Actor.h"
 #include "Animation/AnimMontage.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/BoxComponent.h"
 #include "Components/ArrowComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "MyCharacter.generated.h"
@@ -50,10 +51,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
 		bool bSkill_1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
+		bool bSkill_2;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
 		bool bHold;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
-		bool bSkill_2;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
 		bool bMove;
@@ -72,6 +73,8 @@ public:
 		UAnimMontage * AM_Parrying;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
 		UAnimMontage * AM_Skill_1;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
+		UAnimMontage * AM_Skill_2;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
 		UAnimMontage * AM_MontageSet;
@@ -94,6 +97,8 @@ public:
 		class UStaticMeshComponent*		m_SM_WeaponSocket;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
 		class UCapsuleComponent*		m_collision;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
+	//	class UBoxComponent*			BoxCollision;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
@@ -118,8 +123,11 @@ protected:
 	void InterectOverlap();
 	void Dodge();
 	void Parry();
+	
 	void Skill_1();
 	void Skill_1_Trigger();
+	void Skill_2();
+
 	FRotator LookAtTarget();
 	
 
