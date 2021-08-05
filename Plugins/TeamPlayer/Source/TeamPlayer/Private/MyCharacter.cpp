@@ -61,6 +61,10 @@ AMyCharacter::AMyCharacter(const FObjectInitializer& obj)
 		AM_Skill_1 = Skill_1.Object;
 		static ConstructorHelpers::FObjectFinder<UAnimMontage> Skill_2(TEXT("AnimMontage'/TeamPlayer/ImportedAnimation/AttackAnim/AM_Skill2Montage.AM_Skill2Montage'"));
 		AM_Skill_2 = Skill_2.Object;
+		static ConstructorHelpers::FObjectFinder<UAnimMontage> Skill_3(TEXT("AnimMontage'/TeamPlayer/ImportedAnimation/AttackAnim/AM_Skill3Montage.AM_Skill3Montage'"));
+		AM_Skill_3 = Skill_3.Object;
+		static ConstructorHelpers::FObjectFinder<UAnimMontage> Skill_4(TEXT("AnimMontage'/TeamPlayer/ImportedAnimation/AttackAnim/AM_Skill4Montage.AM_Skill4Montage'"));
+		AM_Skill_4 = Skill_4.Object;
 	}
 
 
@@ -109,7 +113,7 @@ void AMyCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	SaveDeltaTime = DeltaTime;
 	if (bDodge == false && IsHit == false && bHitOnAir == false && IsDead == false && bParrying == false && IsAttack == false &&
-		bSkill_1 == false && bSkill_2 == false)
+		bSkill_1 == false && bSkill_2 == false && bSkill_3 == false)
 	{
 		FRotator temp2 = UKismetMathLibrary::Conv_VectorToRotator(GetCharacterMovement()->GetCurrentAcceleration());
 		FRotator temp = FMath::RInterpTo(GetActorRotation(), temp2, DeltaTime, 10.0f);
@@ -149,13 +153,15 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Skill_1", EInputEvent::IE_Pressed, this, &AMyCharacter::Skill_1);
 	PlayerInputComponent->BindAction("Skill_1", EInputEvent::IE_Released, this, &AMyCharacter::Skill_1_Trigger);
 	PlayerInputComponent->BindAction("Skill_2", EInputEvent::IE_Pressed, this, &AMyCharacter::Skill_2);
+	PlayerInputComponent->BindAction("Skill_3", EInputEvent::IE_Pressed, this, &AMyCharacter::Skill_3);
+
 
 }
 
 void AMyCharacter::Attack()
 {
 
-	if (IsDead == false && IsHit == false && bHitOnAir == false && IsDead == false && bDodge == false && bParrying == false && bSkill_1 == false && bSkill_2 == false)
+	if (IsDead == false && IsHit == false && bHitOnAir == false && IsDead == false && bDodge == false && bParrying == false && bSkill_1 == false && bSkill_2 == false && bSkill_3 == false)
 	{
 		//FRotator LookAtRot = LookAtTarget();
 		//SetActorRotation(LookAtRot);
@@ -164,8 +170,8 @@ void AMyCharacter::Attack()
 		FRotator look;
 		UKismetMathLibrary::BreakVector(m_TPSCamera->GetForwardVector(), roll, pitch, yaw);
 		lookRot = UKismetMathLibrary::MakeVector(roll, pitch, 0.0f);
-		look = FMath::RInterpTo(GetActorRotation(), UKismetMathLibrary::Conv_VectorToRotator(lookRot), SaveDeltaTime, 0.1f);
-		SetActorRotation(look);
+		//look = FMath::RInterpTo(GetActorRotation(), UKismetMathLibrary::Conv_VectorToRotator(lookRot), SaveDeltaTime, 0.1f);
+		SetActorRotation(UKismetMathLibrary::Conv_VectorToRotator(lookRot));
 		if (IsAttack == false)
 		{
 			if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Parrying) == true)
@@ -212,15 +218,25 @@ void AMyCharacter::Attack()
 
 void AMyCharacter::Skill_1()
 {
-	if (bSkill_1 == true || bSkill_2 == true) return;
+	if (bSkill_1 == true || bSkill_2 == true || bDodge == true || bParrying == true || IsHit == true || bSkill_3 == true) return;
 
 
 
 	bSkill_1 = true;
 	bHold = true;
 
-	if(GetMesh()->GetAnimInstance()->Montage_IsActive(AM_Skill_1) == false)
+	if (GetMesh()->GetAnimInstance()->Montage_IsActive(AM_Skill_1) == false)
+	{
+		float roll, pitch, yaw;
+		FVector lookRot;
+		FRotator look;
+		UKismetMathLibrary::BreakVector(m_TPSCamera->GetForwardVector(), roll, pitch, yaw);
+		lookRot = UKismetMathLibrary::MakeVector(roll, pitch, 0.0f);
+		//look = FMath::RInterpTo(GetActorRotation(), UKismetMathLibrary::Conv_VectorToRotator(lookRot), SaveDeltaTime, 0.1f);
+		SetActorRotation(UKismetMathLibrary::Conv_VectorToRotator(lookRot));
 		PlayAnimMontage(AM_Skill_1, 1.0f, "Skill_1_Start");
+
+	}
 }
 
 void AMyCharacter::Skill_1_Trigger()
@@ -230,21 +246,49 @@ void AMyCharacter::Skill_1_Trigger()
 
 void AMyCharacter::Skill_2()
 {
-	if (bSkill_2 == true || bSkill_1 == true) return;
+	if (bSkill_2 == true || bSkill_1 == true || bDodge == true || bParrying == true || IsHit == true || bSkill_3 == true) return;
 
 	bSkill_2 = true;
 
 	if (GetMesh()->GetAnimInstance()->Montage_IsActive(AM_Skill_2) == false)
 	{
+		float roll, pitch, yaw;
+		FVector lookRot;
+		FRotator look;
+		UKismetMathLibrary::BreakVector(m_TPSCamera->GetForwardVector(), roll, pitch, yaw);
+		lookRot = UKismetMathLibrary::MakeVector(roll, pitch, 0.0f);
+		look = FMath::RInterpTo(GetActorRotation(), UKismetMathLibrary::Conv_VectorToRotator(lookRot), SaveDeltaTime, 0.1f);
+		SetActorRotation(UKismetMathLibrary::Conv_VectorToRotator(lookRot));
 		PlayAnimMontage(AM_Skill_2, 1.0f, "Default");
 	}
 
 }
 
+void AMyCharacter::Skill_3()
+{
+	if (bSkill_2 == true || bSkill_1 == true || bDodge == true || bParrying == true || IsHit == true || bSkill_3 == true) return;
+
+	bSkill_3 = true;
+	if (GetMesh()->GetAnimInstance()->Montage_IsActive(AM_Skill_3) == false)
+	{
+		float roll, pitch, yaw;
+		FVector lookRot;
+		FRotator look;
+		UKismetMathLibrary::BreakVector(m_TPSCamera->GetForwardVector(), roll, pitch, yaw);
+		lookRot = UKismetMathLibrary::MakeVector(roll, pitch, 0.0f);
+		look = FMath::RInterpTo(GetActorRotation(), UKismetMathLibrary::Conv_VectorToRotator(lookRot), SaveDeltaTime, 0.1f);
+		SetActorRotation(UKismetMathLibrary::Conv_VectorToRotator(lookRot));
+		PlayAnimMontage(AM_Skill_3, 1.0f, "Default");
+	}
+
+}
+
+
 void AMyCharacter::Dodge()
 {
-	if (bDodge == true || bHitOnAir == true || IsDead == true || bParrying == true || bSkill_1 == true || bSkill_2 == true) return;
+	if (bDodge == true || bHitOnAir == true || IsDead == true || bSkill_1 == true || bSkill_2 == true || IsHit == true || bSkill_3 == true) return;
 	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_KnockDownTwistMontage) == true) return;
+	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_DodgeMontage) == true) return;
 	//USceneComponent::GetWorld
 	float Roll, Pitch, Yaw;
 	m_TPSCameraBoomComponent->GetComponentRotation();
@@ -281,14 +325,16 @@ void AMyCharacter::Dodge()
 
 void AMyCharacter::Parry()
 {
-	if (IsDead == true || IsHit == true || bHitOnAir == true || IsDead == true || bParrying == true || bDodge == true || bSkill_1 == true || bSkill_2 == true) return;
+	if (IsDead == true || IsHit == true || bHitOnAir == true || IsDead == true || bParrying == true || bDodge == true || bSkill_1 == true || bSkill_2 == true || bSkill_3 == true) return;
 	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Parrying) == true) return;
 	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() == true) GetMesh()->GetAnimInstance()->StopAllMontages(0.0);
 
+	
 	bParrying = true;
 	IsAttack = false;
 	StopAnimMontage(AM_AttackMontage);
 	//AM_MontageSet = AM_Parrying;
+	DisableInput(UGameplayStatics::GetPlayerController(this, 0));
 	PlayAnimMontage(AM_Parrying, 1.0f, "Default");
 }
 
@@ -306,8 +352,13 @@ void AMyCharacter::InterectOverlap()
 
 void AMyCharacter::MoveForward(float value)
 {
-	if (bDodge == true || bHitOnAir == true || IsDead == true || bParrying == true || bSkill_2 == true) return;
+	if (bDodge == true || bHitOnAir == true || IsDead == true || bSkill_2 == true || bSkill_3 == true) return;
 	if (GetMesh()->GetAnimInstance()->Montage_GetCurrentSection(GetMesh()->GetAnimInstance()->GetCurrentActiveMontage()) == "Skill_1_Start") return;
+	if (GetMesh()->GetAnimInstance()->Montage_IsActive(AM_AttackMontage)) return;
+	if (GetMesh()->GetAnimInstance()->Montage_IsActive(AM_DodgeMontage)) return;
+	if (GetMesh()->GetAnimInstance()->Montage_IsActive(AM_KnockDownTwistMontage)) return;
+	if (GetMesh()->GetAnimInstance()->Montage_IsActive(AM_Parrying)) return;
+	if (GetMesh()->GetAnimInstance()->Montage_IsActive(AM_Skill_2)) return;
 
 	//when player is not dead or get hit is false, player can move
 	if (IsDead == false && IsHit == false)
@@ -328,18 +379,18 @@ void AMyCharacter::MoveForward(float value)
 			{
 				DodgeDir = 1;
 			}
-			else if (value == 0)
-			{
-				DodgeDir = 1;
-			}
 
 		}
+	}
+	if (value == 0)
+	{
+		DodgeDir = 1;
 	}
 
 }
 void AMyCharacter::MoveRight(float value)
 {
-	if (bDodge == true || bHitOnAir == true || IsDead == true || bParrying == true || bSkill_2 == true) return;
+	if (bDodge == true || bHitOnAir == true || IsDead == true || bParrying == true || bSkill_2 == true || bSkill_3 == true) return;
 	if (IsDead == false && IsHit == false)
 	{
 		if (value != 0.0f && Controller != nullptr)
@@ -358,10 +409,6 @@ void AMyCharacter::MoveRight(float value)
 			else if (value == -1)
 			{
 				DodgeDir = 3;
-			}
-			else if(value == 0)
-			{
-				DodgeDir = 1;
 			}
 		}
 	}
@@ -430,6 +477,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 	{
 		return NULL;
 	}
+
 	if (bParrying == true)
 	{
 		if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Parrying) == true)
@@ -446,32 +494,15 @@ float AMyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 
 
 	fHP -= damage;
-	if (bSkill_1 == true || bSkill_2 == true)
+	if (bSkill_1 == true || bSkill_2 == true || bSkill_3 == true)
 	{
 		return NULL;
 	}
 
-	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_AttackMontage) == true)
-	{
-		IsAttack = false;
-		//GetMesh()->GetAnimInstance()->Montage_Stop(0.0f, AM_Parrying);
-		StopAnimMontage(AM_AttackMontage);
-	}
-	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Parrying) == true)
-	{
-		bParrying = false;
-		//GetMesh()->GetAnimInstance()->Montage_Stop(0.0f, AM_Parrying);
-		StopAnimMontage(AM_Parrying);
-	}
 
-	//UKismetSystemLibrary::PrintString(GetWorld(), FString::SanitizeFloat(fHP));
-	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_DodgeMontage) == true)
-	{
-		bDodge = false;
-		StopAnimMontage(AM_DodgeMontage);
-	}
 
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() == true) GetMesh()->GetAnimInstance()->StopAllMontages(0.0);
+
+
 	if (fHP <= 0.0f)
 	{
 		IsDead = true;

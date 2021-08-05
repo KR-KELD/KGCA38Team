@@ -7,8 +7,8 @@
 //#include "GameFramework/Actor.h"
 #include "Animation/AnimMontage.h"
 #include "Components/CapsuleComponent.h"
-#include "Components/BoxComponent.h"
 #include "Components/ArrowComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "MyCharacter.generated.h"
 
@@ -53,6 +53,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
 		bool bSkill_2;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
+		bool bSkill_3;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
+		bool bSkill_4;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerState)
 		bool bHold;
 
 
@@ -75,6 +79,10 @@ public:
 		UAnimMontage * AM_Skill_1;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
 		UAnimMontage * AM_Skill_2;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
+		UAnimMontage * AM_Skill_3;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
+		UAnimMontage * AM_Skill_4;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
 		UAnimMontage * AM_MontageSet;
@@ -85,6 +93,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DodgeDirection)
 		float SaveDeltaTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Montage)
+		UStaticMeshComponent* SaveBPSM;
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TeamProject)
@@ -127,6 +138,7 @@ protected:
 	void Skill_1();
 	void Skill_1_Trigger();
 	void Skill_2();
+	void Skill_3();
 
 	FRotator LookAtTarget();
 	
