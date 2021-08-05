@@ -23,7 +23,7 @@ public:
 public:
 #pragma region BaseFunc
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "KGCA_AI")
-		void AttackEnemy();
+		void AttackEnemy(AActor* EnemyActor);
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		void SetAIMove(float Speed, bool DesiredRot = true);
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
@@ -47,9 +47,13 @@ public:
 	UFUNCTION()
 		void DeadEvent();
 	UFUNCTION()
+		void HitEvent();
+	UFUNCTION()
 		void RespawnEvent(FString msg);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
 		FTimerHandle DeadTimer;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
+		FTimerHandle HitTimer;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
 		bool IsAIActive = true;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
