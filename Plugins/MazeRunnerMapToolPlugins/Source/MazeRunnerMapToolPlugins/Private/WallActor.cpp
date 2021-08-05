@@ -63,6 +63,7 @@ void AWallActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+
 	/*if (UpVeow)
 	{
 		if (Up->GetRelativeLocation().Z < 539.0f)
