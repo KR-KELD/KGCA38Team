@@ -11,14 +11,15 @@ FString UMyStaticLibrary::GetNPC_Name(int32 index)
 {
 	FString Text = "";
 	
-	if (index == 0) return Text = "Sara";
-	if (index == 1) return Text = "Jain";
-	if (index == 2) return Text = "Joy";
-	if (index == 3) return Text = "Cindy";
-	if (index == 4) return Text = "Colin";
-	if (index == 5) return Text = "Mark";
-	if (index == 6) return Text = "James";
-
+	if (index == 0) Text = "Mike";
+	if (index == 1) Text = "Jora";
+	if (index == 2) Text = "Joy";
+	if (index == 3) Text = "Master";
+	if (index == 4) Text = "Colin";
+	if (index == 5) Text = "Selly";
+	if (index == 6) Text = "Mina";
+	if (index == 7) Text = "Jack";
+	if (index == 8) Text = "Lick";
 	return Text;
 }
 
@@ -26,14 +27,15 @@ FString UMyStaticLibrary::GetNPC_Text(int32 index)
 {
 	FString Text = "";
 
-	if (index == 0) return Text = "Hi";
-	if (index == 1) return Text = "Hi. Guy!";
-	if (index == 2) return Text = "Hello";
-	if (index == 3) return Text = "Hi There";
-	if (index == 4) return Text = "What up?";
-	if (index == 5) return Text = "Good Day";
-	if (index == 6) return Text = "How r u";
-
+	if (index == 0) Text = "I'm sad..";
+	if (index == 1) Text = "You came to rescue me?";
+	if (index == 2) Text = "They say there's a hidden room in this maze";
+	if (index == 3) Text = "I hope someone killed the Frost Giant";
+	if (index == 4) Text = "I was a Special Forces member before I came here.";
+	if (index == 5) Text = "what's for lunch today?";
+	if (index == 6) Text = "It'll be canned food again.";
+	if (index == 7) Text = "Why are you looking at me?";
+	if (index == 8) Text = "H..Help Me..";
 	return Text;
 }
 
