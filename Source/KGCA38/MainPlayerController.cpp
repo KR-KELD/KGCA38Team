@@ -17,7 +17,8 @@ AMainPlayerController::AMainPlayerController() :
 	bShouldTraceItem(false),
 	OverlappedItemCount(0),
 	bInterActionKey(false),
-	bTraceIn(false)
+	bTraceIn(false),
+	HitNumberDestroyTime(1.5f)
 {
 
 }
@@ -28,7 +29,7 @@ void AMainPlayerController::Tick(float DeltaTime)
 
 	// 라인 트레이스 사용 시 매 프레임 호출해야 함.
 	//TraceForActors();
-
+	UpdateHitNumbers();
 }
 
 void AMainPlayerController::BeginPlay()
@@ -398,4 +399,36 @@ void AMainPlayerController::IncreamentOverlappedItemCount(int8 Amount)
 		OverlappedItemCount += Amount;
 		bShouldTraceItem = true;
 	}
+}
+
+void AMainPlayerController::StoreHitNumber(UUserWidget* HitNumber, FVector Location)
+{
+	HitNumbers.Add(HitNumber, Location);
+
+	FTimerHandle HitNumberTimer;
+	FTimerDelegate HitNumberDelegate;
+	HitNumberDelegate.BindUFunction(this, FName("DestroyHitNumber"), HitNumber);
+	GetWorld()->GetTimerManager().SetTimer(HitNumberTimer, HitNumberDelegate, HitNumberDestroyTime, false);
+
+}
+
+void AMainPlayerController::UpdateHitNumbers()
+{
+	for (auto& HitPair : HitNumbers)
+	{
+		UUserWidget* HitNumber{ HitPair.Key };
+		const FVector Location{ HitPair.Value };
+		FVector2D ScreenPosition;
+		UGameplayStatics::ProjectWorldToScreen(
+			GetWorld()->GetFirstPlayerController(),
+			Location,
+			ScreenPosition);
+		HitNumber->SetPositionInViewport(ScreenPosition);
+	}
+}
+
+void AMainPlayerController::DestroyHitNumber(UUserWidget* HitNumber)
+{
+	HitNumbers.Remove(HitNumber);
+	HitNumber->RemoveFromParent();
 }

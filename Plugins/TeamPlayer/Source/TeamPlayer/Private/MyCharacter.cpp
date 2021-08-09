@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Particles/ParticleSystem.h"
+#include "Blueprint/UserWidget.h"
 
 
 #include "Kismet/KismetSystemLibrary.h"
@@ -16,7 +17,7 @@
 AMyCharacter::AMyCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = true;	
 	
 }
 
@@ -131,6 +132,7 @@ void AMyCharacter::Tick(float DeltaTime)
 
 		AddMovementInput(FVec, GetInputAxisValue("MovemForward"));
 	}
+
 	//
 	//
 	//SetActorRotation()
@@ -154,7 +156,6 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Skill_1", EInputEvent::IE_Released, this, &AMyCharacter::Skill_1_Trigger);
 	PlayerInputComponent->BindAction("Skill_2", EInputEvent::IE_Pressed, this, &AMyCharacter::Skill_2);
 	PlayerInputComponent->BindAction("Skill_3", EInputEvent::IE_Pressed, this, &AMyCharacter::Skill_3);
-
 
 }
 
@@ -441,6 +442,10 @@ void AMyCharacter::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, cla
 			if (m_collision->IsActive() == true)		//when give damage to enemy
 			{
 				UGameplayStatics::ApplyDamage(OtherActor, 20.0f, NULL, this, NULL);
+				FTransform trans = OtherActor->GetTransform();
+				FVector ActorLocation = trans.GetLocation();
+				DamageNumber(20.0f, ActorLocation);
+
 				//UKismetSystemLibrary::PrintString(GetWorld(), TEXT("Hit"));
 				UGameplayStatics::SpawnEmitterAttached(m_PS_AttackParticle, OverlappedComp);
 

@@ -163,4 +163,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 		void OverlappedActor(AActor* TagName);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void DamageNumber(int32 Damage, FVector HitLocation);
+
 };
