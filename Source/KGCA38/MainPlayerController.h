@@ -108,7 +108,7 @@ public:
 	FORCEINLINE void SetOverlapItem(AItem* item) { OverlapItem = item; }
 
 	// 데미지 출력
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void ShowHitNumber(int32 Damage, FVector HitLocation);
 
 	UFUNCTION(BlueprintCallable)

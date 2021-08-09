@@ -442,6 +442,10 @@ void AMyCharacter::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, cla
 			if (m_collision->IsActive() == true)		//when give damage to enemy
 			{
 				UGameplayStatics::ApplyDamage(OtherActor, 20.0f, NULL, this, NULL);
+				FTransform trans = OtherActor->GetTransform();
+				FVector ActorLocation = trans.GetLocation();
+				DamageNumber(20.0f, ActorLocation);
+
 				//UKismetSystemLibrary::PrintString(GetWorld(), TEXT("Hit"));
 				UGameplayStatics::SpawnEmitterAttached(m_PS_AttackParticle, OverlappedComp);
 
