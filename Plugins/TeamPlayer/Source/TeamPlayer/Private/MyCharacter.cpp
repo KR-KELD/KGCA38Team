@@ -175,15 +175,6 @@ void AMyCharacter::Attack()
 		SetActorRotation(UKismetMathLibrary::Conv_VectorToRotator(lookRot));
 		if (IsAttack == false)
 		{
-			if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Parrying) == true)
-			{
-				StopAnimMontage(AM_Parrying);
-			}
-			if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_DodgeMontage) == true)
-			{
-				StopAnimMontage(AM_DodgeMontage);
-			}
-			if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() == true) GetMesh()->GetAnimInstance()->StopAllMontages(0.0);
 
 
 			PlayAnimMontage(AM_AttackMontage, 1.0f, "Attack1");
@@ -328,12 +319,12 @@ void AMyCharacter::Parry()
 {
 	if (IsDead == true || IsHit == true || bHitOnAir == true || IsDead == true || bParrying == true || bDodge == true || bSkill_1 == true || bSkill_2 == true || bSkill_3 == true) return;
 	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Parrying) == true) return;
-	if (GetMesh()->GetAnimInstance()->IsAnyMontagePlaying() == true) GetMesh()->GetAnimInstance()->StopAllMontages(0.0);
+
 
 	
 	bParrying = true;
 	IsAttack = false;
-	StopAnimMontage(AM_AttackMontage);
+
 	//AM_MontageSet = AM_Parrying;
 	DisableInput(UGameplayStatics::GetPlayerController(this, 0));
 	PlayAnimMontage(AM_Parrying, 1.0f, "Default");
