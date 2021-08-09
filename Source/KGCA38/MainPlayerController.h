@@ -107,4 +107,24 @@ public:
 	FORCEINLINE AItem* GetTraceHitLastItem() const { return TraceHitLastItem; }
 	FORCEINLINE void SetOverlapItem(AItem* item) { OverlapItem = item; }
 
+	// 데미지 출력
+	UFUNCTION(BlueprintImplementableEvent)
+	void ShowHitNumber(int32 Damage, FVector HitLocation);
+
+	UFUNCTION(BlueprintCallable)
+	void StoreHitNumber(UUserWidget* HitNumber, FVector Location);
+
+	// 적중한 위치에 팝업될 데미지표기 위젯
+	UPROPERTY(VisibleAnywhere, Category = Combat)
+	TMap<UUserWidget*, FVector> HitNumbers;
+
+	// 데미지출력 객체파괴까지의 시간 설정
+	UPROPERTY(EditAnywhere, Category = Combat)
+	float HitNumberDestroyTime;
+
+	void UpdateHitNumbers();
+
+	UFUNCTION()
+	void DestroyHitNumber(UUserWidget* HitNumber);
+
 };
