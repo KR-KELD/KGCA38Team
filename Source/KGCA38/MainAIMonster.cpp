@@ -3,3 +3,24 @@
 
 #include "MainAIMonster.h"
 
+AMainAIMonster::AMainAIMonster()
+{
+	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
+	HealthBar->SetupAttachment(RootComponent);
+}
+
+bool AMainAIMonster::AIDeadCheck()
+{
+	if (CharacterInfo.HP < 0.0f)
+	{
+		return true;
+	}
+	return false;
+}
+
+void AMainAIMonster::AIHit(AActor* AttackActor, float Damage)
+{
+	AAIBase::AIHit(AttackActor, Damage);
+	
+	CharacterInfo.HP -= Damage;
+}
