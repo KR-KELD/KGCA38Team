@@ -8,6 +8,7 @@
 
 
 class AItem;
+class UWidgetComponent;
 /**
  * 
  */
@@ -127,4 +128,18 @@ public:
 	UFUNCTION()
 	void DestroyHitNumber(UUserWidget* HitNumber);
 
+	// 적 체력바 보임
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void ShowHealthBar(UWidgetComponent* widget);
+	void ShowHealthBar_Implementation(UWidgetComponent* widget);
+
+	// 적 체력바 숨김
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void HideHealthBar();
+
+	FTimerHandle HealthBarTimer;
+
+	// 체력바 출력시간
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Combat)
+	float HealthBarDisplayTime;
 };
