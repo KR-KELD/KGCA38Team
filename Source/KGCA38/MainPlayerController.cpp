@@ -18,7 +18,8 @@ AMainPlayerController::AMainPlayerController() :
 	OverlappedItemCount(0),
 	bInterActionKey(false),
 	bTraceIn(false),
-	HitNumberDestroyTime(1.5f)
+	HitNumberDestroyTime(1.5f),
+	HealthBarDisplayTime(4.0f)
 {
 
 }
@@ -431,4 +432,10 @@ void AMainPlayerController::DestroyHitNumber(UUserWidget* HitNumber)
 {
 	HitNumbers.Remove(HitNumber);
 	HitNumber->RemoveFromParent();
+}
+
+void AMainPlayerController::ShowHealthBar_Implementation(UWidgetComponent* widget)
+{
+	GetWorldTimerManager().ClearTimer(HealthBarTimer);
+	GetWorldTimerManager().SetTimer(HealthBarTimer, this, &AMainPlayerController::HideHealthBar, HealthBarDisplayTime);
 }
