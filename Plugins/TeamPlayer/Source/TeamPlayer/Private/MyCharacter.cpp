@@ -245,7 +245,7 @@ void AMyCharacter::Skill_2()
 	if (bSkill_2 == true || bSkill_1 == true || bDodge == true || bParrying == true || IsHit == true || bSkill_3 == true) return;
 
 	bSkill_2 = true;
-
+	bMove = true;
 	if (GetMesh()->GetAnimInstance()->Montage_IsActive(AM_Skill_2) == false)
 	{
 		float roll, pitch, yaw;

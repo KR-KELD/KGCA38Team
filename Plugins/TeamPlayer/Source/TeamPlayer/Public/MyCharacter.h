@@ -174,4 +174,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void DamageNumber(int32 Damage, FVector HitLocation);
 
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void SetSkillCollisionOn();
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+		void SetSkillCollisionOff();
+
+
 };
