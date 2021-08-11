@@ -279,7 +279,7 @@ void AMyCharacter::Skill_3()
 void AMyCharacter::Dodge()
 {
 	if (bDodge == true || bHitOnAir == true || IsDead == true || bSkill_1 == true || bSkill_2 == true || IsHit == true || bSkill_3 == true) return;
-	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_KnockDownTwistMontage) == true) return;
+	//if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_KnockDownTwistMontage) == true) return;
 	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_DodgeMontage) == true) return;
 	//USceneComponent::GetWorld
 	float Roll, Pitch, Yaw;
@@ -346,11 +346,11 @@ void AMyCharacter::MoveForward(float value)
 {
 	if (bDodge == true || bHitOnAir == true || IsDead == true || bSkill_2 == true || bSkill_3 == true) return;
 	if (GetMesh()->GetAnimInstance()->Montage_GetCurrentSection(GetMesh()->GetAnimInstance()->GetCurrentActiveMontage()) == "Skill_1_Start") return;
-	if (GetMesh()->GetAnimInstance()->Montage_IsActive(AM_AttackMontage)) return;
-	if (GetMesh()->GetAnimInstance()->Montage_IsActive(AM_DodgeMontage)) return;
-	if (GetMesh()->GetAnimInstance()->Montage_IsActive(AM_KnockDownTwistMontage)) return;
-	if (GetMesh()->GetAnimInstance()->Montage_IsActive(AM_Parrying)) return;
-	if (GetMesh()->GetAnimInstance()->Montage_IsActive(AM_Skill_2)) return;
+	//if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_AttackMontage)) return;
+	//if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_DodgeMontage)) return;
+	//if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_KnockDownTwistMontage)) return;
+	//if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Parrying)) return;
+	//if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Skill_2)) return;
 
 	//when player is not dead or get hit is false, player can move
 	if (IsDead == false && IsHit == false)
