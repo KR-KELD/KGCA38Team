@@ -97,10 +97,10 @@ bool AAIBase::AIDeadCheck()
 
 float AAIBase::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser)
 {
-	if (IsHit == false)
-	{
-		IsHit = true;
-		GetWorldTimerManager().SetTimer(HitTimer, this, &AAIBase::HitEvent, 0.2f, false);
+	//if (IsHit == false)
+	//{
+	//	IsHit = true;
+	//	GetWorldTimerManager().SetTimer(HitTimer, this, &AAIBase::HitEvent, 0.2f, false);
 		float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 		AIHit(DamageCauser, DamageAmount);
 		if (AIDeadCheck())
@@ -111,7 +111,7 @@ float AAIBase::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 
 		}
 		return Damage;
-	}
+	//}
 	return 0.0f;
 }
 

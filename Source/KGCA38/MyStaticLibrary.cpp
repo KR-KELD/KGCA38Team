@@ -41,12 +41,18 @@ FString UMyStaticLibrary::GetNPC_Text(int32 index)
 
 void UMyStaticLibrary::ShowWidget(UUserWidget* widget)
 {
-	widget->SetVisibility(ESlateVisibility::Visible);
+	if (widget)
+	{
+		widget->SetVisibility(ESlateVisibility::Visible);
+	}
 }
 
 void UMyStaticLibrary::HideWidget(UUserWidget* widget)
 {
-	widget->SetVisibility(ESlateVisibility::Hidden);
+	if (widget)
+	{
+		widget->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 
 float UMyStaticLibrary::CallCharacterCurrentHealth(float curHealth)
