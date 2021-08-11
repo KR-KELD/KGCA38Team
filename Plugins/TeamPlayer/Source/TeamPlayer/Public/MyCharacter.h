@@ -26,6 +26,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerStat)
 		float fMaxHP;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerStat)
+		float fStBar;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerStat)
+		float fMaxStBar;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerStat)
+		float fMP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerStat)
+		float fMaxMP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerStat)
 		float KnockBackRateFromEnemy;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PlayerStat)
 		float HitBackRateFromEnemy;

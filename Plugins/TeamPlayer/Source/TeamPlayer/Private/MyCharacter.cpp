@@ -101,6 +101,10 @@ void AMyCharacter::BeginPlay()
 	m_collision->SetActive(false);
 	fHP = 1000.0f;
 	fMaxHP = 1000.0f;
+	fMaxMP = 100.0f;
+	fMP = fMaxMP;
+	fMaxStBar = 100.0f;
+	fStBar = fMaxStBar;
 	bHitOnAir = false;
 	bMove = true;
 
