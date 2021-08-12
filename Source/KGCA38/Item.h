@@ -10,6 +10,7 @@
 class USphereComponent;
 class UWidgetComponent;
 class USoundCue;
+class UParticleSystemComponent;
 
 UCLASS()
 class KGCA38_API AItem : public AActor
@@ -91,6 +92,10 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
 	USoundCue* UseItemSound;
 
+	// 아이템 파티클
+	UPROPERTY(EditAnywhere, Category = "Item Properties", meta = (AllowPrivateAccess = "true"))
+	UParticleSystemComponent* ItemParticle;
+
 public:
 	FORCEINLINE UWidgetComponent* GetPickupWidget() const { return PickupWidget; }
 	FORCEINLINE USphereComponent* GetPickupSphere() const { return PickupSphere; }
@@ -108,5 +113,6 @@ public:
 	FORCEINLINE EItemType GetItemType() const { return ItemType; }
 	FORCEINLINE UStaticMeshComponent* GetObjectMesh() const { return ObjectMesh; }
 	FORCEINLINE int32 GetItemHealingPoint() { return ItemHealingPoint; }
+	FORCEINLINE UParticleSystemComponent* GetItemParticle() const { return ItemParticle; }
 
 };

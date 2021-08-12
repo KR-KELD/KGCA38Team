@@ -11,6 +11,7 @@
 #include "DrawDebugHelpers.h"
 #include "Components/WidgetComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "ItemType.h"
 
 AMainPlayerController::AMainPlayerController() :
@@ -99,6 +100,10 @@ void AMainPlayerController::OverlapSetInventoryItems(AItem* item)
 					{
 						UGameplayStatics::PlaySound2D(this, item->GetPickupSound());
 					}
+					if (item->GetItemParticle())
+					{
+						item->GetItemParticle()->Deactivate();
+					}
 
 					OverlapItem = nullptr;
 
@@ -127,6 +132,11 @@ void AMainPlayerController::OverlapSetInventoryItems(AItem* item)
 					if (item->GetPickupSound())
 					{
 						UGameplayStatics::PlaySound2D(this, item->GetPickupSound());
+					}
+
+					if (item->GetItemParticle())
+					{
+						item->GetItemParticle()->Deactivate();
 					}
 
 					OverlapItem = nullptr;
@@ -377,6 +387,11 @@ void AMainPlayerController::DropActorSetInWorld(AItem* item, FTransform transfor
 			{
 				UGameplayStatics::PlaySound2D(this, object->GetDropItemSound());
 			}
+			if (object->GetItemParticle())
+			{
+				object->GetItemParticle()->Activate();
+			}
+
 			GetWorld()->GetTimerManager().SetTimer(OverlapTimer, this, &AMainPlayerController::ChangeSetOverlap, 0.5f);
 		}
 	}

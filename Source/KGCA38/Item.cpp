@@ -9,6 +9,7 @@
 #include "GameFramework/PlayerController.h"
 #include "MainPlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 AItem::AItem()
@@ -27,6 +28,9 @@ AItem::AItem()
 	PickupWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("PickupWidget"));
 	PickupWidget->SetupAttachment(GetRootComponent());
 
+	ItemParticle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particles"));
+	ItemParticle->SetupAttachment(GetRootComponent());
+
 }
 
 // Called when the game starts or when spawned
@@ -38,6 +42,11 @@ void AItem::BeginPlay()
 	{
 		// Á¤º¸ À§Á¬ ¼û±è
 		PickupWidget->SetVisibility(false);
+	}
+
+	if (ItemParticle)
+	{
+		ItemParticle->Activate();
 	}
 
 	PickupSphere->OnComponentBeginOverlap.AddDynamic(this, &AItem::OnPickupSphereOverlap);
@@ -55,8 +64,9 @@ void AItem::Tick(float DeltaTime)
 void AItem::OnPickupSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor)
+	if (OtherActor->ActorHasTag(FName(TEXT("Player"))))
 	{
+
 		//AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
 		AMainPlayerController* controller = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 		UE_LOG(LogTemp, Warning, TEXT("Item Overlap"));
@@ -72,13 +82,14 @@ void AItem::OnPickupSphereOverlap(UPrimitiveComponent* OverlappedComponent, AAct
 				controller->IncreamentOverlappedItemCount(1);
 			}
 		}
+
 	}
 }
 
 void AItem::OnPickupSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex)
 {
-	if (OtherActor)
+	if (OtherActor->ActorHasTag(FName(TEXT("Player"))))
 	{
 		//AMainCharacter* MainCharacter = Cast<AMainCharacter>(OtherActor);
 		AMainPlayerController* controller = Cast<AMainPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0));
