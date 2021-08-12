@@ -117,6 +117,8 @@ void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	SaveDeltaTime = DeltaTime;
+	fStBar += 0.6f;
+	fMP += 0.3f;
 	if (bDodge == false && IsHit == false && bHitOnAir == false && IsDead == false && bParrying == false && IsAttack == false &&
 		bSkill_1 == false && bSkill_2 == false && bSkill_3 == false)
 	{
@@ -137,6 +139,19 @@ void AMyCharacter::Tick(float DeltaTime)
 		AddMovementInput(FVec, GetInputAxisValue("MovemForward"));
 	}
 
+
+	if (fStBar >= 100.0f)
+	{
+		fStBar = 100.0f;
+	}
+	if (fMP >= 100.0f)
+	{
+		fMP = 100.0f;
+	}
+	if (fHP >= 1000.0f)
+	{
+		fHP = 1000.0f;
+	}
 	//
 	//
 	//SetActorRotation()
@@ -214,6 +229,7 @@ void AMyCharacter::Attack()
 
 void AMyCharacter::Skill_1()
 {
+	if (fStBar < 15.0f) return;
 	if (bSkill_1 == true || bSkill_2 == true || bDodge == true || bParrying == true || IsHit == true || bSkill_3 == true) return;
 
 
@@ -231,6 +247,8 @@ void AMyCharacter::Skill_1()
 		//look = FMath::RInterpTo(GetActorRotation(), UKismetMathLibrary::Conv_VectorToRotator(lookRot), SaveDeltaTime, 0.1f);
 		SetActorRotation(UKismetMathLibrary::Conv_VectorToRotator(lookRot));
 		PlayAnimMontage(AM_Skill_1, 1.0f, "Skill_1_Start");
+		fStBar -= 15.0f;
+		fMP += 5.0f;
 
 	}
 }
@@ -242,6 +260,10 @@ void AMyCharacter::Skill_1_Trigger()
 
 void AMyCharacter::Skill_2()
 {
+	if (fStBar < 30.0f)
+	{
+		return;
+	}
 	if (bSkill_2 == true || bSkill_1 == true || bDodge == true || bParrying == true || IsHit == true || bSkill_3 == true) return;
 
 	bSkill_2 = true;
@@ -256,14 +278,20 @@ void AMyCharacter::Skill_2()
 		look = FMath::RInterpTo(GetActorRotation(), UKismetMathLibrary::Conv_VectorToRotator(lookRot), SaveDeltaTime, 0.1f);
 		SetActorRotation(UKismetMathLibrary::Conv_VectorToRotator(lookRot));
 		PlayAnimMontage(AM_Skill_2, 1.0f, "Default");
+		fStBar -= 30.0f;
+		fMP += 10.0f;
 	}
 
 }
 
 void AMyCharacter::Skill_3()
 {
+	if (fMP < 100)
+	{
+		return;
+	}
 	if (bSkill_2 == true || bSkill_1 == true || bDodge == true || bParrying == true || IsHit == true || bSkill_3 == true) return;
-
+	
 	bSkill_3 = true;
 	if (GetMesh()->GetAnimInstance()->Montage_IsActive(AM_Skill_3) == false)
 	{
@@ -275,6 +303,7 @@ void AMyCharacter::Skill_3()
 		look = FMath::RInterpTo(GetActorRotation(), UKismetMathLibrary::Conv_VectorToRotator(lookRot), SaveDeltaTime, 0.1f);
 		SetActorRotation(UKismetMathLibrary::Conv_VectorToRotator(lookRot));
 		PlayAnimMontage(AM_Skill_3, 1.0f, "Default");
+		fMP -= 100.0f;
 	}
 
 }
@@ -282,6 +311,7 @@ void AMyCharacter::Skill_3()
 
 void AMyCharacter::Dodge()
 {
+	if (fStBar < 20.0f) return;
 	if (bDodge == true || bHitOnAir == true || IsDead == true || bSkill_1 == true || bSkill_2 == true || IsHit == true || bSkill_3 == true) return;
 	//if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_KnockDownTwistMontage) == true) return;
 	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_DodgeMontage) == true) return;
@@ -316,11 +346,13 @@ void AMyCharacter::Dodge()
 		break;
 
 	}
+	fStBar -= 20.0f;
 
 }
 
 void AMyCharacter::Parry()
 {
+	if (fStBar < 20.0f) return;
 	if (IsDead == true || IsHit == true || bHitOnAir == true || IsDead == true || bParrying == true || bDodge == true || bSkill_1 == true || bSkill_2 == true || bSkill_3 == true) return;
 	if (GetMesh()->GetAnimInstance()->Montage_IsPlaying(AM_Parrying) == true) return;
 
@@ -332,6 +364,7 @@ void AMyCharacter::Parry()
 	//AM_MontageSet = AM_Parrying;
 	DisableInput(UGameplayStatics::GetPlayerController(this, 0));
 	PlayAnimMontage(AM_Parrying, 1.0f, "Default");
+	fStBar -= 20.0f;
 }
 
 
@@ -443,6 +476,9 @@ void AMyCharacter::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, cla
 
 				//UKismetSystemLibrary::PrintString(GetWorld(), TEXT("Hit"));
 				UGameplayStatics::SpawnEmitterAttached(m_PS_AttackParticle, OverlappedComp);
+				
+				fStBar += 10.0f;
+				fMP += 10.0f;
 
 			}
 		}
@@ -494,6 +530,7 @@ float AMyCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& Da
 
 
 	fHP -= damage;
+	fMP += 20.0f;
 	if (bSkill_1 == true || bSkill_2 == true || bSkill_3 == true)
 	{
 		return NULL;
