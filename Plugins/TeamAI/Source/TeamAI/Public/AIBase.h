@@ -55,11 +55,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
 		FTimerHandle HitTimer;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
+		FTimerHandle RespawnTimer;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
+		FTransform RespawnTrans;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
 		bool IsAIActive = true;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
 		bool IsDead = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
 		bool IsHit = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "KGCA_AI")
+		bool IsRespawn = false;
 #pragma endregion
 public:
 	AAIBase();

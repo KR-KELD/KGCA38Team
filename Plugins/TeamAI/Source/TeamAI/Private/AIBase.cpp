@@ -30,7 +30,7 @@ AAIBase::AAIBase()
 void AAIBase::BeginPlay()
 {
 	Super::BeginPlay();
-
+	RespawnTrans = GetActorTransform();
 	RespawnDelegate.AddDynamic(this, &AAIBase::RespawnEvent);
 }
 
@@ -128,6 +128,11 @@ void AAIBase::DeadEvent()
 	SetActorLocation(FVector(9999.0f, 9999.0f, 9999.0f));
 	SetActorActive(false);
 	GetWorldTimerManager().ClearTimer(DeadTimer);
+	if (IsRespawn)
+	{
+		GetWorldTimerManager().SetTimer(RespawnTimer, this, &AAIBase::AIRespawn, 15.0f, false);
+		SetActorTransform(RespawnTrans);
+	}
 }
 
 void AAIBase::HitEvent()
@@ -141,4 +146,5 @@ void AAIBase::RespawnEvent(FString msg)
 	IsDead = false;
 	SetActorActive(true);
 	AIReset();
+	GetWorldTimerManager().ClearTimer(RespawnTimer);
 }

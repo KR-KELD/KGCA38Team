@@ -30,7 +30,7 @@ FString UMyStaticLibrary::GetNPC_Text(int32 index)
 	if (index == 0) Text = "I'm sad..";
 	if (index == 1) Text = "You came to rescue me?";
 	if (index == 2) Text = "They say there's a hidden room in this maze";
-	if (index == 3) Text = "I hope someone killed the Frost Giant";
+	if (index == 3) Text = "Bring me canned food and I'll give you something important";
 	if (index == 4) Text = "I was a Special Forces member before I came here.";
 	if (index == 5) Text = "what's for lunch today?";
 	if (index == 6) Text = "It'll be canned food again.";

@@ -22,4 +22,6 @@ public:
 		int MaxFavorability = 100;
 	UFUNCTION(BlueprintCallable, Category = "KGCA_AI")
 		bool AddFavorability(int iFavorPoint);
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "KGCA_AI")
+		bool FavorCompleteCheck();
 };
