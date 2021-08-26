@@ -88,6 +88,10 @@ void AAIBase::AIDead()
 void AAIBase::AIRespawn()
 {
 	if (RespawnDelegate.IsBound() == true) RespawnDelegate.Broadcast("Respawn");
+	if (IsRespawn)
+	{
+		SetActorTransform(RespawnTrans);
+	}
 }
 
 bool AAIBase::AIDeadCheck()
@@ -131,7 +135,6 @@ void AAIBase::DeadEvent()
 	if (IsRespawn)
 	{
 		GetWorldTimerManager().SetTimer(RespawnTimer, this, &AAIBase::AIRespawn, 15.0f, false);
-		SetActorTransform(RespawnTrans);
 	}
 }
 

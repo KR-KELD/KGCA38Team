@@ -1,0 +1,12 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.ProjectUI.cpp.obj": [
+			"MainCharacter.cpp.obj",
+			"NPC_Characters.cpp.obj",
+			"ProjectUI.cpp.obj",
+			"TeamProjectCharacter.cpp.obj",
+			"WidgetGroup.cpp.obj"
+		]
+	}
+}

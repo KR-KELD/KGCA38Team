@@ -1,0 +1,17 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.MazeRunnerMapToolPlugins.cpp.obj": [
+			"MapToolGameModeBase.cpp.obj",
+			"MazeGeneration.cpp.obj",
+			"MazeRunnerMapToolPlugins.cpp.obj",
+			"WallActor.cpp.obj"
+		],
+		"Module.MazeRunnerMapToolPlugins.gen.cpp.obj": [
+			"MapToolGameModeBase.gen.cpp.obj",
+			"MazeGeneration.gen.cpp.obj",
+			"MazeRunnerMapToolPlugins.init.gen.cpp.obj",
+			"WallActor.gen.cpp.obj"
+		]
+	}
+}

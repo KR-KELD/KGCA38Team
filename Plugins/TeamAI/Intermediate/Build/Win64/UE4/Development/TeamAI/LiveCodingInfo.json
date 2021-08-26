@@ -1,0 +1,19 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.TeamAI.cpp.obj": [
+			"AIBase.cpp.obj",
+			"AIDataStruct.cpp.obj",
+			"MyAIController.cpp.obj",
+			"PatrolPoint.cpp.obj",
+			"TeamAI.cpp.obj"
+		],
+		"Module.TeamAI.gen.cpp.obj": [
+			"AIBase.gen.cpp.obj",
+			"AIDataStruct.gen.cpp.obj",
+			"MyAIController.gen.cpp.obj",
+			"PatrolPoint.gen.cpp.obj",
+			"TeamAI.init.gen.cpp.obj"
+		]
+	}
+}

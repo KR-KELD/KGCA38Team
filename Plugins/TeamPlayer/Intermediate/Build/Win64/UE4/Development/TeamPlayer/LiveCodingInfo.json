@@ -1,0 +1,17 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.TeamPlayer.cpp.obj": [
+			"MyBoss.cpp.obj",
+			"MyCharacter.cpp.obj",
+			"MyPlayerController.cpp.obj",
+			"TeamPlayer.cpp.obj"
+		],
+		"Module.TeamPlayer.gen.cpp.obj": [
+			"MyBoss.gen.cpp.obj",
+			"MyCharacter.gen.cpp.obj",
+			"MyPlayerController.gen.cpp.obj",
+			"TeamPlayer.init.gen.cpp.obj"
+		]
+	}
+}

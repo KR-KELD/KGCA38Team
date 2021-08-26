@@ -1,0 +1,2 @@
+F:\Unreal\Project2\KGCA38Team\Plugins\TeamEffect\Intermediate\Build\Win64\UE4\Development\TeamEffect\Definitions.TeamEffect.h
+F:\Unreal\Project2\KGCA38Team\Plugins\TeamEffect\Source\TeamEffect\Public\TeamEffect.h
